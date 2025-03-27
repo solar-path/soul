@@ -1,5 +1,6 @@
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { Button } from "flowbite-react";
 
 export const Route = createRootRoute({
   component: () => (
@@ -12,6 +13,8 @@ export const Route = createRootRoute({
           About
         </Link>
       </div>
+      <Button>Default</Button>
+
       <hr />
       <Outlet />
       <TanStackRouterDevtools />
