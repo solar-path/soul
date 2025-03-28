@@ -1,0 +1,148 @@
+# WINDSURF PROJECT RULES
+
+## DEVELOPMENT ENVIRONMENT
+
+1. Use Bun as the JavaScript runtime
+2. Utilize built-in Bun or Node.js functionality before adding new packages (e.g., bun.password.hash(), crypto.randomUUID())
+3. Use only commands defined in package.json (dev, dev:client, dev:api, build, preview, drizzle, seed)
+4. Add new commands to package.json only when absolutely necessary
+
+## TECHNOLOGY STACK
+
+- **Backend**: Hono.dev (https://hono.dev)
+- **Database**:
+  - Drizzle ORM (https://orm.drizzle.team)
+  - Bun:SQLite (https://bun.sh/docs/recipes/sqlite)
+- **Frontend**:
+  - TypeScript
+  - Vite (https://vitejs.dev)
+  - React (https://reactjs.org)
+  - TailwindCSS (https://tailwindcss.com) version ^4
+  - TanStack Query (https://tanstack.com/query)
+  - React Hook Form (https://react-hook-form.com)
+  - TanStack Router (https://tanstack.com/router) for client-side routing
+- **Authentication**: Lucia (https://lucia-auth.com)
+- **Validation**: Zod (https://zod.dev)
+- **UI Components**: Flowbite-react (https://flowbite-react.com/)
+- **State Management**: zustand (https://github.com/pmndrs/zustand)
+
+## FILE NAMING CONVENTIONS
+
+- **Forms**: \*.form.tsx
+- **Guides**: \*.guide.tsx
+- **Database Schemas**: \*.schema.ts
+- **Validation Schemas**: \*.zod.ts
+- **Pages**: \*.page.tsx
+- **Layouts**: \*.layout.tsx
+
+## DATABASE RULES
+
+- Modifying database-related files is prohibited unless absolutely necessary:
+  - migrate.ts
+  - database.ts
+  - drizzle.config.ts
+  - seed.ts
+  - \*.schema.ts
+
+## CODE ORGANIZATION
+
+- Group related components in feature folders
+- Share common utilities in a utils folder
+- Place all API calls in dedicated service files
+- Keep components focused with single responsibility
+- Apply DRY (Don't Repeat Yourself) principle
+- Use TypeScript path aliases for imports (@/\*)
+
+## STATE MANAGEMENT
+
+- Use TanStack Query for server state and API data fetching
+- Use Preact/signal for global app state and local state
+- Implement proper loading states for all async operations
+
+## UI IMPLEMENTATION
+
+- All forms must be implemented using React Hook Form
+- Forms should be placed in right-hand-side Drawer components
+- Drawers cannot be closed until the form is submitted or cancelled
+- Drawers may contain clickable references to other forms
+- Use Flowbite-react components for consistent design
+
+## API INTEGRATION
+
+- Use fetch API with proper error handling
+- Define TypeScript interfaces for API response data
+- Process Hono client responses with .json() method
+- Properly type useQuery hooks with generic parameters
+
+## ERROR HANDLING
+
+- All API endpoints must return appropriate HTTP status codes
+- All forms must show validation errors clearly
+- All async operations must have proper error states
+- Log errors appropriately for debugging
+
+## TYPE SAFETY
+
+- Use TypeScript strict mode
+- Define proper interfaces/types for all data structures
+- No use of 'any' type unless absolutely necessary
+- Ensure all API responses are properly typed
+
+## ACCESSIBILITY
+
+- All forms must be keyboard navigable
+- Use proper ARIA labels and roles
+- Maintain proper heading hierarchy
+- Ensure sufficient color contrast
+- Support screen readers
+
+## TESTING
+
+- Testing is mandatory
+- Unit tests for all utility functions
+- Integration tests for API endpoints
+- Component tests for all forms
+- E2E tests for critical user flows
+- Test coverage minimum: 80%
+
+## DOCUMENTATION
+
+- Develop guides for each module (src/routes/public/docs/posts/\*)
+- All components must have JSDoc comments
+- API endpoints must have OpenAPI/Swagger documentation
+- Include setup instructions in README
+- Document all environment variables
+- Maintain a changelog
+
+## PERFORMANCE
+
+- Implement proper code splitting
+- Optimize images and assets
+- Minimize bundle size
+- Use proper caching strategies
+- Monitor and maintain Lighthouse scores
+
+## SECURITY
+
+- Implement proper CSRF protection
+- Sanitize all user inputs
+- Use proper Content Security Policy
+- Regular security audits of dependencies
+- Secure storage of sensitive data
+
+## WORKFLOW RULES
+
+- Do not create new files; modify existing files whenever possible
+- Fix problems as they arise; don't let issues pile up
+- Module is complete when project successfully passes "bun run build" command
+- If user rejects a terminal command, propose an alternative solution
+- Do not stop process until module from assignment.md is completed
+
+## MODULE COMPLETION CRITERIA
+
+- All tests must pass
+- No TypeScript errors
+- No ESLint warnings
+- Successful build
+- Documentation complete
+- Performance benchmarks met
