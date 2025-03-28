@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import AIcon from "../../assets/icon.png";
+import AIcon from "@/assets/icon.png";
 import { Button } from "flowbite-react";
-import { fillDrawer } from "../../ui/QDrawer/drawer.store";
-import SignUpForm from "../../forms/SignUp.form";
+import { fillDrawer } from "@/ui/QDrawer/drawer.store";
+import SignUpForm from "@/forms/SignUp.form";
 export const Route = createFileRoute("/(public)/")({
   component: Index,
 });
