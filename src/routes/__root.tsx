@@ -2,7 +2,7 @@ import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import QFooter from "../ui/QFooter.ui";
 import QHeader from "../ui/QHeader.ui";
-import QDrawer from "../ui/QDrawer.ui";
+import QDrawer from "../ui/QDrawer/QDrawer.ui";
 
 export const Route = createRootRoute({
   component: () => (

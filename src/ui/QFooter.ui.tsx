@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Footer, FooterCopyright, List, ListItem } from "flowbite-react";
-import { fillDrawer } from "./QDrawer.ui";
+import { fillDrawer } from "./QDrawer/drawer.store";
 import ContactUsForm from "../forms/ContactUs.form";
 
 export default function QFooter() {
