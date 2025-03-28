@@ -4,11 +4,11 @@ import { cors } from "hono/cors";
 import { lucia } from "@/api/utils/lucia";
 import { HTTPException } from "hono/http-exception";
 import type { ApiResponse } from "@/api/utils/types";
-import { authRouter } from "@/routes/auth/auth.routes";
+import { authRouter } from "@/api/routes/auth.routes";
 import { logger } from "hono/logger";
-import { businessRouter } from "@/routes/business/business.routes";
+import { businessRouter } from "@/api/routes/business.routes";
 import { serveStatic } from "hono/bun";
-import { contactUsRouter } from "./routes/public/contactUs/contactUs.routes";
+import { contactUsRouter } from "@/api/routes/contactUs.routes";
 
 const app = new Hono<Context>().use(logger());
 
