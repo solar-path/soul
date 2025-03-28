@@ -11,16 +11,16 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as CompanyIndexImport } from './routes/company/index'
 import { Route as publicIndexImport } from './routes/(public)/index'
-import { Route as CompanyDashboardImport } from './routes/company/dashboard'
-import { Route as AuthProfileImport } from './routes/auth/profile'
 import { Route as publicPricingImport } from './routes/(public)/pricing'
+import { Route as CompanySettingsIndexImport } from './routes/company/settings/index'
+import { Route as CompanyHrmIndexImport } from './routes/company/hrm/index'
+import { Route as CompanyErmIndexImport } from './routes/company/erm/index'
+import { Route as CompanyAddressBookIndexImport } from './routes/company/addressBook/index'
+import { Route as AuthProfileIndexImport } from './routes/auth/profile/index'
 import { Route as publicDocsIndexImport } from './routes/(public)/docs/index'
 import { Route as CompanyUserManagementUserImport } from './routes/company/userManagement/user'
-import { Route as CompanySettingsSettingsImport } from './routes/company/settings/settings'
-import { Route as CompanyHrmHrmImport } from './routes/company/hrm/hrm'
-import { Route as CompanyErmErmImport } from './routes/company/erm/erm'
-import { Route as CompanyAddressBookAddressBookImport } from './routes/company/addressBook/addressBook'
 import { Route as CompanyHrmPositionPositionImport } from './routes/company/hrm/position/position'
 import { Route as CompanyHrmEmployeeEmployeeImport } from './routes/company/hrm/employee/employee'
 import { Route as CompanyHrmDepartmentDepartmentImport } from './routes/company/hrm/department/department'
@@ -29,27 +29,51 @@ import { Route as publicDocsPrivacyPostImport } from './routes/(public)/docs/pri
 
 // Create/Update Routes
 
+const CompanyIndexRoute = CompanyIndexImport.update({
+  id: '/company/',
+  path: '/company/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const publicIndexRoute = publicIndexImport.update({
   id: '/(public)/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const CompanyDashboardRoute = CompanyDashboardImport.update({
-  id: '/company/dashboard',
-  path: '/company/dashboard',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const AuthProfileRoute = AuthProfileImport.update({
-  id: '/auth/profile',
-  path: '/auth/profile',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const publicPricingRoute = publicPricingImport.update({
   id: '/(public)/pricing',
   path: '/pricing',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CompanySettingsIndexRoute = CompanySettingsIndexImport.update({
+  id: '/company/settings/',
+  path: '/company/settings/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CompanyHrmIndexRoute = CompanyHrmIndexImport.update({
+  id: '/company/hrm/',
+  path: '/company/hrm/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CompanyErmIndexRoute = CompanyErmIndexImport.update({
+  id: '/company/erm/',
+  path: '/company/erm/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CompanyAddressBookIndexRoute = CompanyAddressBookIndexImport.update({
+  id: '/company/addressBook/',
+  path: '/company/addressBook/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthProfileIndexRoute = AuthProfileIndexImport.update({
+  id: '/auth/profile/',
+  path: '/auth/profile/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -64,31 +88,6 @@ const CompanyUserManagementUserRoute = CompanyUserManagementUserImport.update({
   path: '/company/userManagement/user',
   getParentRoute: () => rootRoute,
 } as any)
-
-const CompanySettingsSettingsRoute = CompanySettingsSettingsImport.update({
-  id: '/company/settings/settings',
-  path: '/company/settings/settings',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const CompanyHrmHrmRoute = CompanyHrmHrmImport.update({
-  id: '/company/hrm/hrm',
-  path: '/company/hrm/hrm',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const CompanyErmErmRoute = CompanyErmErmImport.update({
-  id: '/company/erm/erm',
-  path: '/company/erm/erm',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const CompanyAddressBookAddressBookRoute =
-  CompanyAddressBookAddressBookImport.update({
-    id: '/company/addressBook/addressBook',
-    path: '/company/addressBook/addressBook',
-    getParentRoute: () => rootRoute,
-  } as any)
 
 const CompanyHrmPositionPositionRoute = CompanyHrmPositionPositionImport.update(
   {
@@ -136,20 +135,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publicPricingImport
       parentRoute: typeof rootRoute
     }
-    '/auth/profile': {
-      id: '/auth/profile'
-      path: '/auth/profile'
-      fullPath: '/auth/profile'
-      preLoaderRoute: typeof AuthProfileImport
-      parentRoute: typeof rootRoute
-    }
-    '/company/dashboard': {
-      id: '/company/dashboard'
-      path: '/company/dashboard'
-      fullPath: '/company/dashboard'
-      preLoaderRoute: typeof CompanyDashboardImport
-      parentRoute: typeof rootRoute
-    }
     '/(public)/': {
       id: '/(public)/'
       path: '/'
@@ -157,32 +142,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publicIndexImport
       parentRoute: typeof rootRoute
     }
-    '/company/addressBook/addressBook': {
-      id: '/company/addressBook/addressBook'
-      path: '/company/addressBook/addressBook'
-      fullPath: '/company/addressBook/addressBook'
-      preLoaderRoute: typeof CompanyAddressBookAddressBookImport
-      parentRoute: typeof rootRoute
-    }
-    '/company/erm/erm': {
-      id: '/company/erm/erm'
-      path: '/company/erm/erm'
-      fullPath: '/company/erm/erm'
-      preLoaderRoute: typeof CompanyErmErmImport
-      parentRoute: typeof rootRoute
-    }
-    '/company/hrm/hrm': {
-      id: '/company/hrm/hrm'
-      path: '/company/hrm/hrm'
-      fullPath: '/company/hrm/hrm'
-      preLoaderRoute: typeof CompanyHrmHrmImport
-      parentRoute: typeof rootRoute
-    }
-    '/company/settings/settings': {
-      id: '/company/settings/settings'
-      path: '/company/settings/settings'
-      fullPath: '/company/settings/settings'
-      preLoaderRoute: typeof CompanySettingsSettingsImport
+    '/company/': {
+      id: '/company/'
+      path: '/company'
+      fullPath: '/company'
+      preLoaderRoute: typeof CompanyIndexImport
       parentRoute: typeof rootRoute
     }
     '/company/userManagement/user': {
@@ -197,6 +161,41 @@ declare module '@tanstack/react-router' {
       path: '/docs'
       fullPath: '/docs'
       preLoaderRoute: typeof publicDocsIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/profile/': {
+      id: '/auth/profile/'
+      path: '/auth/profile'
+      fullPath: '/auth/profile'
+      preLoaderRoute: typeof AuthProfileIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/company/addressBook/': {
+      id: '/company/addressBook/'
+      path: '/company/addressBook'
+      fullPath: '/company/addressBook'
+      preLoaderRoute: typeof CompanyAddressBookIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/company/erm/': {
+      id: '/company/erm/'
+      path: '/company/erm'
+      fullPath: '/company/erm'
+      preLoaderRoute: typeof CompanyErmIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/company/hrm/': {
+      id: '/company/hrm/'
+      path: '/company/hrm'
+      fullPath: '/company/hrm'
+      preLoaderRoute: typeof CompanyHrmIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/company/settings/': {
+      id: '/company/settings/'
+      path: '/company/settings'
+      fullPath: '/company/settings'
+      preLoaderRoute: typeof CompanySettingsIndexImport
       parentRoute: typeof rootRoute
     }
     '/(public)/docs/privacy/post': {
@@ -241,15 +240,15 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/pricing': typeof publicPricingRoute
-  '/auth/profile': typeof AuthProfileRoute
-  '/company/dashboard': typeof CompanyDashboardRoute
   '/': typeof publicIndexRoute
-  '/company/addressBook/addressBook': typeof CompanyAddressBookAddressBookRoute
-  '/company/erm/erm': typeof CompanyErmErmRoute
-  '/company/hrm/hrm': typeof CompanyHrmHrmRoute
-  '/company/settings/settings': typeof CompanySettingsSettingsRoute
+  '/company': typeof CompanyIndexRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
   '/docs': typeof publicDocsIndexRoute
+  '/auth/profile': typeof AuthProfileIndexRoute
+  '/company/addressBook': typeof CompanyAddressBookIndexRoute
+  '/company/erm': typeof CompanyErmIndexRoute
+  '/company/hrm': typeof CompanyHrmIndexRoute
+  '/company/settings': typeof CompanySettingsIndexRoute
   '/docs/privacy/post': typeof publicDocsPrivacyPostRoute
   '/docs/terms/post': typeof publicDocsTermsPostRoute
   '/company/hrm/department/department': typeof CompanyHrmDepartmentDepartmentRoute
@@ -259,15 +258,15 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/pricing': typeof publicPricingRoute
-  '/auth/profile': typeof AuthProfileRoute
-  '/company/dashboard': typeof CompanyDashboardRoute
   '/': typeof publicIndexRoute
-  '/company/addressBook/addressBook': typeof CompanyAddressBookAddressBookRoute
-  '/company/erm/erm': typeof CompanyErmErmRoute
-  '/company/hrm/hrm': typeof CompanyHrmHrmRoute
-  '/company/settings/settings': typeof CompanySettingsSettingsRoute
+  '/company': typeof CompanyIndexRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
   '/docs': typeof publicDocsIndexRoute
+  '/auth/profile': typeof AuthProfileIndexRoute
+  '/company/addressBook': typeof CompanyAddressBookIndexRoute
+  '/company/erm': typeof CompanyErmIndexRoute
+  '/company/hrm': typeof CompanyHrmIndexRoute
+  '/company/settings': typeof CompanySettingsIndexRoute
   '/docs/privacy/post': typeof publicDocsPrivacyPostRoute
   '/docs/terms/post': typeof publicDocsTermsPostRoute
   '/company/hrm/department/department': typeof CompanyHrmDepartmentDepartmentRoute
@@ -278,15 +277,15 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/(public)/pricing': typeof publicPricingRoute
-  '/auth/profile': typeof AuthProfileRoute
-  '/company/dashboard': typeof CompanyDashboardRoute
   '/(public)/': typeof publicIndexRoute
-  '/company/addressBook/addressBook': typeof CompanyAddressBookAddressBookRoute
-  '/company/erm/erm': typeof CompanyErmErmRoute
-  '/company/hrm/hrm': typeof CompanyHrmHrmRoute
-  '/company/settings/settings': typeof CompanySettingsSettingsRoute
+  '/company/': typeof CompanyIndexRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
   '/(public)/docs/': typeof publicDocsIndexRoute
+  '/auth/profile/': typeof AuthProfileIndexRoute
+  '/company/addressBook/': typeof CompanyAddressBookIndexRoute
+  '/company/erm/': typeof CompanyErmIndexRoute
+  '/company/hrm/': typeof CompanyHrmIndexRoute
+  '/company/settings/': typeof CompanySettingsIndexRoute
   '/(public)/docs/privacy/post': typeof publicDocsPrivacyPostRoute
   '/(public)/docs/terms/post': typeof publicDocsTermsPostRoute
   '/company/hrm/department/department': typeof CompanyHrmDepartmentDepartmentRoute
@@ -298,15 +297,15 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/pricing'
-    | '/auth/profile'
-    | '/company/dashboard'
     | '/'
-    | '/company/addressBook/addressBook'
-    | '/company/erm/erm'
-    | '/company/hrm/hrm'
-    | '/company/settings/settings'
+    | '/company'
     | '/company/userManagement/user'
     | '/docs'
+    | '/auth/profile'
+    | '/company/addressBook'
+    | '/company/erm'
+    | '/company/hrm'
+    | '/company/settings'
     | '/docs/privacy/post'
     | '/docs/terms/post'
     | '/company/hrm/department/department'
@@ -315,15 +314,15 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/pricing'
-    | '/auth/profile'
-    | '/company/dashboard'
     | '/'
-    | '/company/addressBook/addressBook'
-    | '/company/erm/erm'
-    | '/company/hrm/hrm'
-    | '/company/settings/settings'
+    | '/company'
     | '/company/userManagement/user'
     | '/docs'
+    | '/auth/profile'
+    | '/company/addressBook'
+    | '/company/erm'
+    | '/company/hrm'
+    | '/company/settings'
     | '/docs/privacy/post'
     | '/docs/terms/post'
     | '/company/hrm/department/department'
@@ -332,15 +331,15 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/(public)/pricing'
-    | '/auth/profile'
-    | '/company/dashboard'
     | '/(public)/'
-    | '/company/addressBook/addressBook'
-    | '/company/erm/erm'
-    | '/company/hrm/hrm'
-    | '/company/settings/settings'
+    | '/company/'
     | '/company/userManagement/user'
     | '/(public)/docs/'
+    | '/auth/profile/'
+    | '/company/addressBook/'
+    | '/company/erm/'
+    | '/company/hrm/'
+    | '/company/settings/'
     | '/(public)/docs/privacy/post'
     | '/(public)/docs/terms/post'
     | '/company/hrm/department/department'
@@ -351,15 +350,15 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   publicPricingRoute: typeof publicPricingRoute
-  AuthProfileRoute: typeof AuthProfileRoute
-  CompanyDashboardRoute: typeof CompanyDashboardRoute
   publicIndexRoute: typeof publicIndexRoute
-  CompanyAddressBookAddressBookRoute: typeof CompanyAddressBookAddressBookRoute
-  CompanyErmErmRoute: typeof CompanyErmErmRoute
-  CompanyHrmHrmRoute: typeof CompanyHrmHrmRoute
-  CompanySettingsSettingsRoute: typeof CompanySettingsSettingsRoute
+  CompanyIndexRoute: typeof CompanyIndexRoute
   CompanyUserManagementUserRoute: typeof CompanyUserManagementUserRoute
   publicDocsIndexRoute: typeof publicDocsIndexRoute
+  AuthProfileIndexRoute: typeof AuthProfileIndexRoute
+  CompanyAddressBookIndexRoute: typeof CompanyAddressBookIndexRoute
+  CompanyErmIndexRoute: typeof CompanyErmIndexRoute
+  CompanyHrmIndexRoute: typeof CompanyHrmIndexRoute
+  CompanySettingsIndexRoute: typeof CompanySettingsIndexRoute
   publicDocsPrivacyPostRoute: typeof publicDocsPrivacyPostRoute
   publicDocsTermsPostRoute: typeof publicDocsTermsPostRoute
   CompanyHrmDepartmentDepartmentRoute: typeof CompanyHrmDepartmentDepartmentRoute
@@ -369,15 +368,15 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   publicPricingRoute: publicPricingRoute,
-  AuthProfileRoute: AuthProfileRoute,
-  CompanyDashboardRoute: CompanyDashboardRoute,
   publicIndexRoute: publicIndexRoute,
-  CompanyAddressBookAddressBookRoute: CompanyAddressBookAddressBookRoute,
-  CompanyErmErmRoute: CompanyErmErmRoute,
-  CompanyHrmHrmRoute: CompanyHrmHrmRoute,
-  CompanySettingsSettingsRoute: CompanySettingsSettingsRoute,
+  CompanyIndexRoute: CompanyIndexRoute,
   CompanyUserManagementUserRoute: CompanyUserManagementUserRoute,
   publicDocsIndexRoute: publicDocsIndexRoute,
+  AuthProfileIndexRoute: AuthProfileIndexRoute,
+  CompanyAddressBookIndexRoute: CompanyAddressBookIndexRoute,
+  CompanyErmIndexRoute: CompanyErmIndexRoute,
+  CompanyHrmIndexRoute: CompanyHrmIndexRoute,
+  CompanySettingsIndexRoute: CompanySettingsIndexRoute,
   publicDocsPrivacyPostRoute: publicDocsPrivacyPostRoute,
   publicDocsTermsPostRoute: publicDocsTermsPostRoute,
   CompanyHrmDepartmentDepartmentRoute: CompanyHrmDepartmentDepartmentRoute,
@@ -396,15 +395,15 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/(public)/pricing",
-        "/auth/profile",
-        "/company/dashboard",
         "/(public)/",
-        "/company/addressBook/addressBook",
-        "/company/erm/erm",
-        "/company/hrm/hrm",
-        "/company/settings/settings",
+        "/company/",
         "/company/userManagement/user",
         "/(public)/docs/",
+        "/auth/profile/",
+        "/company/addressBook/",
+        "/company/erm/",
+        "/company/hrm/",
+        "/company/settings/",
         "/(public)/docs/privacy/post",
         "/(public)/docs/terms/post",
         "/company/hrm/department/department",
@@ -415,32 +414,32 @@ export const routeTree = rootRoute
     "/(public)/pricing": {
       "filePath": "(public)/pricing.tsx"
     },
-    "/auth/profile": {
-      "filePath": "auth/profile.tsx"
-    },
-    "/company/dashboard": {
-      "filePath": "company/dashboard.tsx"
-    },
     "/(public)/": {
       "filePath": "(public)/index.tsx"
     },
-    "/company/addressBook/addressBook": {
-      "filePath": "company/addressBook/addressBook.tsx"
-    },
-    "/company/erm/erm": {
-      "filePath": "company/erm/erm.tsx"
-    },
-    "/company/hrm/hrm": {
-      "filePath": "company/hrm/hrm.tsx"
-    },
-    "/company/settings/settings": {
-      "filePath": "company/settings/settings.tsx"
+    "/company/": {
+      "filePath": "company/index.tsx"
     },
     "/company/userManagement/user": {
       "filePath": "company/userManagement/user.tsx"
     },
     "/(public)/docs/": {
       "filePath": "(public)/docs/index.tsx"
+    },
+    "/auth/profile/": {
+      "filePath": "auth/profile/index.tsx"
+    },
+    "/company/addressBook/": {
+      "filePath": "company/addressBook/index.tsx"
+    },
+    "/company/erm/": {
+      "filePath": "company/erm/index.tsx"
+    },
+    "/company/hrm/": {
+      "filePath": "company/hrm/index.tsx"
+    },
+    "/company/settings/": {
+      "filePath": "company/settings/index.tsx"
     },
     "/(public)/docs/privacy/post": {
       "filePath": "(public)/docs/privacy.post.tsx"

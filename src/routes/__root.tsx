@@ -16,25 +16,19 @@ export const Route = createRootRoute({
           <Link to="/auth/profile" className="[&.active]:font-bold">
             Profile
           </Link>
-          <Link to="/company/dashboard" className="[&.active]:font-bold">
+          <Link to="/company" className="[&.active]:font-bold">
             Dashboard
           </Link>
-          <Link
-            to="/company/addressBook/addressBook"
-            className="[&.active]:font-bold"
-          >
+          <Link to="/company/addressBook" className="[&.active]:font-bold">
             Address Book
           </Link>
-          <Link to="/company/erm/erm" className="[&.active]:font-bold">
+          <Link to="/company/erm" className="[&.active]:font-bold">
             ERM
           </Link>
-          <Link to="/company/hrm/hrm" className="[&.active]:font-bold">
+          <Link to="/company/hrm" className="[&.active]:font-bold">
             HRM
           </Link>
-          <Link
-            to="/company/settings/settings"
-            className="[&.active]:font-bold"
-          >
+          <Link to="/company/settings" className="[&.active]:font-bold">
             Settings
           </Link>
           <Link
@@ -43,7 +37,7 @@ export const Route = createRootRoute({
           >
             User Management
           </Link>
-          <Link to="/" className="[&.active]:font-bold">
+          <Link to="/docs" className="[&.active]:font-bold">
             Docs
           </Link>
         </nav>

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/(public)/docs/')({
-  component: DocsPage
+export const Route = createFileRoute("/(public)/docs/")({
+  component: DocsPage,
 });
 
 function DocsPage() {
@@ -15,7 +15,10 @@ function DocsPage() {
           </a>
         </li>
         <li>
-          <a href="/docs/privacy/post" className="text-blue-500 hover:underline">
+          <a
+            href="/docs/privacy/post"
+            className="text-blue-500 hover:underline"
+          >
             Privacy Policy
           </a>
         </li>
