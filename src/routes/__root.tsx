@@ -13,6 +13,39 @@ export const Route = createRootRoute({
           <Link to="/pricing" className="[&.active]:font-bold">
             Pricing
           </Link>
+          <Link to="/auth/profile" className="[&.active]:font-bold">
+            Profile
+          </Link>
+          <Link to="/company/dashboard" className="[&.active]:font-bold">
+            Dashboard
+          </Link>
+          <Link
+            to="/company/addressBook/addressBook"
+            className="[&.active]:font-bold"
+          >
+            Address Book
+          </Link>
+          <Link to="/company/erm/erm" className="[&.active]:font-bold">
+            ERM
+          </Link>
+          <Link to="/company/hrm/hrm" className="[&.active]:font-bold">
+            HRM
+          </Link>
+          <Link
+            to="/company/settings/settings"
+            className="[&.active]:font-bold"
+          >
+            Settings
+          </Link>
+          <Link
+            to="/company/userManagement/user"
+            className="[&.active]:font-bold"
+          >
+            User Management
+          </Link>
+          <Link to="/" className="[&.active]:font-bold">
+            Docs
+          </Link>
         </nav>
         <Outlet />
         <TanStackRouterDevtools />
