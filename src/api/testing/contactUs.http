@@ -1,0 +1,13 @@
+@baseUrl = http://localhost:3000/api/contact-us
+
+###
+POST {{baseUrl}}/new
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "message": "Hello, world!"
+}
+
+### GET 
+{{baseUrl}}/find/40048192-c440-4326-8792-817ec3610edc

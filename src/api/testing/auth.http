@@ -1,0 +1,45 @@
+@baseURL=http://localhost:3000/api
+
+### Sign up 
+POST {{baseURL}}/auth/signup
+Content-Type: application/json
+
+{
+    "email": "john.doe@demo.com",
+    "password": "M1r@nd@32",
+    "confirmPassword": "M1r@nd@32",
+    "termsAcceptance": true
+}
+
+### Sign in
+POST {{baseURL}}/auth/signin
+Content-Type: application/json
+
+{
+    "email": "john.doe@demo.com",
+    "password": "M1r@nd@32"
+}   
+
+### Activate account 
+POST {{baseURL}}/auth/activate
+Content-Type: application/json
+
+{
+    "token": "d01ab2a5-9fa4-4ea9-83ee-5fb1a8a19a27"
+}
+
+### Get User
+GET {{baseURL}}/auth/user
+Content-Type: application/json
+
+### Sign out
+GET {{baseURL}}/auth/signout
+Content-Type: application/json
+
+# 1. sign up ✅
+# 2. sign in ❌ - requires account verification ✅
+# 3. activate account ✅
+# 4. sign in  ✅ - does not return a list of companies
+# 5. get user ✅
+# 6. sign out ✅ - invalidates session
+# 7. get user ❌ - requires authentication ✅
