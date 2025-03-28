@@ -23,6 +23,26 @@ function RouteComponent() {
           <Link to="/company/hrm" className="[&.active]:font-bold">
             HRM
           </Link>
+          <ul>
+            <li>
+              <Link to="/company/hrm/employee" className="[&.active]:font-bold">
+                Employee
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/company/hrm/department"
+                className="[&.active]:font-bold"
+              >
+                Department
+              </Link>
+            </li>
+            <li>
+              <Link to="/company/hrm/position" className="[&.active]:font-bold">
+                Position
+              </Link>
+            </li>
+          </ul>
         </li>
         <li>
           <Link to="/company/settings" className="[&.active]:font-bold">
