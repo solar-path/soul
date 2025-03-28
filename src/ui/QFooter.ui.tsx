@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Footer, FooterCopyright, List, ListItem } from "flowbite-react";
+import { fillDrawer } from "./QDrawer.ui";
+import ContactUsForm from "../forms/ContactUs.form";
 
 export default function QFooter() {
   return (
@@ -22,7 +24,11 @@ export default function QFooter() {
             Terms of Service
           </Link>
         </ListItem>
-        {/* <Link to="#" className="text-gray-500 hover:underline dark:text-gray-400">Contact</Link> */}
+        <ListItem>
+          <button onClick={() => fillDrawer(ContactUsForm, "Contact Us")}>
+            Contact Us
+          </button>
+        </ListItem>
       </List>
     </Footer>
   );
