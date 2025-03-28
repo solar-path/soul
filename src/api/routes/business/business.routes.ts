@@ -10,8 +10,12 @@ import {
   industryTable,
   orgchartTable,
 } from "@/api/database/schema/business.schema";
-import { companySchema, IndustryResponse } from "./business.zod";
-import { Company, Country } from "@/api/utils/types";
+import {
+  companySchema,
+  IndustryResponse,
+  Company,
+  Country,
+} from "@/api/routes/business/business.zod";
 
 export const businessRouter = new Hono<Context>()
   .get("/country", async (c) => {

@@ -12,7 +12,7 @@ import {
   contactUsSchema,
   RespondToContactUs,
   trackContactUsSchema,
-} from "./contactUs.zod";
+} from "@/api/routes/contactUs/contactUs.zod";
 import { eq } from "drizzle-orm";
 
 export const contactUsRouter = new Hono<Context>()

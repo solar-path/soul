@@ -13,7 +13,7 @@ import {
   resetPasswordSchema,
   signInSchema,
   signUpSchema,
-} from "./auth.zod";
+} from "./auth.zod.ts";
 
 const checkUser = async (email: string) => {
   return await db
