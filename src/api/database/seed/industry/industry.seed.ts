@@ -1,6 +1,6 @@
 import industryData from "./industry.data.json";
 import { db } from "../../database";
-import { industryTable } from "@/api/database/schema/business.schema";
+import { industryTable } from "../../schema/business.schema";
 
 export const seedIndustryData = async () => {
   console.log("Starting to seed industry data...");
