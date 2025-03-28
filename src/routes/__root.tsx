@@ -19,24 +19,6 @@ export const Route = createRootRoute({
           <Link to="/company" className="[&.active]:font-bold">
             Dashboard
           </Link>
-          <Link to="/company/addressBook" className="[&.active]:font-bold">
-            Address Book
-          </Link>
-          <Link to="/company/erm" className="[&.active]:font-bold">
-            ERM
-          </Link>
-          <Link to="/company/hrm" className="[&.active]:font-bold">
-            HRM
-          </Link>
-          <Link to="/company/settings" className="[&.active]:font-bold">
-            Settings
-          </Link>
-          <Link
-            to="/company/userManagement/user"
-            className="[&.active]:font-bold"
-          >
-            User Management
-          </Link>
           <Link to="/docs" className="[&.active]:font-bold">
             Docs
           </Link>
