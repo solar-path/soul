@@ -1,12 +1,14 @@
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { Footer, FooterCopyright, List, ListItem } from "flowbite-react";
+import QHeader from "../ui/QHeader.ui";
 
 export const Route = createRootRoute({
   component: () => (
     <>
       <div className="flex min-h-screen flex-col justify-between">
-        <nav className="p-2 flex gap-2">
+        <QHeader />
+        {/* <nav className="p-2 flex gap-2">
           <Link to="/" className="[&.active]:font-bold">
             Home
           </Link>{" "}
@@ -22,7 +24,7 @@ export const Route = createRootRoute({
           <Link to="/docs" className="[&.active]:font-bold">
             Docs
           </Link>
-        </nav>
+        </nav> */}
         <Outlet />
         <TanStackRouterDevtools />
         <Footer container>
