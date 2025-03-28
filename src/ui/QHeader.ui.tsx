@@ -8,7 +8,7 @@ import {
   NavbarToggle,
 } from "flowbite-react";
 
-export default function HeaderUI() {
+export default function QHeader() {
   return (
     <Navbar fluid rounded>
       <NavbarBrand href="/">
@@ -33,9 +33,6 @@ export default function HeaderUI() {
         </Link>
         <Link to="/company">
           <NavbarLink href="/company">Dashboard</NavbarLink>
-        </Link>
-        <Link to="/docs">
-          <NavbarLink href="/docs">Documentation</NavbarLink>
         </Link>
       </NavbarCollapse>
     </Navbar>

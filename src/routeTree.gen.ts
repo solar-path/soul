@@ -21,11 +21,11 @@ import { Route as CompanyAddressBookIndexImport } from './routes/company/address
 import { Route as AuthProfileIndexImport } from './routes/auth/profile/index'
 import { Route as publicDocsIndexImport } from './routes/(public)/docs/index'
 import { Route as CompanyUserManagementUserImport } from './routes/company/userManagement/user'
+import { Route as publicDocsTermsImport } from './routes/(public)/docs/terms'
+import { Route as publicDocsPrivacyImport } from './routes/(public)/docs/privacy'
 import { Route as CompanyHrmPositionIndexImport } from './routes/company/hrm/position/index'
 import { Route as CompanyHrmEmployeeIndexImport } from './routes/company/hrm/employee/index'
 import { Route as CompanyHrmDepartmentIndexImport } from './routes/company/hrm/department/index'
-import { Route as publicDocsTermsPostImport } from './routes/(public)/docs/terms.post'
-import { Route as publicDocsPrivacyPostImport } from './routes/(public)/docs/privacy.post'
 
 // Create/Update Routes
 
@@ -89,6 +89,18 @@ const CompanyUserManagementUserRoute = CompanyUserManagementUserImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const publicDocsTermsRoute = publicDocsTermsImport.update({
+  id: '/(public)/docs/terms',
+  path: '/docs/terms',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const publicDocsPrivacyRoute = publicDocsPrivacyImport.update({
+  id: '/(public)/docs/privacy',
+  path: '/docs/privacy',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const CompanyHrmPositionIndexRoute = CompanyHrmPositionIndexImport.update({
   id: '/company/hrm/position/',
   path: '/company/hrm/position/',
@@ -104,18 +116,6 @@ const CompanyHrmEmployeeIndexRoute = CompanyHrmEmployeeIndexImport.update({
 const CompanyHrmDepartmentIndexRoute = CompanyHrmDepartmentIndexImport.update({
   id: '/company/hrm/department/',
   path: '/company/hrm/department/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const publicDocsTermsPostRoute = publicDocsTermsPostImport.update({
-  id: '/(public)/docs/terms/post',
-  path: '/docs/terms/post',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const publicDocsPrivacyPostRoute = publicDocsPrivacyPostImport.update({
-  id: '/(public)/docs/privacy/post',
-  path: '/docs/privacy/post',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -142,6 +142,20 @@ declare module '@tanstack/react-router' {
       path: '/company'
       fullPath: '/company'
       preLoaderRoute: typeof CompanyIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/(public)/docs/privacy': {
+      id: '/(public)/docs/privacy'
+      path: '/docs/privacy'
+      fullPath: '/docs/privacy'
+      preLoaderRoute: typeof publicDocsPrivacyImport
+      parentRoute: typeof rootRoute
+    }
+    '/(public)/docs/terms': {
+      id: '/(public)/docs/terms'
+      path: '/docs/terms'
+      fullPath: '/docs/terms'
+      preLoaderRoute: typeof publicDocsTermsImport
       parentRoute: typeof rootRoute
     }
     '/company/userManagement/user': {
@@ -193,20 +207,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompanySettingsIndexImport
       parentRoute: typeof rootRoute
     }
-    '/(public)/docs/privacy/post': {
-      id: '/(public)/docs/privacy/post'
-      path: '/docs/privacy/post'
-      fullPath: '/docs/privacy/post'
-      preLoaderRoute: typeof publicDocsPrivacyPostImport
-      parentRoute: typeof rootRoute
-    }
-    '/(public)/docs/terms/post': {
-      id: '/(public)/docs/terms/post'
-      path: '/docs/terms/post'
-      fullPath: '/docs/terms/post'
-      preLoaderRoute: typeof publicDocsTermsPostImport
-      parentRoute: typeof rootRoute
-    }
     '/company/hrm/department/': {
       id: '/company/hrm/department/'
       path: '/company/hrm/department'
@@ -237,6 +237,8 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof publicPricingRoute
   '/': typeof publicIndexRoute
   '/company': typeof CompanyIndexRoute
+  '/docs/privacy': typeof publicDocsPrivacyRoute
+  '/docs/terms': typeof publicDocsTermsRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
   '/docs': typeof publicDocsIndexRoute
   '/auth/profile': typeof AuthProfileIndexRoute
@@ -244,8 +246,6 @@ export interface FileRoutesByFullPath {
   '/company/erm': typeof CompanyErmIndexRoute
   '/company/hrm': typeof CompanyHrmIndexRoute
   '/company/settings': typeof CompanySettingsIndexRoute
-  '/docs/privacy/post': typeof publicDocsPrivacyPostRoute
-  '/docs/terms/post': typeof publicDocsTermsPostRoute
   '/company/hrm/department': typeof CompanyHrmDepartmentIndexRoute
   '/company/hrm/employee': typeof CompanyHrmEmployeeIndexRoute
   '/company/hrm/position': typeof CompanyHrmPositionIndexRoute
@@ -255,6 +255,8 @@ export interface FileRoutesByTo {
   '/pricing': typeof publicPricingRoute
   '/': typeof publicIndexRoute
   '/company': typeof CompanyIndexRoute
+  '/docs/privacy': typeof publicDocsPrivacyRoute
+  '/docs/terms': typeof publicDocsTermsRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
   '/docs': typeof publicDocsIndexRoute
   '/auth/profile': typeof AuthProfileIndexRoute
@@ -262,8 +264,6 @@ export interface FileRoutesByTo {
   '/company/erm': typeof CompanyErmIndexRoute
   '/company/hrm': typeof CompanyHrmIndexRoute
   '/company/settings': typeof CompanySettingsIndexRoute
-  '/docs/privacy/post': typeof publicDocsPrivacyPostRoute
-  '/docs/terms/post': typeof publicDocsTermsPostRoute
   '/company/hrm/department': typeof CompanyHrmDepartmentIndexRoute
   '/company/hrm/employee': typeof CompanyHrmEmployeeIndexRoute
   '/company/hrm/position': typeof CompanyHrmPositionIndexRoute
@@ -274,6 +274,8 @@ export interface FileRoutesById {
   '/(public)/pricing': typeof publicPricingRoute
   '/(public)/': typeof publicIndexRoute
   '/company/': typeof CompanyIndexRoute
+  '/(public)/docs/privacy': typeof publicDocsPrivacyRoute
+  '/(public)/docs/terms': typeof publicDocsTermsRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
   '/(public)/docs/': typeof publicDocsIndexRoute
   '/auth/profile/': typeof AuthProfileIndexRoute
@@ -281,8 +283,6 @@ export interface FileRoutesById {
   '/company/erm/': typeof CompanyErmIndexRoute
   '/company/hrm/': typeof CompanyHrmIndexRoute
   '/company/settings/': typeof CompanySettingsIndexRoute
-  '/(public)/docs/privacy/post': typeof publicDocsPrivacyPostRoute
-  '/(public)/docs/terms/post': typeof publicDocsTermsPostRoute
   '/company/hrm/department/': typeof CompanyHrmDepartmentIndexRoute
   '/company/hrm/employee/': typeof CompanyHrmEmployeeIndexRoute
   '/company/hrm/position/': typeof CompanyHrmPositionIndexRoute
@@ -294,6 +294,8 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/'
     | '/company'
+    | '/docs/privacy'
+    | '/docs/terms'
     | '/company/userManagement/user'
     | '/docs'
     | '/auth/profile'
@@ -301,8 +303,6 @@ export interface FileRouteTypes {
     | '/company/erm'
     | '/company/hrm'
     | '/company/settings'
-    | '/docs/privacy/post'
-    | '/docs/terms/post'
     | '/company/hrm/department'
     | '/company/hrm/employee'
     | '/company/hrm/position'
@@ -311,6 +311,8 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/'
     | '/company'
+    | '/docs/privacy'
+    | '/docs/terms'
     | '/company/userManagement/user'
     | '/docs'
     | '/auth/profile'
@@ -318,8 +320,6 @@ export interface FileRouteTypes {
     | '/company/erm'
     | '/company/hrm'
     | '/company/settings'
-    | '/docs/privacy/post'
-    | '/docs/terms/post'
     | '/company/hrm/department'
     | '/company/hrm/employee'
     | '/company/hrm/position'
@@ -328,6 +328,8 @@ export interface FileRouteTypes {
     | '/(public)/pricing'
     | '/(public)/'
     | '/company/'
+    | '/(public)/docs/privacy'
+    | '/(public)/docs/terms'
     | '/company/userManagement/user'
     | '/(public)/docs/'
     | '/auth/profile/'
@@ -335,8 +337,6 @@ export interface FileRouteTypes {
     | '/company/erm/'
     | '/company/hrm/'
     | '/company/settings/'
-    | '/(public)/docs/privacy/post'
-    | '/(public)/docs/terms/post'
     | '/company/hrm/department/'
     | '/company/hrm/employee/'
     | '/company/hrm/position/'
@@ -347,6 +347,8 @@ export interface RootRouteChildren {
   publicPricingRoute: typeof publicPricingRoute
   publicIndexRoute: typeof publicIndexRoute
   CompanyIndexRoute: typeof CompanyIndexRoute
+  publicDocsPrivacyRoute: typeof publicDocsPrivacyRoute
+  publicDocsTermsRoute: typeof publicDocsTermsRoute
   CompanyUserManagementUserRoute: typeof CompanyUserManagementUserRoute
   publicDocsIndexRoute: typeof publicDocsIndexRoute
   AuthProfileIndexRoute: typeof AuthProfileIndexRoute
@@ -354,8 +356,6 @@ export interface RootRouteChildren {
   CompanyErmIndexRoute: typeof CompanyErmIndexRoute
   CompanyHrmIndexRoute: typeof CompanyHrmIndexRoute
   CompanySettingsIndexRoute: typeof CompanySettingsIndexRoute
-  publicDocsPrivacyPostRoute: typeof publicDocsPrivacyPostRoute
-  publicDocsTermsPostRoute: typeof publicDocsTermsPostRoute
   CompanyHrmDepartmentIndexRoute: typeof CompanyHrmDepartmentIndexRoute
   CompanyHrmEmployeeIndexRoute: typeof CompanyHrmEmployeeIndexRoute
   CompanyHrmPositionIndexRoute: typeof CompanyHrmPositionIndexRoute
@@ -365,6 +365,8 @@ const rootRouteChildren: RootRouteChildren = {
   publicPricingRoute: publicPricingRoute,
   publicIndexRoute: publicIndexRoute,
   CompanyIndexRoute: CompanyIndexRoute,
+  publicDocsPrivacyRoute: publicDocsPrivacyRoute,
+  publicDocsTermsRoute: publicDocsTermsRoute,
   CompanyUserManagementUserRoute: CompanyUserManagementUserRoute,
   publicDocsIndexRoute: publicDocsIndexRoute,
   AuthProfileIndexRoute: AuthProfileIndexRoute,
@@ -372,8 +374,6 @@ const rootRouteChildren: RootRouteChildren = {
   CompanyErmIndexRoute: CompanyErmIndexRoute,
   CompanyHrmIndexRoute: CompanyHrmIndexRoute,
   CompanySettingsIndexRoute: CompanySettingsIndexRoute,
-  publicDocsPrivacyPostRoute: publicDocsPrivacyPostRoute,
-  publicDocsTermsPostRoute: publicDocsTermsPostRoute,
   CompanyHrmDepartmentIndexRoute: CompanyHrmDepartmentIndexRoute,
   CompanyHrmEmployeeIndexRoute: CompanyHrmEmployeeIndexRoute,
   CompanyHrmPositionIndexRoute: CompanyHrmPositionIndexRoute,
@@ -392,6 +392,8 @@ export const routeTree = rootRoute
         "/(public)/pricing",
         "/(public)/",
         "/company/",
+        "/(public)/docs/privacy",
+        "/(public)/docs/terms",
         "/company/userManagement/user",
         "/(public)/docs/",
         "/auth/profile/",
@@ -399,8 +401,6 @@ export const routeTree = rootRoute
         "/company/erm/",
         "/company/hrm/",
         "/company/settings/",
-        "/(public)/docs/privacy/post",
-        "/(public)/docs/terms/post",
         "/company/hrm/department/",
         "/company/hrm/employee/",
         "/company/hrm/position/"
@@ -414,6 +414,12 @@ export const routeTree = rootRoute
     },
     "/company/": {
       "filePath": "company/index.tsx"
+    },
+    "/(public)/docs/privacy": {
+      "filePath": "(public)/docs/privacy.tsx"
+    },
+    "/(public)/docs/terms": {
+      "filePath": "(public)/docs/terms.tsx"
     },
     "/company/userManagement/user": {
       "filePath": "company/userManagement/user.tsx"
@@ -435,12 +441,6 @@ export const routeTree = rootRoute
     },
     "/company/settings/": {
       "filePath": "company/settings/index.tsx"
-    },
-    "/(public)/docs/privacy/post": {
-      "filePath": "(public)/docs/privacy.post.tsx"
-    },
-    "/(public)/docs/terms/post": {
-      "filePath": "(public)/docs/terms.post.tsx"
     },
     "/company/hrm/department/": {
       "filePath": "company/hrm/department/index.tsx"
