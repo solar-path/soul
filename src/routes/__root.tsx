@@ -7,10 +7,10 @@ export const Route = createRootRoute({
     <>
       <div className="flex min-h-screen flex-col justify-between">
         <nav className="p-2 flex gap-2">
-          <Link to="/public" className="[&.active]:font-bold">
+          <Link to="/" className="[&.active]:font-bold">
             Home
           </Link>{" "}
-          <Link to="/public/pricing" className="[&.active]:font-bold">
+          <Link to="/pricing" className="[&.active]:font-bold">
             Pricing
           </Link>
         </nav>
@@ -21,7 +21,7 @@ export const Route = createRootRoute({
           <List horizontal>
             <ListItem>
               <Link
-                to="/public/docs/privacy/post"
+                to="/docs/privacy/post"
                 className="text-gray-500 hover:underline dark:text-gray-400"
               >
                 Privacy Policy
@@ -29,7 +29,7 @@ export const Route = createRootRoute({
             </ListItem>
             <ListItem>
               <Link
-                to="/public/docs/terms/post"
+                to="/docs/terms/post"
                 className="text-gray-500 hover:underline dark:text-gray-400"
               >
                 Terms of Service

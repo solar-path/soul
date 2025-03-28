@@ -11,34 +11,34 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as PublicIndexImport } from './routes/public/index'
-import { Route as PublicPricingImport } from './routes/public/pricing'
-import { Route as PublicDocsTermsPostImport } from './routes/public/docs/terms.post'
-import { Route as PublicDocsPrivacyPostImport } from './routes/public/docs/privacy.post'
+import { Route as publicIndexImport } from './routes/(public)/index'
+import { Route as publicPricingImport } from './routes/(public)/pricing'
+import { Route as publicDocsTermsPostImport } from './routes/(public)/docs/terms.post'
+import { Route as publicDocsPrivacyPostImport } from './routes/(public)/docs/privacy.post'
 
 // Create/Update Routes
 
-const PublicIndexRoute = PublicIndexImport.update({
-  id: '/public/',
-  path: '/public/',
+const publicIndexRoute = publicIndexImport.update({
+  id: '/(public)/',
+  path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const PublicPricingRoute = PublicPricingImport.update({
-  id: '/public/pricing',
-  path: '/public/pricing',
+const publicPricingRoute = publicPricingImport.update({
+  id: '/(public)/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRoute,
 } as any)
 
-const PublicDocsTermsPostRoute = PublicDocsTermsPostImport.update({
-  id: '/public/docs/terms/post',
-  path: '/public/docs/terms/post',
+const publicDocsTermsPostRoute = publicDocsTermsPostImport.update({
+  id: '/(public)/docs/terms/post',
+  path: '/docs/terms/post',
   getParentRoute: () => rootRoute,
 } as any)
 
-const PublicDocsPrivacyPostRoute = PublicDocsPrivacyPostImport.update({
-  id: '/public/docs/privacy/post',
-  path: '/public/docs/privacy/post',
+const publicDocsPrivacyPostRoute = publicDocsPrivacyPostImport.update({
+  id: '/(public)/docs/privacy/post',
+  path: '/docs/privacy/post',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -46,32 +46,32 @@ const PublicDocsPrivacyPostRoute = PublicDocsPrivacyPostImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/public/pricing': {
-      id: '/public/pricing'
-      path: '/public/pricing'
-      fullPath: '/public/pricing'
-      preLoaderRoute: typeof PublicPricingImport
+    '/(public)/pricing': {
+      id: '/(public)/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof publicPricingImport
       parentRoute: typeof rootRoute
     }
-    '/public/': {
-      id: '/public/'
-      path: '/public'
-      fullPath: '/public'
-      preLoaderRoute: typeof PublicIndexImport
+    '/(public)/': {
+      id: '/(public)/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof publicIndexImport
       parentRoute: typeof rootRoute
     }
-    '/public/docs/privacy/post': {
-      id: '/public/docs/privacy/post'
-      path: '/public/docs/privacy/post'
-      fullPath: '/public/docs/privacy/post'
-      preLoaderRoute: typeof PublicDocsPrivacyPostImport
+    '/(public)/docs/privacy/post': {
+      id: '/(public)/docs/privacy/post'
+      path: '/docs/privacy/post'
+      fullPath: '/docs/privacy/post'
+      preLoaderRoute: typeof publicDocsPrivacyPostImport
       parentRoute: typeof rootRoute
     }
-    '/public/docs/terms/post': {
-      id: '/public/docs/terms/post'
-      path: '/public/docs/terms/post'
-      fullPath: '/public/docs/terms/post'
-      preLoaderRoute: typeof PublicDocsTermsPostImport
+    '/(public)/docs/terms/post': {
+      id: '/(public)/docs/terms/post'
+      path: '/docs/terms/post'
+      fullPath: '/docs/terms/post'
+      preLoaderRoute: typeof publicDocsTermsPostImport
       parentRoute: typeof rootRoute
     }
   }
@@ -80,61 +80,53 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/public/pricing': typeof PublicPricingRoute
-  '/public': typeof PublicIndexRoute
-  '/public/docs/privacy/post': typeof PublicDocsPrivacyPostRoute
-  '/public/docs/terms/post': typeof PublicDocsTermsPostRoute
+  '/pricing': typeof publicPricingRoute
+  '/': typeof publicIndexRoute
+  '/docs/privacy/post': typeof publicDocsPrivacyPostRoute
+  '/docs/terms/post': typeof publicDocsTermsPostRoute
 }
 
 export interface FileRoutesByTo {
-  '/public/pricing': typeof PublicPricingRoute
-  '/public': typeof PublicIndexRoute
-  '/public/docs/privacy/post': typeof PublicDocsPrivacyPostRoute
-  '/public/docs/terms/post': typeof PublicDocsTermsPostRoute
+  '/pricing': typeof publicPricingRoute
+  '/': typeof publicIndexRoute
+  '/docs/privacy/post': typeof publicDocsPrivacyPostRoute
+  '/docs/terms/post': typeof publicDocsTermsPostRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/public/pricing': typeof PublicPricingRoute
-  '/public/': typeof PublicIndexRoute
-  '/public/docs/privacy/post': typeof PublicDocsPrivacyPostRoute
-  '/public/docs/terms/post': typeof PublicDocsTermsPostRoute
+  '/(public)/pricing': typeof publicPricingRoute
+  '/(public)/': typeof publicIndexRoute
+  '/(public)/docs/privacy/post': typeof publicDocsPrivacyPostRoute
+  '/(public)/docs/terms/post': typeof publicDocsTermsPostRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/public/pricing'
-    | '/public'
-    | '/public/docs/privacy/post'
-    | '/public/docs/terms/post'
+  fullPaths: '/pricing' | '/' | '/docs/privacy/post' | '/docs/terms/post'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/public/pricing'
-    | '/public'
-    | '/public/docs/privacy/post'
-    | '/public/docs/terms/post'
+  to: '/pricing' | '/' | '/docs/privacy/post' | '/docs/terms/post'
   id:
     | '__root__'
-    | '/public/pricing'
-    | '/public/'
-    | '/public/docs/privacy/post'
-    | '/public/docs/terms/post'
+    | '/(public)/pricing'
+    | '/(public)/'
+    | '/(public)/docs/privacy/post'
+    | '/(public)/docs/terms/post'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  PublicPricingRoute: typeof PublicPricingRoute
-  PublicIndexRoute: typeof PublicIndexRoute
-  PublicDocsPrivacyPostRoute: typeof PublicDocsPrivacyPostRoute
-  PublicDocsTermsPostRoute: typeof PublicDocsTermsPostRoute
+  publicPricingRoute: typeof publicPricingRoute
+  publicIndexRoute: typeof publicIndexRoute
+  publicDocsPrivacyPostRoute: typeof publicDocsPrivacyPostRoute
+  publicDocsTermsPostRoute: typeof publicDocsTermsPostRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  PublicPricingRoute: PublicPricingRoute,
-  PublicIndexRoute: PublicIndexRoute,
-  PublicDocsPrivacyPostRoute: PublicDocsPrivacyPostRoute,
-  PublicDocsTermsPostRoute: PublicDocsTermsPostRoute,
+  publicPricingRoute: publicPricingRoute,
+  publicIndexRoute: publicIndexRoute,
+  publicDocsPrivacyPostRoute: publicDocsPrivacyPostRoute,
+  publicDocsTermsPostRoute: publicDocsTermsPostRoute,
 }
 
 export const routeTree = rootRoute
@@ -147,23 +139,23 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/public/pricing",
-        "/public/",
-        "/public/docs/privacy/post",
-        "/public/docs/terms/post"
+        "/(public)/pricing",
+        "/(public)/",
+        "/(public)/docs/privacy/post",
+        "/(public)/docs/terms/post"
       ]
     },
-    "/public/pricing": {
-      "filePath": "public/pricing.tsx"
+    "/(public)/pricing": {
+      "filePath": "(public)/pricing.tsx"
     },
-    "/public/": {
-      "filePath": "public/index.tsx"
+    "/(public)/": {
+      "filePath": "(public)/index.tsx"
     },
-    "/public/docs/privacy/post": {
-      "filePath": "public/docs/privacy.post.tsx"
+    "/(public)/docs/privacy/post": {
+      "filePath": "(public)/docs/privacy.post.tsx"
     },
-    "/public/docs/terms/post": {
-      "filePath": "public/docs/terms.post.tsx"
+    "/(public)/docs/terms/post": {
+      "filePath": "(public)/docs/terms.post.tsx"
     }
   }
 }
