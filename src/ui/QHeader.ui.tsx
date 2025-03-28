@@ -1,4 +1,5 @@
 import Logo from "@/assets/logo.png";
+import { Link } from "@tanstack/react-router";
 import {
   Navbar,
   NavbarBrand,
@@ -6,7 +7,6 @@ import {
   NavbarLink,
   NavbarToggle,
 } from "flowbite-react";
-import Logo from "";
 
 export default function HeaderUI() {
   return (
@@ -22,11 +22,21 @@ export default function HeaderUI() {
         <NavbarToggle />
       </div>
       <NavbarCollapse>
-        <NavbarLink href="/docs">Documentation</NavbarLink>
-        <NavbarLink href="/pricing">Pricing</NavbarLink>
-        <NavbarLink href="/auth/profile">Profile</NavbarLink>
-        <NavbarLink href="/company">Dashboard</NavbarLink>
-        <NavbarLink href="/docs">Documentation</NavbarLink>
+        <Link to="/docs">
+          <NavbarLink href="/docs">Documentation</NavbarLink>
+        </Link>
+        <Link to="/pricing">
+          <NavbarLink href="/pricing">Pricing</NavbarLink>
+        </Link>
+        <Link to="/auth/profile">
+          <NavbarLink href="/auth/profile">Profile</NavbarLink>
+        </Link>
+        <Link to="/company">
+          <NavbarLink href="/company">Dashboard</NavbarLink>
+        </Link>
+        <Link to="/docs">
+          <NavbarLink href="/docs">Documentation</NavbarLink>
+        </Link>
       </NavbarCollapse>
     </Navbar>
   );
