@@ -9,7 +9,7 @@ import {
 import { fillDrawer } from "@/ui/QDrawer/QDrawer.store";
 import ContactUsForm from "./ContactUs.form";
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
-import { trpc } from "@/lib/trpc";
+import { trpc } from "@/utils/trpc";
 import { useState } from "react";
 
 export default function FindContactUsResponse() {

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { contactUsSchema, ContactUs } from "./contactUs.zod";
 import { closeDrawer, fillDrawer } from "@/ui/QDrawer/QDrawer.store";
-import { trpc } from "@/lib/trpc";
+import { trpc } from "@/utils/trpc";
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
 import FindContactUsResponse from "./findContactUsResponse.form";
 
