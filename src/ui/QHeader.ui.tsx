@@ -1,12 +1,16 @@
 import Logo from "@/assets/logo.png";
 import { Link } from "@tanstack/react-router";
 import {
+  Button,
   Navbar,
   NavbarBrand,
   NavbarCollapse,
   NavbarLink,
   NavbarToggle,
 } from "flowbite-react";
+import { fillDrawer } from "./QDrawer/QDrawer.store";
+import SignUpForm from "@/api/routes/auth/SignUp.form";
+import SignInForm from "@/api/routes/auth/SignIn.form";
 
 export default function QHeader() {
   return (
@@ -19,6 +23,9 @@ export default function QHeader() {
         />
       </NavbarBrand>
       <div className="flex md:order-2">
+        <Button onClick={() => fillDrawer(SignInForm, "Sign in")}>
+          Get started
+        </Button>
         <NavbarToggle />
       </div>
       <NavbarCollapse>
@@ -34,6 +41,9 @@ export default function QHeader() {
         <Link to="/company">
           <NavbarLink href="/company">Dashboard</NavbarLink>
         </Link>
+        <NavbarLink href="#" onClick={() => fillDrawer(SignUpForm, "Sign up")}>
+          Sign up
+        </NavbarLink>
       </NavbarCollapse>
     </Navbar>
   );
