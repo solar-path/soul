@@ -1,5 +1,5 @@
 import { Drawer, DrawerHeader, DrawerItems } from "flowbite-react";
-import { useDrawerStore } from "@/ui/QDrawer/drawer.store";
+import { useDrawerStore } from "@/ui/QDrawer/QDrawer.store";
 
 /**
  * QDrawer component that displays content in a right-side drawer
