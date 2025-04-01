@@ -53,12 +53,16 @@ export default function ContactUsForm() {
         </div>
         <div>
           <Label htmlFor="message">Message</Label>
-          <Textarea
-            id="message"
-            rows={4}
-            {...register("message")}
-            color={errors.message ? "failure" : "gray"}
-          />
+          <div className="relative">
+            <div className="absolute left-3 top-3 text-lg z-10">💬</div>
+            <Textarea
+              id="message"
+              rows={4}
+              className="pl-10"
+              {...register("message")}
+              color={errors.message ? "failure" : "gray"}
+            />
+          </div>
           <HelperText>{errors.message?.message}</HelperText>
         </div>
         <Button type="submit" color="dark">
