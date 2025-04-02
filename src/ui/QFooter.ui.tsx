@@ -25,30 +25,6 @@ export default function QFooter() {
           </button>
         </FooterLink>
       </FooterLinkGroup>
-
-      {/* <List horizontal>
-        <ListItem>
-          <Link
-            to="/docs/privacy"
-            className="text-gray-500 hover:underline dark:text-gray-400"
-          >
-            Privacy Policy
-          </Link>
-        </ListItem>
-        <ListItem>
-          <Link
-            to="/docs/terms"
-            className="text-gray-500 hover:underline dark:text-gray-400"
-          >
-            Terms of Service
-          </Link>
-        </ListItem>
-        <ListItem>
-          <button onClick={() => fillDrawer(ContactUsForm, "Contact Us")}>
-            Contact Us
-          </button>
-        </ListItem>
-      </List> */}
     </Footer>
   );
 }
