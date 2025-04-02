@@ -20,6 +20,26 @@ function DocsPage() {
       title: "Privacy Policy",
       href: "/docs/privacy",
     },
+    {
+      title: "Authentication",
+      href: "/docs/authentication",
+    },
+    {
+      title: "Business",
+      href: "/docs/business",
+    },
+    {
+      title: "Risk management",
+      href: "/docs/erm",
+    },
+    {
+      title: "Internal control",
+      href: "/docs/ic",
+    },
+    {
+      title: "Internal audit",
+      href: "/docs/ia",
+    },
   ];
 
   return (
@@ -31,11 +51,9 @@ function DocsPage() {
           <SidebarItems>
             <SidebarItemGroup>
               {postList.map((post) => (
-                <Link to={post.href}>
-                  <SidebarItem key={post.title} href={post.href}>
-                    {post.title}
-                  </SidebarItem>
-                </Link>
+                <SidebarItem as={Link} key={post.title} href={post.href}>
+                  {post.title}
+                </SidebarItem>
               ))}
             </SidebarItemGroup>
           </SidebarItems>
