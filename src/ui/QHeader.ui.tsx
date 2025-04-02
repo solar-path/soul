@@ -15,7 +15,7 @@ import SignInForm from "@/api/routes/auth/SignIn.form";
 export default function QHeader() {
   return (
     <Navbar fluid rounded>
-      <NavbarBrand href="/">
+      <NavbarBrand as={Link} href="/">
         <img
           src={Logo}
           className="mr-3 h-6 sm:h-9"
@@ -29,19 +29,19 @@ export default function QHeader() {
         <NavbarToggle />
       </div>
       <NavbarCollapse>
-        <Link to="/docs">
-          <NavbarLink href="/docs">Documentation</NavbarLink>
-        </Link>
-        <Link to="/pricing">
-          <NavbarLink href="/pricing">Pricing</NavbarLink>
-        </Link>
-        <Link to="/auth/profile">
-          <NavbarLink href="/auth/profile">Profile</NavbarLink>
-        </Link>
-        <Link to="/company">
-          <NavbarLink href="/company">Dashboard</NavbarLink>
-        </Link>
-        <NavbarLink href="#" onClick={() => fillDrawer(SignUpForm, "Sign up")}>
+        <NavbarLink as={Link} href="/docs">
+          Documentation
+        </NavbarLink>
+        <NavbarLink as={Link} href="/pricing">
+          Pricing
+        </NavbarLink>
+        <NavbarLink as={Link} href="/auth/profile">
+          Profile
+        </NavbarLink>
+        <NavbarLink as={Link} href="/company">
+          Dashboard
+        </NavbarLink>
+        <NavbarLink onClick={() => fillDrawer(SignUpForm, "Sign up")}>
           Sign up
         </NavbarLink>
       </NavbarCollapse>
