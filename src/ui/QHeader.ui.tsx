@@ -23,7 +23,7 @@ export default function QHeader() {
         />
       </NavbarBrand>
       <div className="flex md:order-2">
-        <Button onClick={() => fillDrawer(SignInForm, "Sign in")}>
+        <Button color="dark" onClick={() => fillDrawer(SignInForm, "Sign in")}>
           Get started
         </Button>
         <NavbarToggle />

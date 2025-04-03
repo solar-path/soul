@@ -92,7 +92,7 @@ export default function SignInForm() {
         <div className="relative">
           <TextInput
             type={showPassword ? "text" : "password"}
-            icon={() => <span className="text-lg">🔒</span>}
+            icon={() => <span className="text-lg">🔑</span>}
             color={errors.password ? "failure" : "gray"}
             {...register("password")}
           />

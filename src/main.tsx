@@ -7,6 +7,7 @@ import { routeTree } from "./routeTree.gen";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./utils/trpc";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { createTheme, ThemeProvider } from "flowbite-react";
 // Create a new router instance
 const router = createRouter({ routeTree });
 
@@ -17,16 +18,26 @@ declare module "@tanstack/react-router" {
   }
 }
 
+const customTheme = createTheme({
+  button: {
+    color: {
+      primary: "bg-black text-white",
+    },
+  },
+});
+
 // Render the app
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
+      <ThemeProvider theme={customTheme}>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </ThemeProvider>
     </StrictMode>
   );
 }

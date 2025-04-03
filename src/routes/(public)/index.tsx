@@ -31,6 +31,7 @@ function Index() {
 
             <Button
               type="button"
+              color="dark"
               onClick={() => fillDrawer(SignUpForm, "Sign Up")}
             >
               Sign Up

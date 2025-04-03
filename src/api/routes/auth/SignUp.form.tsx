@@ -88,7 +88,7 @@ export default function SignUpForm() {
           <TextInput
             autoComplete="off"
             type={showPassword ? "text" : "password"}
-            icon={() => <span className="text-lg">🔒</span>}
+            icon={() => <span className="text-lg">🔑</span>}
             color={errors.password ? "failure" : "gray"}
             {...register("password")}
           />
@@ -109,7 +109,7 @@ export default function SignUpForm() {
           <TextInput
             autoComplete="off"
             type={showConfirmPassword ? "text" : "password"}
-            icon={() => <span className="text-lg">🔒</span>}
+            icon={() => <span className="text-lg">🔑</span>}
             color={errors.confirmPassword ? "failure" : "gray"}
             {...register("confirmPassword")}
           />
