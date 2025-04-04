@@ -1,420 +1,74 @@
-import { createFileRoute } from "@tanstack/react-router";
+---
+title: Terms of Service
+description: Aneko's Terms of Service.
+date: "2025-04-18"
+categories:
+  - legal
+  - terms
+published: true
+---
 
-export const Route = createFileRoute("/(public)/docs/terms")({
-  component: RouteComponent,
-});
+## Acceptance of the Terms of Use
 
-function RouteComponent() {
-  return (
-    <div>
-      <div className="flex flex-col space-y-2 text-justify p-8">
-        <p className="mb-2 text-lg font-semibold">
-          Acceptance of the Terms of Use
-        </p>
-        <p className="text-justify">Aneko Last Updated: April 18, 2024</p>
+Aneko Last Updated: April 18, 2024
 
-        <p className="text-justify">
-          These Terms of Use are entered into by and between you and Aneko, and
-          any of its subsidiaries and affiliates thereof (“Company”, “we”, or
-          “us”). The term “Aneko” refers to Aneko, LLC doing business under the
-          name “Aneko”.
-        </p>
+These Terms of Use are entered into by and between you and Aneko, and any of its subsidiaries and affiliates thereof ("Company", "we", or "us"). The term "Aneko" refers to Aneko, LLC doing business under the name "Aneko".
 
-        <p className="text-justify">
-          The following terms and conditions, together with any documents
-          expressly incorporated herein by reference (collectively, “Terms of
-          Use”), govern your access to and use of <a href="/">aneko.io</a> (the
-          “Website” or the “Site”) including any content, marketplace, mobile
-          apps, functionality, and site services (the “Services”) offered on or
-          through the Website, whether as a guest or a registered user (a
-          “User”). Users include those who have registered for an account on the
-          Platform (“Account”).
-        </p>
+The following terms and conditions, together with any documents expressly incorporated herein by reference (collectively, "Terms of Use"), govern your access to and use of [aneko.io](/) (the "Website" or the "Site") including any content, marketplace, mobile apps, functionality, and site services (the "Services") offered on or through the Website, whether as a guest or a registered user (a "User"). Users include those who have registered for an account on the Platform ("Account").
 
-        <p className="text-justify">
-          Please read the Terms of Use carefully before you start to use the
-          Website. By registering for an account on the Website, or by clicking
-          to accept or agree to the Terms of Use when this option is made
-          available to you, you accept and agree to be bound and abide by these
-          Terms of Use, and our <a href="/policy">Privacy Policy</a>, which
-          Privacy Policy is hereby incorporated by reference. If you do not want
-          to agree to these Terms of Use, or our Privacy Policy, you must not
-          access or use the Website and must exit the Website immediately.
-        </p>
+Please read the Terms of Use carefully before you start to use the Website. By registering for an account on the Website, or by clicking to accept or agree to the Terms of Use when this option is made available to you, you accept and agree to be bound and abide by these Terms of Use, and our [Privacy Policy](/policy), which Privacy Policy is hereby incorporated by reference. If you do not want to agree to these Terms of Use, or our Privacy Policy, you must not access or use the Website and must exit the Website immediately.
 
-        <p className="mb-2 text-lg font-semibold">
-          Eligibility Requirements to Use or Access the Services
-        </p>
+## Eligibility Requirements to Use or Access the Services
 
-        <p className="text-justify">
-          To use the Website or any other Services offered by the Company, you
-          must be
-        </p>
-        <ul className="text-justify list-disc ml-8">
-          <li className="text-justify">(i) at least 18 years old, and</li>
-          <li className="text-justify">
-            (ii) not a competitor of or using the Services for purposes that are
-            competitive with the Company.
-          </li>
-        </ul>
+To use the Website or any other Services offered by the Company, you must be at least 18 years old, and not a competitor of or using the Services for purposes that are competitive with the Company.
 
-        <p className="text-justify">
-          By accessing or using the Services, you represent and warrant that you
-          meet all the foregoing eligibility requirements. You also represent
-          and warrant that you have the right, authority, and capacity to enter
-          into these Terms of Use on your behalf or the entity or organization
-          that you represent. If you do not meet all these requirements, you may
-          not use or access the Services.
-        </p>
+By accessing or using the Services, you represent and warrant that you meet all the foregoing eligibility requirements. You also represent and warrant that you have the right, authority, and capacity to enter into these Terms of Use on your behalf or the entity or organization that you represent. If you do not meet all these requirements, you may not use or access the Services.
 
-        <p className="mb-2 text-lg font-semibold">Privacy</p>
-        <p className="text-justify">
-          For information about how the Company collects, uses, and shares your
-          information, please review our <a href="/policy">Privacy Policy</a>.
-          You agree that by using the Services you consent to the collection,
-          use, and sharing (as set forth in the Privacy Policy) of such
-          information.
-        </p>
+## Changes to the Terms of Use
 
-        <p className="text-justify">
-          The Children’s Online Privacy Protection Act requires that online
-          service providers obtain parental consent before they knowingly
-          collect personally identifiable information online from children who
-          are under 18 years old. We do not knowingly collect or solicit
-          personally identifiable information from children under 18 years old.
-          If you are a child under 18 years old, please do not attempt to
-          register for the Services or send any personal information about
-          yourself to us. If we learn we have collected personal information
-          from a child under 18 years old, we will delete that information as
-          quickly as possible. If you believe that a child under 18 years old
-          may have provided us personal information, please{" "}
-          <a href="/contactUs">Contact us</a>
-        </p>
+We may revise and update these Terms of Use from time to time in our sole discretion. All changes are effective immediately when we post them, and apply to all access to and use of the Website thereafter. However, any changes to the dispute resolution provisions set out in Governing Law and Jurisdiction will not apply to any disputes for which the parties have actual notice on or before the date the change is posted on the Website.
 
-        <p className="mb-2 text-lg font-semibold">
-          Changes to the Terms of Use
-        </p>
+Your continued use of the Website following the posting of revised Terms of Use means that you accept and agree to the changes. You are expected to check this page each time you access this Website so you are aware of any changes, as they are binding on you.
 
-        <p className="text-justify">
-          We may revise and update these Terms of Use from time to time in our
-          sole and absolute discretion. All changes are effective immediately
-          when we post them, and apply to all access to and use of the Website
-          thereafter. However, any changes to the dispute resolution provisions
-          set out in Governing Law and Jurisdiction sections (below) will not
-          apply to any disputes for which the parties have actual notice on or
-          before the date the change is posted on the Website. Your continued
-          use of the Website following the posting of revised Terms of Use means
-          that you accept and agree to the changes. You are expected to check
-          this page frequently so you are aware of any changes, as they are
-          binding on you.
-        </p>
+## Definitions
 
-        <p className="mb-2 text-lg font-semibold">Definitions</p>
+* **Affiliates** means any third-party companies which the Company chooses to work with and is considered a part of the Platform.
+* **Connected Account** means the account Users successfully create with the Company’s third-party payment processor, Stripe, in order to complete payments to and from Users.
+* **Content** means texts, emails, photographs or videos, information, software, images, communication, or other materials, including but not limited to, profile information, message threads, auditing resources, reviews, calendars, schedules, other information materials.
+* **Groups** are areas of the Website in which a User can either join or start a group focused on collaboration and which allows for sharing Group Content among Users that is specific to such groups’ industry, geography, or functional focus. Groups can be open to all Users or invite-only as determined by the access settings set by the Group Organizer or Group Moderator.
+* **Group Content** means Content shared among Users who are subscribed to a particular Group.
+* **Group Moderator** is a User who is part of a Group, is promoted to be a moderator of a Group, and who has the ability to edit and delete any forum discussion within the Group and delete any activity feed items, excluding those posted by a Group Organizer.
+* **Group Organizer** means a User who creates a Group and has total control over the contents and settings of a Group, which includes all the abilities of Group Moderators, as well as the ability to turn Group forums on or off, change Group status from public to private, change the Group photo, manage Group Users, and delete the Group.
+* **Marketplace** is defined as the area of the Website whereby Marketplace Sellers can offer Marketplace Resources to other Users either for free or for cost, as determined by such Marketplace Seller.
+* **Marketplace Payout Rate** is defined as the percentage of the total sales price Users may earn for sales of Marketplace Resource sold through the Website. The Marketplace Payout Rate will be paid out by the Company to a User via mutually agreed payment method and such amount shall be determined by a mutually agreed upon calculation. The Company reserves the right to deduct from the Marketplace Payout Rate the amount of any refunds granted to Users or deduct the amount of such refunds from future disbursements otherwise payable to Marketplace Sellers. All payments and refunds payable or due from Marketplace Sellers shall be done through a mutually agreed method.
+* **Marketplace Resources** means digital products, physical products, or services sold or shared for free by Marketplace Sellers and/or Users, as applicable, on the Marketplace.
+* **Marketplace Seller** means a User who sells Marketplace Resources through the Website.
+* **Payment Method** refers to credit card, debit cards, and ACH transactions.
+* **Platform** means the application on the Site used to connect Users.
+* **Premium Membership Content** means, including, without limitation, webinars, educational courses, access to live and a library of recorded events, virtual community events, and other educational resources and content the Company makes available now or in the future to Users with a Subscription.
+* **Profile** means the User-created web profile on the Site in which a User’s information is stored and select information is displayed, such as the information described in the “User Profile” section below.
+* **Subscription** means the amount to be paid by the User to obtain access to the Platform, Website, Premium Membership Content, access to purchase Marketplace Resources, and/or Website Services. All Subscriptions are non-refundable. All Subscription fees are subject to change in the Company’s sole and absolute discretion.
+* **User Content** means all content Users submit, post, upload, publish, or transmit on or through the Platform, including but not limited to, chat messaging, or calls made through the Site’s internal communication application, photographs, Profile information, descriptions, postings, and reviews.
 
-        <ul className="text-justify list-disc ml-8">
-          <li className="text-justify">
-            <span className="font-semibold">Affiliates</span>
-            means any third-party companies which the Company chooses to work
-            with and is considered a part of the Platform.
-          </li>
-          <li className="text-justify">
-            <span className="font-semibold">Connected Account</span> means the
-            account Users successfully create with the Company’s third-party
-            payment processor, Stripe, in order to complete payments to and from
-            Users.
-          </li>
-          <li className="text-justify">
-            <span className="font-semibold">Content</span> means texts, emails,
-            photographs or videos, information, software, images, communication,
-            or other materials, including but not limited to, profile
-            information, message threads, auditing resources, reviews,
-            calendars, schedules, other information materials.
-          </li>
-          <li className="text-justify">
-            <span className="font-semibold">Groups</span> are areas of the
-            Website in which a User can either join or start a group focused on
-            collaboration and which allows for sharing Group Content among Users
-            that is specific to such groups’ industry, geography, or functional
-            focus. Groups can be open to all Users or invite-only as determined
-            by the access settings set by the Group Organizer or Group
-            Moderator.
-          </li>
-          <li className="text-justify">
-            <span className="font-semibold">Group Content</span> means Content
-            shared among Users who are subscribed to a particular Group.
-          </li>
-          <li className="text-justify">
-            <span className="font-semibold">Group Moderator</span> is a User who
-            is part of a Group, is promoted to be a moderator of a Group, and
-            who has the ability to edit and delete any forum discussion within
-            the Group and delete any activity feed items, excluding those posted
-            by a Group Organizer.
-          </li>
-          <li className="text-justify">
-            <span className="font-semibold">Group Organizer</span> means a User
-            who creates a Group and has total control over the contents and
-            settings of a Group, which includes all the abilities of Group
-            Moderators, as well as the ability to turn Group forums on or off,
-            change Group status from public to private, change the Group photo,
-            manage Group Users, and delete the Group.
-          </li>
-          <li className="text-justify">
-            <span className="font-semibold">Marketplace</span> is defined as the
-            area of the Website whereby Marketplace Sellers can offer
-            Marketplace Resources to other Users either for free or for cost, as
-            determined by such Marketplace Seller.
-          </li>
-          <li className="text-justify">
-            <span className="font-semibold">Marketplace Payout Rate</span> is
-            defined as the percentage of the total sales price Users may earn
-            for sales of Marketplace Resource sold through the Website. The
-            Marketplace Payout Rate will be paid out by the Company to a User
-            via mutually agreed payment method and such amount shall be
-            determined by a mutually agreed upon calculation. The Company
-            reserves the right to deduct from the Marketplace Payout Rate the
-            amount of any refunds granted to Users or deduct the amount of such
-            refunds from future disbursements otherwise payable to Marketplace
-            Sellers. All payments and refunds payable or due from Marketplace
-            Sellers shall be done through a mutually agreed method.
-          </li>
-          <li className="text-justify">
-            <span className="font-semibold">Marketplace Resources</span> means
-            digital products, physical products, or services sold or shared for
-            free by Marketplace Sellers and/or Users, as applicable, on the
-            Marketplace.
-          </li>
-          <li className="text-justify">
-            <span className="font-semibold">Marketplace Seller</span> means a
-            User who sells Marketplace Resources through the Website.
-          </li>
-          <li className="text-justify">
-            <span className="font-semibold">Payment Method</span> refers to
-            credit card, debit cards, and ACH transactions.
-          </li>
-          <li className="text-justify">
-            <span className="font-semibold">Platform</span> means the
-            application on the Site used to connect Users.
-          </li>
-          <li className="text-justify">
-            <span className="font-semibold">Premium Membership Content</span>{" "}
-            means, including, without limitation, webinars, educational courses,
-            access to live and a library of recorded events, virtual community
-            events, and other educational resources and content the Company
-            makes available now or in the future to Users with a Subscription.
-          </li>
-          <li className="text-justify">
-            <span className="font-semibold">Profile</span> means the
-            User-created web profile on the Site in which a User’s information
-            is stored and select information is displayed, such as the
-            information described in the “User Profile” section below.
-          </li>
-          <li className="text-justify">
-            <span className="font-semibold">Subscription</span> means the amount
-            to be paid by the User to obtain access to the Platform, Website,
-            Premium Membership Content, access to purchase Marketplace
-            Resources, and/or Website Services. All Subscriptions are
-            non-refundable. All Subscription fees are subject to change in the
-            Company’s sole and absolute discretion.
-          </li>
-          <li className="text-justify">
-            <span className="font-semibold">User Content</span> means all
-            content Users submit, post, upload, publish, or transmit on or
-            through the Platform, including but not limited to, chat messaging,
-            or calls made through the Site’s internal communication application,
-            photographs, Profile information, descriptions, postings, and
-            reviews.
-          </li>
-        </ul>
+## Aneko Site and Marketplace Services
 
-        <p className="mb-2 text-lg font-semibold">
-          Aneko Site and Marketplace Services
-        </p>
-        <p className="text-justify">
-          The Company is an online community for internal auditors that allows
-          Users to share resources, learn from each other in virtual community
-          events, and expand their professional education. The Company offers
-          Subscriptions, which grant Users access to Premium Membership Content.
-          The Company also offers Marketplace Resources, including without
-          limitation, electronically delivered files, digital products, and
-          other digital product types. The Company may modify, add, discontinue
-          support for, or limit the availability of any product type. The
-          Company at no time sells Marketplace Resources for or on behalf of our
-          Users. The Company offers Subscriptions to its Premium Membership
-          Content independently of Marketplace Resources that are offered by
-          third-party Marketplace Sellers. Users acknowledge and agree that the
-          Company does not supervise or direct the Content posted by, and is
-          therefore not responsible for the information posted or sold by,
-          Marketplace Sellers or other Users. The Company does not ensure the
-          accuracy and legality of any Content. For more information about
-          Content standards, please see Prohibited Uses and Code of Conduct and
-          Content Standards below.
-        </p>
+The Company is an online community for internal auditors that allows Users to share resources, learn from each other in virtual community events, and expand their professional education. The Company offers Subscriptions, which grant Users access to Premium Membership Content. The Company also offers Marketplace Resources, including without limitation, electronically delivered files, digital products, and other digital product types. The Company may modify, add, discontinue support for, or limit the availability of any product type. The Company at no time sells Marketplace Resources for or on behalf of our Users. The Company offers Subscriptions to its Premium Membership Content independently of Marketplace Resources that are offered by third-party Marketplace Sellers. Users acknowledge and agree that the Company does not supervise or direct the Content posted by, and is therefore not responsible for the information posted or sold by, Marketplace Sellers or other Users. The Company does not ensure the accuracy and legality of any Content. For more information about Content standards, please see Prohibited Uses and Code of Conduct and Content Standards below.
 
-        <p className="mb-2 text-lg font-semibold">
-          Payment Methods and Currency
-        </p>
-        <p className="text-justify">
-          The Company charges Users a periodic Subscription rate for access to
-          Premium Membership Content according to the Company’s pricing page on
-          the Website. The Company uses a third-party payment processing
-          company, PayPal, as the payment processor for all payment services on
-          the Platform, including for Premium Membership Subscriptions and
-          Marketplace Resources. PayPal currently accepts payments in multiple
-          currencies. The Company is not responsible or liable in any way for
-          third-party losses, damages, lawsuits, actions, or claims. By using
-          the Website, Users release the Company from any liability resulting
-          from use of third-party payment services. If you have questions
-          regarding PayPal, please contact PayPal at support@paypal.com or visit
-          the PayPal website to review their Terms of Service.
-        </p>
+## Payment Methods and Currency
 
-        <p className="mb-2 text-lg font-semibold">Refund Policy</p>
-        <p className="text-justify">
-          When you subscribe to Premium Membership Content or purchase
-          Marketplace Resources on the Platform, you agree to our Refund Policy.
-          Except as otherwise provided herein, all sales are final and
-          nonrefundable once an order is submitted. We may, in our sole
-          discretion, modify our Refund Policy or, on a case-by-case basis,
-          issue a refund for a reason that falls outside of our Refund Policy,
-          such as a receipt of a corrupted file. In such cases, please contact
-          us as soon as possible to let us know.
-        </p>
+The Company charges Users a periodic Subscription rate for access to Premium Membership Content according to the Company’s pricing page on the Website. The Company uses a third-party payment processing company, PayPal, as the payment processor for all payment services on the Platform, including for Premium Membership Subscriptions and Marketplace Resources. PayPal currently accepts payments in multiple currencies. The Company is not responsible or liable in any way for third-party losses, damages, lawsuits, actions, or claims. By using the Website, Users release the Company from any liability resulting from use of third-party payment services. If you have questions regarding PayPal, please contact PayPal at support@paypal.com or visit the PayPal website to review their Terms of Service.
 
-        <p className="mb-2 text-lg font-semibold">Promise to Pay</p>
-        <p className="text-justify">
-          When you subscribe to Premium Membership Content or purchase
-          Marketplace Resources on the Marketplace, you represent and warrant
-          that you are authorized to make the purchase and to use the payment
-          method and billing information you have provided to the Company’s
-          third-party payment processor, Stripe. You further agree that the
-          Company may charge your payment method for the amount due. The Company
-          is not responsible for any additional fees you may be charged by your
-          financial institution, such as international transaction fees or
-          overdraft fees.
-        </p>
+## Refund Policy
 
-        <p className="mb-2 text-lg font-semibold">
-          Failure to Pay and Payment Disputes
-        </p>
-        <p className="text-justify">
-          Failure to pay as promised may result in late fees being charged,
-          removal of Premium Membership Content or Marketplace Resources from
-          your Account, Account suspension or closure, or any other action we
-          deem necessary. If the Company receives notice that you have disputed
-          a charge related to a purchase made from your Account, it may, at its
-          discretion, offer proof to challenge the dispute. Pending resolution
-          of the dispute, the Company may terminate Premium Membership Content
-          in your Account, terminate your Subscription Account, and/or remove
-          the purchased Marketplace Resources from your Account temporarily, or,
-          if a refund is ultimately issued, permanently. In our discretion, we
-          may take further action against your Account.
-        </p>
+When you subscribe to Premium Membership Content or purchase Marketplace Resources on the Platform, you agree to our Refund Policy. Except as otherwise provided herein, all sales are final and nonrefundable once an order is submitted. We may, in our sole discretion, modify our Refund Policy or, on a case-by-case basis, issue a refund for a reason that falls outside of our Refund Policy, such as a receipt of a corrupted file. In such cases, please contact us as soon as possible to let us know.
 
-        <p className="mb-2 text-lg font-semibold">Marketplace Earnings</p>
-        <p className="text-justify">
-          For each sale through the Platform, the User earns the applicable
-          Marketplace Payout Rate applicable to each User’s sales of Marketplace
-          Resources.
-        </p>
+## Promise to Pay
 
-        <p className="mb-2 text-lg font-semibold">
-          Content Standards and Intellectual Property Infringement
-        </p>
-        <p className="text-justify">
-          All Users (including Marketplace Sellers) must abide by the Content
-          Standards (described below) and Users and Marketplace Sellers maintain
-          all right, title, and interest to all their intellectual property in
-          Marketplace Resources, User Content, and Group Content offered through
-          the Website or in Groups (as applicable).
-        </p>
-        <p className="mb-2 text-lg font-semibold">
-          Marketplace Indemnification
-        </p>
-        <p className="text-justify">
-          Marketplace Sellers and Users agree to indemnify, defend, and hold
-          harmless the Company, its employees, officers, directors, agents, and
-          affiliates from and against all costs, expenses, damages, judgments,
-          and liabilities (including reasonable attorneys’ fees) resulting from
-          allegations, threats, claims, suits, or other proceedings brought by
-          third parties related to a Marketplace Seller’s or User’s use or
-          misuse of the Marketplace Services or the Website, including but not
-          limited to, any breach of these Terms of Use, violation of any
-          federal, state, or local law, and infringement of someone else’s
-          intellectual property, privacy, publicity, or other rights.
-        </p>
-        <p className="mb-2 text-lg font-semibold">Sales Tax</p>
-        <p className="text-justify">
-          A purchaser of Marketplace Resources may be subject to local, state,
-          or federal sales taxes or other taxes in the jurisdiction in which
-          such purchaser resides.
-        </p>
+When you subscribe to Premium Membership Content or purchase Marketplace Resources on the Marketplace, you represent and warrant that you are authorized to make the purchase and to use the payment method and billing information you have provided to the Company’s third-party payment processor, Stripe. You further agree that the Company may charge your payment method for the amount due. The Company is not responsible for any additional fees you may be charged by your financial institution, such as international transaction fees or overdraft fees.
 
-        <p className="mb-2 text-lg font-semibold">
-          Accessing the Website and Account Security
-        </p>
-        <p className="text-justify">
-          We reserve the right to withdraw or amend this Website, and any
-          service or material we provide on the Website, in our sole and
-          absolute discretion without notice. We will not be liable if for any
-          reason all or any part of the Website is unavailable at any time or
-          for any period. From time to time, we may restrict access to some
-          parts of the Website, or the entire Website, to Users, including
-          registered Users.
-        </p>
-        <p className="text-justify">You are responsible for both:</p>
-        <ul className="text-justify list-disc ml-8">
-          <li className="text-justify">
-            Making all arrangements necessary for you to have access to the
-            Website.
-          </li>
-          <li className="text-justify">
-            Ensuring that all persons who access the Website through your
-            Internet connection are aware of these Terms of Use and comply with
-            them.
-          </li>
-        </ul>
+## Failure to Pay and Payment Disputes
 
-        <p className="text-justify">
-          To access the Website or some of the resources it offers, you may be
-          asked to provide certain registration details or other information. It
-          is a condition of your use of the Website that all the information you
-          provide on the Website is correct, current, and complete. You agree
-          that all information you provide to register with this Website or
-          otherwise, including but not limited to, through the use of any
-          interactive features on the Website, if applicable, is governed by our{" "}
-          <a href="/policy">Privacy Policy</a> which is hereby incorporated into
-          these Terms of Use, and you consent to all actions we take with
-          respect to your information consistent with our Privacy Policy and
-          these Terms of Use.
-        </p>
-        <p className="mb-2 text-lg font-semibold">Account Profile</p>
-        <p className="text-justify">
-          To register for the Website, you must complete a User profile
-          (“Profile”), in which you must choose a username and password. With
-          your Profile creation, your default screen name will be your first
-          name, which you can later modify if you choose to. By creating a
-          Profile, you consent to having your Profile information visible to
-          other Users and/or the public. If you choose, or are provided with,
-          any other piece of information as part of our security procedures, you
-          must treat such information as confidential, and you must not disclose
-          it to any other person or entity. You also acknowledge that your
-          account is personal to you and agree not to provide any other person
-          with access to this Website or portions of it using your username,
-          password, or other security information. The safety of your account is
-          your responsibility. You agree that the information you provide is
-          true, accurate, and complete, will not provide misleading information
-          about your identity, location, skills, or services you provide, and
-          you will update your information to maintain such accuracy and
-          completeness or correct any information that becomes false or
-          misleading. You agree to notify us immediately of any unauthorized
-          access to or use of your username or password or any other breach of
-          security by contacting the Company at
-          <a href="Contact Us">Contact us</a>. You should use particular caution
-          when accessing your account from a public or shared computer so that
-          others are not able to view or record your password or other personal
-          information. You agree that you will not open an account for someone
-          else or log in to someone else’s account and act on their behalf
-          unless you are authorized by the Company. You agree that you will act
+Failure to pay as promised may result in late fees being charged, removal of Premium Membership Content or Marketplace Resources from your Account, Account suspension or closure, or any other action we deem necessary. If the Company receives notice that you have disputed a charge related to a purchase made from your Account, it may, at its discretion, offer proof to challenge the dispute. Pending resolution of the dispute, the Company may terminate Premium Membership Content in your Account, terminate your Subscription Account, and/or remove the purchased Marketplace Resources from your Account temporarily, or, if a refund is ultimately issued, permanently. In our discretion, we may take further action against your Account.
           on your own behalf, unless appropriately authorized to act on behalf
           of another person, and will not pretend to be any identify other than
           your own. You agree that the person using your account has authority

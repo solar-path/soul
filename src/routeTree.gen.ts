@@ -19,15 +19,8 @@ import { Route as CompanyHrmIndexImport } from './routes/company/hrm/index'
 import { Route as CompanyErmIndexImport } from './routes/company/erm/index'
 import { Route as CompanyAddressBookIndexImport } from './routes/company/addressBook/index'
 import { Route as AuthProfileIndexImport } from './routes/auth/profile/index'
-import { Route as publicDocsIndexImport } from './routes/(public)/docs/index'
 import { Route as CompanyUserManagementUserImport } from './routes/company/userManagement/user'
-import { Route as publicDocsTermsImport } from './routes/(public)/docs/terms'
-import { Route as publicDocsPrivacyImport } from './routes/(public)/docs/privacy'
-import { Route as publicDocsIcImport } from './routes/(public)/docs/ic'
-import { Route as publicDocsErmImport } from './routes/(public)/docs/erm'
-import { Route as publicDocsBusinessImport } from './routes/(public)/docs/business'
-import { Route as publicDocsAuthenticationImport } from './routes/(public)/docs/authentication'
-import { Route as publicDocsAiImport } from './routes/(public)/docs/ai'
+import { Route as publicDocsSlugImport } from './routes/(public)/docs.$slug'
 import { Route as CompanyHrmPositionIndexImport } from './routes/company/hrm/position/index'
 import { Route as CompanyHrmEmployeeIndexImport } from './routes/company/hrm/employee/index'
 import { Route as CompanyHrmDepartmentIndexImport } from './routes/company/hrm/department/index'
@@ -82,57 +75,15 @@ const AuthProfileIndexRoute = AuthProfileIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const publicDocsIndexRoute = publicDocsIndexImport.update({
-  id: '/(public)/docs/',
-  path: '/docs/',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const CompanyUserManagementUserRoute = CompanyUserManagementUserImport.update({
   id: '/company/userManagement/user',
   path: '/company/userManagement/user',
   getParentRoute: () => rootRoute,
 } as any)
 
-const publicDocsTermsRoute = publicDocsTermsImport.update({
-  id: '/(public)/docs/terms',
-  path: '/docs/terms',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const publicDocsPrivacyRoute = publicDocsPrivacyImport.update({
-  id: '/(public)/docs/privacy',
-  path: '/docs/privacy',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const publicDocsIcRoute = publicDocsIcImport.update({
-  id: '/(public)/docs/ic',
-  path: '/docs/ic',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const publicDocsErmRoute = publicDocsErmImport.update({
-  id: '/(public)/docs/erm',
-  path: '/docs/erm',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const publicDocsBusinessRoute = publicDocsBusinessImport.update({
-  id: '/(public)/docs/business',
-  path: '/docs/business',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const publicDocsAuthenticationRoute = publicDocsAuthenticationImport.update({
-  id: '/(public)/docs/authentication',
-  path: '/docs/authentication',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const publicDocsAiRoute = publicDocsAiImport.update({
-  id: '/(public)/docs/ai',
-  path: '/docs/ai',
+const publicDocsSlugRoute = publicDocsSlugImport.update({
+  id: '/(public)/docs/$slug',
+  path: '/docs/$slug',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -179,53 +130,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompanyIndexImport
       parentRoute: typeof rootRoute
     }
-    '/(public)/docs/ai': {
-      id: '/(public)/docs/ai'
-      path: '/docs/ai'
-      fullPath: '/docs/ai'
-      preLoaderRoute: typeof publicDocsAiImport
-      parentRoute: typeof rootRoute
-    }
-    '/(public)/docs/authentication': {
-      id: '/(public)/docs/authentication'
-      path: '/docs/authentication'
-      fullPath: '/docs/authentication'
-      preLoaderRoute: typeof publicDocsAuthenticationImport
-      parentRoute: typeof rootRoute
-    }
-    '/(public)/docs/business': {
-      id: '/(public)/docs/business'
-      path: '/docs/business'
-      fullPath: '/docs/business'
-      preLoaderRoute: typeof publicDocsBusinessImport
-      parentRoute: typeof rootRoute
-    }
-    '/(public)/docs/erm': {
-      id: '/(public)/docs/erm'
-      path: '/docs/erm'
-      fullPath: '/docs/erm'
-      preLoaderRoute: typeof publicDocsErmImport
-      parentRoute: typeof rootRoute
-    }
-    '/(public)/docs/ic': {
-      id: '/(public)/docs/ic'
-      path: '/docs/ic'
-      fullPath: '/docs/ic'
-      preLoaderRoute: typeof publicDocsIcImport
-      parentRoute: typeof rootRoute
-    }
-    '/(public)/docs/privacy': {
-      id: '/(public)/docs/privacy'
-      path: '/docs/privacy'
-      fullPath: '/docs/privacy'
-      preLoaderRoute: typeof publicDocsPrivacyImport
-      parentRoute: typeof rootRoute
-    }
-    '/(public)/docs/terms': {
-      id: '/(public)/docs/terms'
-      path: '/docs/terms'
-      fullPath: '/docs/terms'
-      preLoaderRoute: typeof publicDocsTermsImport
+    '/(public)/docs/$slug': {
+      id: '/(public)/docs/$slug'
+      path: '/docs/$slug'
+      fullPath: '/docs/$slug'
+      preLoaderRoute: typeof publicDocsSlugImport
       parentRoute: typeof rootRoute
     }
     '/company/userManagement/user': {
@@ -233,13 +142,6 @@ declare module '@tanstack/react-router' {
       path: '/company/userManagement/user'
       fullPath: '/company/userManagement/user'
       preLoaderRoute: typeof CompanyUserManagementUserImport
-      parentRoute: typeof rootRoute
-    }
-    '/(public)/docs/': {
-      id: '/(public)/docs/'
-      path: '/docs'
-      fullPath: '/docs'
-      preLoaderRoute: typeof publicDocsIndexImport
       parentRoute: typeof rootRoute
     }
     '/auth/profile/': {
@@ -307,15 +209,8 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof publicPricingRoute
   '/': typeof publicIndexRoute
   '/company': typeof CompanyIndexRoute
-  '/docs/ai': typeof publicDocsAiRoute
-  '/docs/authentication': typeof publicDocsAuthenticationRoute
-  '/docs/business': typeof publicDocsBusinessRoute
-  '/docs/erm': typeof publicDocsErmRoute
-  '/docs/ic': typeof publicDocsIcRoute
-  '/docs/privacy': typeof publicDocsPrivacyRoute
-  '/docs/terms': typeof publicDocsTermsRoute
+  '/docs/$slug': typeof publicDocsSlugRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
-  '/docs': typeof publicDocsIndexRoute
   '/auth/profile': typeof AuthProfileIndexRoute
   '/company/addressBook': typeof CompanyAddressBookIndexRoute
   '/company/erm': typeof CompanyErmIndexRoute
@@ -330,15 +225,8 @@ export interface FileRoutesByTo {
   '/pricing': typeof publicPricingRoute
   '/': typeof publicIndexRoute
   '/company': typeof CompanyIndexRoute
-  '/docs/ai': typeof publicDocsAiRoute
-  '/docs/authentication': typeof publicDocsAuthenticationRoute
-  '/docs/business': typeof publicDocsBusinessRoute
-  '/docs/erm': typeof publicDocsErmRoute
-  '/docs/ic': typeof publicDocsIcRoute
-  '/docs/privacy': typeof publicDocsPrivacyRoute
-  '/docs/terms': typeof publicDocsTermsRoute
+  '/docs/$slug': typeof publicDocsSlugRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
-  '/docs': typeof publicDocsIndexRoute
   '/auth/profile': typeof AuthProfileIndexRoute
   '/company/addressBook': typeof CompanyAddressBookIndexRoute
   '/company/erm': typeof CompanyErmIndexRoute
@@ -354,15 +242,8 @@ export interface FileRoutesById {
   '/(public)/pricing': typeof publicPricingRoute
   '/(public)/': typeof publicIndexRoute
   '/company/': typeof CompanyIndexRoute
-  '/(public)/docs/ai': typeof publicDocsAiRoute
-  '/(public)/docs/authentication': typeof publicDocsAuthenticationRoute
-  '/(public)/docs/business': typeof publicDocsBusinessRoute
-  '/(public)/docs/erm': typeof publicDocsErmRoute
-  '/(public)/docs/ic': typeof publicDocsIcRoute
-  '/(public)/docs/privacy': typeof publicDocsPrivacyRoute
-  '/(public)/docs/terms': typeof publicDocsTermsRoute
+  '/(public)/docs/$slug': typeof publicDocsSlugRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
-  '/(public)/docs/': typeof publicDocsIndexRoute
   '/auth/profile/': typeof AuthProfileIndexRoute
   '/company/addressBook/': typeof CompanyAddressBookIndexRoute
   '/company/erm/': typeof CompanyErmIndexRoute
@@ -379,15 +260,8 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/'
     | '/company'
-    | '/docs/ai'
-    | '/docs/authentication'
-    | '/docs/business'
-    | '/docs/erm'
-    | '/docs/ic'
-    | '/docs/privacy'
-    | '/docs/terms'
+    | '/docs/$slug'
     | '/company/userManagement/user'
-    | '/docs'
     | '/auth/profile'
     | '/company/addressBook'
     | '/company/erm'
@@ -401,15 +275,8 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/'
     | '/company'
-    | '/docs/ai'
-    | '/docs/authentication'
-    | '/docs/business'
-    | '/docs/erm'
-    | '/docs/ic'
-    | '/docs/privacy'
-    | '/docs/terms'
+    | '/docs/$slug'
     | '/company/userManagement/user'
-    | '/docs'
     | '/auth/profile'
     | '/company/addressBook'
     | '/company/erm'
@@ -423,15 +290,8 @@ export interface FileRouteTypes {
     | '/(public)/pricing'
     | '/(public)/'
     | '/company/'
-    | '/(public)/docs/ai'
-    | '/(public)/docs/authentication'
-    | '/(public)/docs/business'
-    | '/(public)/docs/erm'
-    | '/(public)/docs/ic'
-    | '/(public)/docs/privacy'
-    | '/(public)/docs/terms'
+    | '/(public)/docs/$slug'
     | '/company/userManagement/user'
-    | '/(public)/docs/'
     | '/auth/profile/'
     | '/company/addressBook/'
     | '/company/erm/'
@@ -447,15 +307,8 @@ export interface RootRouteChildren {
   publicPricingRoute: typeof publicPricingRoute
   publicIndexRoute: typeof publicIndexRoute
   CompanyIndexRoute: typeof CompanyIndexRoute
-  publicDocsAiRoute: typeof publicDocsAiRoute
-  publicDocsAuthenticationRoute: typeof publicDocsAuthenticationRoute
-  publicDocsBusinessRoute: typeof publicDocsBusinessRoute
-  publicDocsErmRoute: typeof publicDocsErmRoute
-  publicDocsIcRoute: typeof publicDocsIcRoute
-  publicDocsPrivacyRoute: typeof publicDocsPrivacyRoute
-  publicDocsTermsRoute: typeof publicDocsTermsRoute
+  publicDocsSlugRoute: typeof publicDocsSlugRoute
   CompanyUserManagementUserRoute: typeof CompanyUserManagementUserRoute
-  publicDocsIndexRoute: typeof publicDocsIndexRoute
   AuthProfileIndexRoute: typeof AuthProfileIndexRoute
   CompanyAddressBookIndexRoute: typeof CompanyAddressBookIndexRoute
   CompanyErmIndexRoute: typeof CompanyErmIndexRoute
@@ -470,15 +323,8 @@ const rootRouteChildren: RootRouteChildren = {
   publicPricingRoute: publicPricingRoute,
   publicIndexRoute: publicIndexRoute,
   CompanyIndexRoute: CompanyIndexRoute,
-  publicDocsAiRoute: publicDocsAiRoute,
-  publicDocsAuthenticationRoute: publicDocsAuthenticationRoute,
-  publicDocsBusinessRoute: publicDocsBusinessRoute,
-  publicDocsErmRoute: publicDocsErmRoute,
-  publicDocsIcRoute: publicDocsIcRoute,
-  publicDocsPrivacyRoute: publicDocsPrivacyRoute,
-  publicDocsTermsRoute: publicDocsTermsRoute,
+  publicDocsSlugRoute: publicDocsSlugRoute,
   CompanyUserManagementUserRoute: CompanyUserManagementUserRoute,
-  publicDocsIndexRoute: publicDocsIndexRoute,
   AuthProfileIndexRoute: AuthProfileIndexRoute,
   CompanyAddressBookIndexRoute: CompanyAddressBookIndexRoute,
   CompanyErmIndexRoute: CompanyErmIndexRoute,
@@ -502,15 +348,8 @@ export const routeTree = rootRoute
         "/(public)/pricing",
         "/(public)/",
         "/company/",
-        "/(public)/docs/ai",
-        "/(public)/docs/authentication",
-        "/(public)/docs/business",
-        "/(public)/docs/erm",
-        "/(public)/docs/ic",
-        "/(public)/docs/privacy",
-        "/(public)/docs/terms",
+        "/(public)/docs/$slug",
         "/company/userManagement/user",
-        "/(public)/docs/",
         "/auth/profile/",
         "/company/addressBook/",
         "/company/erm/",
@@ -530,32 +369,11 @@ export const routeTree = rootRoute
     "/company/": {
       "filePath": "company/index.tsx"
     },
-    "/(public)/docs/ai": {
-      "filePath": "(public)/docs/ai.tsx"
-    },
-    "/(public)/docs/authentication": {
-      "filePath": "(public)/docs/authentication.tsx"
-    },
-    "/(public)/docs/business": {
-      "filePath": "(public)/docs/business.tsx"
-    },
-    "/(public)/docs/erm": {
-      "filePath": "(public)/docs/erm.tsx"
-    },
-    "/(public)/docs/ic": {
-      "filePath": "(public)/docs/ic.tsx"
-    },
-    "/(public)/docs/privacy": {
-      "filePath": "(public)/docs/privacy.tsx"
-    },
-    "/(public)/docs/terms": {
-      "filePath": "(public)/docs/terms.tsx"
+    "/(public)/docs/$slug": {
+      "filePath": "(public)/docs.$slug.tsx"
     },
     "/company/userManagement/user": {
       "filePath": "company/userManagement/user.tsx"
-    },
-    "/(public)/docs/": {
-      "filePath": "(public)/docs/index.tsx"
     },
     "/auth/profile/": {
       "filePath": "auth/profile/index.tsx"

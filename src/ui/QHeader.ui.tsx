@@ -29,7 +29,7 @@ export default function QHeader() {
         <NavbarToggle />
       </div>
       <NavbarCollapse>
-        <NavbarLink as={Link} href="/docs">
+        <NavbarLink as={Link} href="/docs/intro">
           Documentation
         </NavbarLink>
         <NavbarLink as={Link} href="/pricing">
