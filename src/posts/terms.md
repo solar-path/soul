@@ -144,22 +144,13 @@ You are solely responsible for your User Generated Content. Please consider care
 
 All trademarks, logos, and service marks displayed on the Services are either the Company’s property or the property of third parties. You may not use such trademarks, logos, or service marks without the prior written consent of their respective owners.
 
-These Terms of Use permit you to use the Website for your personal,
-non-commercial use only, unless authorized by the Company. You must
-not reproduce, distribute, modify, create derivative works of,
-publicly display, publicly perform, republish, download, store, or
+These Terms of Use permit you to use the Website for your personal, non-commercial use only, unless authorized by the Company. You must
+not reproduce, distribute, modify, create derivative works of, publicly display, publicly perform, republish, download, store, or
 transmit any of the material on our Website, except as follows:
 
-- Your computer may temporarily store copies of such materials in RAM
-  incidental to your accessing and viewing those materials.
-
-You may store files that are automatically cached by your Web
-browser for display enhancement purposes.
-
-If we provide desktop, mobile, or other applications for download,
-you may download a single copy to your computer or mobile device
-solely for your own personal, non-commercial use, provided you agree
-to be bound by our end User license agreement for such applications.
+- Your computer may temporarily store copies of such materials in RAM incidental to your accessing and viewing those materials.
+- You may store files that are automatically cached by your Web browser for display enhancement purposes.
+- If we provide desktop, mobile, or other applications for download, you may download a single copy to your computer or mobile device solely for your own personal, non-commercial use, provided you agree to be bound by our end User license agreement for such applications.
 
 We currently maintain social media accounts at:
 
@@ -181,55 +172,35 @@ You must not:
   expressly granted are reserved by the Company. Any use of the Website
   not expressly permitted by these Terms of Use is a breach of these
   Terms of Use and may violate copyright, trademark, and other laws.
-  </p>
 
-          <p className="mb-2 text-lg font-semibold">
-            Prohibited Uses and Code of Conduct
-          </p>
-          <p className="text-justify">
-            It is the expectation of the Company and its affiliates that all Users
-            of the Site and Platform as well as use of third-party affiliates of
-            the Company act in a manner that is professional and ethical at all
-            times. You may use the Website only for lawful purposes and in
-            accordance with these Terms of Use. You agree not to use the Website:
-          </p>
-          <ul className="text-justify list-disc ml-8">
-            <li className="text-justify">
-              In any way that violates any applicable federal, state, local, or
-              international law or regulation (including, without limitation, any
-              laws regarding the export of data or software to and from the U.S.
-              or other countries).
-            </li>
-            <li className="text-justify">
-              For the purpose of exploiting, harming, or attempting to exploit or
-              harm others, including minors, in any way by exposing them to
-              inappropriate content, asking for personally identifiable
-              information, or otherwise.
-            </li>
-            <li className="text-justify">
-              To send, knowingly receive, upload, download, use, or re-use any
-              material that does not comply with the Content Standards (below) set
-              out in these Terms of Use.
-            </li>
-            <li className="text-justify">
-              To transmit, or procure the sending of, any advertising or
-              promotional material not authorized by the company, including any
-              “junk mail,” “chain letter,” “spam,” or any other similar
-              solicitation.
-            </li>
-            <li className="text-justify">
-              To impersonate or attempt to impersonate the Company, a Company
-              employee, another User, or any other person or entity (including,
-              without limitation, by using email addresses or screen names
-              associated with any of the foregoing).
-            </li>
-            <li className="text-justify">
-              To engage in any other conduct that restricts or inhibits others’
-              use or enjoyment of the Website, or which, as determined by us, may
-              harm or expose to liability the Company, Users of the Website, or
-              others.
-            </li>
-          </ul>
+### Prohibited Uses and Code of Conduct
+
+It is the expectation of the Company and its affiliates that all Users
+of the Site and Platform as well as use of third-party affiliates of
+the Company act in a manner that is professional and ethical at all times. You may use the Website only for lawful purposes and in
+accordance with these Terms of Use. You agree not to use the Website:
+
+- In any way that violates any applicable federal, state, local, or
+  international law or regulation (including, without limitation, any
+  laws regarding the export of data or software to and from the U.S.
+  or other countries).
+- For the purpose of exploiting, harming, or attempting to exploit or
+  harm others, including minors, in any way by exposing them to inappropriate content, asking for personally identifiable information, or otherwise.
+- To send, knowingly receive, upload, download, use, or re-use any
+  material that does not comply with the Content Standards (below) set
+  out in these Terms of Use.
+- To transmit, or procure the sending of, any advertising or
+  promotional material not authorized by the company, including any
+  “junk mail,” “chain letter,” “spam,” or any other similar
+  solicitation.
+- To impersonate or attempt to impersonate the Company, a Company
+  employee, another User, or any other person or entity (including,
+  without limitation, by using email addresses or screen names
+  associated with any of the foregoing).
+- To engage in any other conduct that restricts or inhibits others’
+  use or enjoyment of the Website, or which, as determined by us, may
+  harm or expose to liability the Company, Users of the Website, or
+  others.
 
   You also hereby acknowledge:
 
@@ -244,39 +215,30 @@ You must not:
 - Use any manual process to monitor or copy any of the material on the Website, or for any other purpose not expressly authorized in these Terms of Use, without our prior written consent.
 - Use any device, software, or routine that interferes with the proper working of the Website.
 - Introduce any viruses, Trojan horses, worms, logic bombs, or other material that is malicious or technologically harmful.
-  <li className="text-justify">
-  Attempt to gain unauthorized access to, interfere with, damage, or
+- Attempt to gain unauthorized access to, interfere with, damage, or
   disrupt any parts of the Website, the server on which the Website is
   stored, or any server, computer, or database connected to the
   Website.
-  </li>
-  <li className="text-justify">
-  Attack the Website via a denial-of-service attack or a distributed
+- Attack the Website via a denial-of-service attack or a distributed
   denial-of-service attack.
-  </li>
-  <li className="text-justify">
-  Otherwise attempt to interfere with the proper working of the
+- Otherwise attempt to interfere with the proper working of the
   Website.
-  </li>
-  </ul>
 
-        <p className="mb-2 text-lg font-semibold">User Generated Content</p>
-        <p className="text-justify">
-          The Site and Platform may contain (either currently or in the future)
-          message boards, chatrooms, Profiles, forums, Groups, the ability to
-          share Marketplace Resources, and other interactive features that allow
-          Users to post, upload, submit, publish, display, or transmit to other
-          Users or other persons content or materials (collectively, “User
-          Generated Content”) on or through the Services.
-        </p>
+### User Generated Content
 
-        <p className="text-justify">
-          You are solely responsible for your User Generated Content. Please
-          consider carefully what you choose to share. All User Generated
-          Content must comply with the Content Standards set forth below. With
-          the exception of Group Content, which a Group Organizer or Group
-          Moderator may, in their discretion, elect to be deemed confidential
-          per User access settings, any User Generated Content you post on or
+The Site and Platform may contain (either currently or in the future)
+message boards, chatrooms, Profiles, forums, Groups, the ability to
+share Marketplace Resources, and other interactive features that allow
+Users to post, upload, submit, publish, display, or transmit to other
+Users or other persons content or materials (collectively, "User
+Generated Content") on or through the Services.
+
+You are solely responsible for your User Generated Content. Please
+consider carefully what you choose to share. All User Generated
+Content must comply with the Content Standards set forth below. With
+the exception of Group Content, which a Group Organizer or Group
+Moderator may, in their discretion, elect to be deemed confidential
+per User access settings, any User Generated Content you post on or
 
 You further agree that the Company shall not be responsible for any loss or damage incurred as the result of any interactions between you and other Users. Your interactions with other Users are solely between you and such Users. If there is a dispute between you and any other User, we are under no obligation to become involved.
 
@@ -335,8 +297,6 @@ If you provide the Company with any feedback or suggestions regarding the Servic
 
 The information presented on or through the Website is made available solely for general information purposes. We do not warrant the accuracy, completeness, or usefulness of this information. Any reliance you place on such information is strictly at your own risk. We disclaim all liability and responsibility arising from any reliance placed on such materials by you or any other visitor to the Website, or by anyone who may be informed of any of its contents.
 
-</p>
-<p className="text-justify">
 This Website may include content provided by third parties and all
 statements and/or opinions expressed in these materials, and all
 articles and responses to questions and other content, other than the
@@ -345,50 +305,63 @@ responsibility of the person or entity providing those materials.
 These materials do not necessarily reflect the opinion of the Company.
 We are not responsible, or liable to you or any third party, for the
 content or accuracy of any materials provided by any third parties.
-</p>
 
-        <p className="mb-2 text-lg font-semibold">Changes to the Website</p>
-        <p className="text-justify">
-          We may update the content on this Website from time to time, but its
-          content is not necessarily complete or up-to-date. Any of the material
-          on the Website may be out of date at any given time, and we are under
-          no obligation to update such material or label it in any way.
-        </p>
+### Changes to the Website
 
-        <p className="mb-2 text-lg font-semibold">
-          Information About You and Your Visits to the Website
-        </p>
-        <p className="text-justify">
-          All information we collect on this Website is subject to our Terms of
-          Use and our <a href="/policy">Privacy Policy</a>. By using the
-          Website, you consent to all actions taken by us with respect to your
-          information in compliance with the Terms and Conditions and the
-          Privacy Policy.
-        </p>
+We may update the content on this Website from time to time, but its
+content is not necessarily complete or up-to-date. Any of the material
+on the Website may be out of date at any given time, and we are under
+no obligation to update such material or label it in any way.
 
-        <p className="mb-2 text-lg font-semibold">Other Terms and Conditions</p>
-        <p className="text-justify">
-          Additional terms and conditions may also apply to specific portions,
-          services, or features of the Website. All such additional terms and
-          conditions are hereby incorporated by this reference into these Terms
-          of Use.
-        </p>
+### Information About You and Your Visits to the Website
 
-        <p className="mb-2 text-lg font-semibold">
-          Linking to the Website and Social Media Features
-        </p>
-        <p className="text-justify">
-          You may link to our homepage, provided you do so in a way that is fair
-          and legal and does not damage our reputation or take advantage of it,
-          but you must not establish a link in such a way as to suggest any form
-          of association, approval, or endorsement on our part without our
-          express written consent.
-        </p>
+All information we collect on this Website is subject to our Terms of
+Use and our [Privacy Policy](/policy). By using the
+Website, you consent to all actions taken by us with respect to your
+information in compliance with the Terms and Conditions and the
+Privacy Policy.
 
-        <p className="text-justify">
-          This Website may provide certain social media features that enable you
-          to:
-        </p>
+### Other Terms and Conditions
+
+Additional terms and conditions may also apply to specific portions,
+services, or features of the Website. All such additional terms and
+conditions are hereby incorporated by this reference into these Terms
+of Use.
+
+### Linking to the Website and Social Media Features
+
+You may link to our homepage, provided you do so in a way that is fair
+and legal and does not damage our reputation or take advantage of it,
+but you must not establish a link in such a way as to suggest any form
+of association, approval, or endorsement on our part without our
+express written consent.
+
+This Website may provide certain social media features that enable you
+
+### Information About You and Your Visits to the Website
+
+All information we collect on this Website is subject to our Terms of
+Use and our [Privacy Policy](/policy). By using the
+Website, you consent to all actions taken by us with respect to your
+information in compliance with the Terms and Conditions and the
+Privacy Policy.
+
+### Other Terms and Conditions
+
+Additional terms and conditions may also apply to specific portions,
+services, or features of the Website. All such additional terms and
+conditions are hereby incorporated by this reference into these Terms
+of Use.
+
+### Linking to the Website and Social Media Features
+
+You may link to our homepage, provided you do so in a way that is fair
+and legal and does not damage our reputation or take advantage of it,
+but you must not establish a link in such a way as to suggest any form
+of association, approval, or endorsement on our part without our
+express written consent.
+
+This Website may provide certain social media features that enable you to:
 
 - Link from your own or certain third-party websites to certain content on this Website.
 - Send emails or other communications with certain content, or links to certain content, on this Website.
