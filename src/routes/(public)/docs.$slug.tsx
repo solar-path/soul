@@ -128,7 +128,13 @@ function DocsPage() {
           headers.forEach((header, index) => {
             // Create an ID for the header if it doesn't have one
             if (!header.id) {
-              header.id = `header-${index}`;
+              const id = `header-${index}`;
+              header.id = id;
+              // Add an anchor element before the header for better scrolling
+              const anchor = document.createElement("a");
+              anchor.id = id;
+              anchor.className = "anchor-target";
+              header.parentNode?.insertBefore(anchor, header);
             }
 
             const level = parseInt(header.tagName.substring(1));
@@ -149,35 +155,57 @@ function DocsPage() {
   const scrollToHeader = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      // Add a small offset to account for the sticky header
+      const yOffset = -80;
+      const y =
+        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
 
   // Custom components for ReactMarkdown to apply Tailwind styles
   const components = {
     h1: (props: React.ComponentPropsWithoutRef<"h1">) => (
-      <h1 className="text-3xl font-bold mt-6 mb-4 text-gray-800" {...props} />
+      <h1
+        id={props.id}
+        className="text-3xl font-bold mt-6 mb-4 text-gray-800 scroll-mt-20"
+        {...props}
+      />
     ),
     h2: (props: React.ComponentPropsWithoutRef<"h2">) => (
       <h2
-        className="text-2xl font-semibold mt-5 mb-3 text-gray-800 border-b pb-1"
+        id={props.id}
+        className="text-2xl font-semibold mt-5 mb-3 text-gray-800 border-b pb-1 scroll-mt-20"
         {...props}
       />
     ),
     h3: (props: React.ComponentPropsWithoutRef<"h3">) => (
-      <h3 className="text-xl font-medium mt-4 mb-2 text-gray-700" {...props} />
+      <h3
+        id={props.id}
+        className="text-xl font-medium mt-4 mb-2 text-gray-700 scroll-mt-20"
+        {...props}
+      />
     ),
     h4: (props: React.ComponentPropsWithoutRef<"h4">) => (
-      <h4 className="text-lg font-medium mt-3 mb-2 text-gray-700" {...props} />
+      <h4
+        id={props.id}
+        className="text-lg font-medium mt-3 mb-2 text-gray-700 scroll-mt-20"
+        {...props}
+      />
     ),
     h5: (props: React.ComponentPropsWithoutRef<"h5">) => (
       <h5
-        className="text-base font-medium mt-2 mb-1 text-gray-700"
+        id={props.id}
+        className="text-base font-medium mt-2 mb-1 text-gray-700 scroll-mt-20"
         {...props}
       />
     ),
     h6: (props: React.ComponentPropsWithoutRef<"h6">) => (
-      <h6 className="text-sm font-medium mt-2 mb-1 text-gray-700" {...props} />
+      <h6
+        id={props.id}
+        className="text-sm font-medium mt-2 mb-1 text-gray-700 scroll-mt-20"
+        {...props}
+      />
     ),
     p: (props: React.ComponentPropsWithoutRef<"p">) => (
       <p className="my-3 text-gray-600" {...props} />
@@ -213,42 +241,52 @@ function DocsPage() {
 
   // Render TOC item with proper indentation based on header level
   const renderTocItem = (item: { id: string; level: number; text: string }) => {
-    const indentClass = `pl-${(item.level - 1) * 4}`;
+    // Calculate indentation based on header level
+    const indentClass = `ml-${(item.level - 1) * 3}`;
     return (
-      <div
+      <a
         key={item.id}
-        className={`${indentClass} py-1 cursor-pointer hover:text-blue-600 ${item.level === 1 ? "font-semibold" : ""}`}
-        onClick={() => scrollToHeader(item.id)}
+        href={`#${item.id}`}
+        className={`${indentClass} py-1 block text-sm cursor-pointer hover:text-blue-600 ${item.level === 1 ? "font-semibold" : ""} no-underline text-gray-700`}
+        onClick={(e) => {
+          e.preventDefault();
+          scrollToHeader(item.id);
+        }}
       >
         {item.text}
-      </div>
+      </a>
     );
   };
 
   return (
     <div className="flex flex-row">
-      <div className="w-1/5 p-4">
-        <h1 className="text-2xl font-bold mb-4">Documentation</h1>
-
-        <Sidebar className="h-full w-full">
-          <SidebarItems>
-            <SidebarItemGroup>
-              {postList.map((post) => (
-                <SidebarItem
-                  key={post.href}
-                  as={Link}
-                  href={post.href}
-                  active={post.href === `/docs/${slug}`}
-                >
-                  {post.title}
-                </SidebarItem>
-              ))}
-            </SidebarItemGroup>
-          </SidebarItems>
-        </Sidebar>
+      {/* Documentation Navigation Sidebar */}
+      <div className="w-1/5 h-[calc(100vh-64px)] overflow-y-auto border-r">
+        <div className="p-4 sticky top-0 bg-white z-10">
+          <h3 className="text-lg font-semibold mb-3">Documentation</h3>
+        </div>
+        <div className="px-2 pb-4">
+          <Sidebar className="w-full">
+            <SidebarItems>
+              <SidebarItemGroup>
+                {postList.map((post) => (
+                  <SidebarItem
+                    key={post.href}
+                    as={Link}
+                    href={post.href}
+                    active={post.href === `/docs/${slug}`}
+                  >
+                    {post.title}
+                  </SidebarItem>
+                ))}
+              </SidebarItemGroup>
+            </SidebarItems>
+          </Sidebar>
+        </div>
       </div>
 
-      <div className="w-3/5 p-4">
+      {/* Main Content Area */}
+      <div className="w-3/5 p-6 overflow-y-auto h-[calc(100vh-64px)]">
         {isLoading ? (
           <div className="text-center">
             <p>Loading documentation...</p>
@@ -267,15 +305,19 @@ function DocsPage() {
       </div>
 
       {/* Table of Contents */}
-      <div className="w-1/5 p-4 border-l">
-        <h2 className="text-xl font-semibold mb-3">Table of Contents</h2>
-        {tableOfContents.length > 0 ? (
-          <div className="toc-container">
-            {tableOfContents.map((item) => renderTocItem(item))}
-          </div>
-        ) : (
-          <p className="text-gray-500 italic">No headers found</p>
-        )}
+      <div className="w-1/5 h-[calc(100vh-64px)] overflow-y-auto border-l">
+        <div className="p-4 sticky top-0 bg-white z-10">
+          <h2 className="text-lg font-semibold">Table of Contents</h2>
+        </div>
+        <div className="px-4 pb-4">
+          {tableOfContents.length > 0 ? (
+            <nav className="toc-container">
+              {tableOfContents.map((item) => renderTocItem(item))}
+            </nav>
+          ) : (
+            <p className="text-gray-500 italic">No headers found</p>
+          )}
+        </div>
       </div>
     </div>
   );
