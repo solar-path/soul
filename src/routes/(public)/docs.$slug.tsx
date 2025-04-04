@@ -114,32 +114,41 @@ function DocsPage() {
   >([]);
   const contentRef = useRef<HTMLDivElement>(null);
 
+  // Reset TOC when slug changes
+  useEffect(() => {
+    setTableOfContents([]);
+  }, [slug]);
+
   // Function to extract headers and build TOC
   useEffect(() => {
     if (!isLoading && !error && contentRef.current) {
       // Wait for the content to be rendered
       setTimeout(() => {
         if (contentRef.current) {
+          // Clear existing anchor elements to prevent duplicates
+          const existingAnchors =
+            contentRef.current.querySelectorAll(".anchor-target");
+          existingAnchors.forEach((anchor) => anchor.remove());
+
           const headers = contentRef.current.querySelectorAll(
             "h1, h2, h3, h4, h5, h6"
           );
           const toc: Array<{ id: string; level: number; text: string }> = [];
 
           headers.forEach((header, index) => {
-            // Create an ID for the header if it doesn't have one
-            if (!header.id) {
-              const id = `header-${index}`;
-              header.id = id;
-              // Add an anchor element before the header for better scrolling
-              const anchor = document.createElement("a");
-              anchor.id = id;
-              anchor.className = "anchor-target";
-              header.parentNode?.insertBefore(anchor, header);
-            }
+            // Create a consistent ID for the header based on slug and index
+            const id = `${slug}-header-${index}`;
+            header.id = id;
+
+            // Add an anchor element before the header for better scrolling
+            const anchor = document.createElement("a");
+            anchor.id = id;
+            anchor.className = "anchor-target";
+            header.parentNode?.insertBefore(anchor, header);
 
             const level = parseInt(header.tagName.substring(1));
             toc.push({
-              id: header.id,
+              id: id,
               level,
               text: header.textContent || "",
             });
@@ -149,7 +158,7 @@ function DocsPage() {
         }
       }, 100);
     }
-  }, [isLoading, error, markdownContent]);
+  }, [isLoading, error, markdownContent, slug]);
 
   // Function to scroll to header when TOC item is clicked
   const scrollToHeader = (id: string) => {
@@ -243,6 +252,7 @@ function DocsPage() {
   const renderTocItem = (item: { id: string; level: number; text: string }) => {
     // Calculate indentation based on header level
     const indentClass = `ml-${(item.level - 1) * 3}`;
+
     return (
       <a
         key={item.id}
@@ -250,6 +260,9 @@ function DocsPage() {
         className={`${indentClass} py-1 block text-sm cursor-pointer hover:text-blue-600 ${item.level === 1 ? "font-semibold" : ""} no-underline text-gray-700`}
         onClick={(e) => {
           e.preventDefault();
+          // Use TanStack Router's navigate function to update the URL hash without page reload
+          // while still scrolling to the element
+          window.history.pushState({}, "", `#${item.id}`);
           scrollToHeader(item.id);
         }}
       >
