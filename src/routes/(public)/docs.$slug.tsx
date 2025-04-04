@@ -15,14 +15,14 @@ export const Route = createFileRoute("/(public)/docs/$slug")({
 
 // Define the mapping between route slugs and markdown files
 const slugToFileMap: Record<string, { title: string; file: string }> = {
-  "intro": { title: "Introduction", file: "intro.md" },
-  "terms": { title: "Terms of Service", file: "terms.md" },
-  "privacy": { title: "Privacy Policy", file: "privacy.md" },
-  "authentication": { title: "Authentication", file: "authentication.md" },
-  "business": { title: "Business", file: "setupBusiness.md" },
-  "erm": { title: "Risk Management", file: "riskManagement.md" },
-  "ic": { title: "Internal Control", file: "internalControl.md" },
-  "ia": { title: "Internal Audit", file: "internalAudit.md" },
+  intro: { title: "Introduction", file: "intro.md" },
+  terms: { title: "Terms of Service", file: "terms.md" },
+  privacy: { title: "Privacy Policy", file: "privacy.md" },
+  authentication: { title: "Authentication", file: "authentication.md" },
+  business: { title: "Business", file: "setupBusiness.md" },
+  erm: { title: "Risk Management", file: "riskManagement.md" },
+  ic: { title: "Internal Control", file: "internalControl.md" },
+  ia: { title: "Internal Audit", file: "internalAudit.md" },
 };
 
 // Create a list of all available documentation pages
@@ -34,11 +34,11 @@ const postList = Object.entries(slugToFileMap).map(([slug, { title }]) => ({
 function DocsPage() {
   // Get the slug parameter from the route
   const { slug } = Route.useParams();
-  
+
   // Redirect to intro if no slug is provided
   useEffect(() => {
-    if (slug === '') {
-      window.location.href = '/docs/intro';
+    if (slug === "") {
+      window.location.href = "/docs/intro";
     }
   }, [slug]);
   const [markdownContent, setMarkdownContent] = useState<string>("");
@@ -127,10 +127,10 @@ function DocsPage() {
 
   return (
     <div className="flex flex-row">
-      <div className="w-1/5 p-4 border-r">
+      <div className="w-1/5 p-4 ">
         <h1 className="text-2xl font-bold mb-4">Documentation</h1>
 
-        <Sidebar>
+        <Sidebar className="h-full w-full">
           <SidebarItems>
             <SidebarItemGroup>
               {postList.map((post) => (

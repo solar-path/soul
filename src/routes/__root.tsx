@@ -7,12 +7,16 @@ import QDrawer from "../ui/QDrawer/QDrawer.ui";
 export const Route = createRootRoute({
   component: () => (
     <>
-      <div className="flex min-h-screen flex-col justify-between">
+      <div className="flex flex-col min-h-screen">
         <QHeader />
-        <Outlet />
+        <main className="flex-1 overflow-y-auto pb-16">
+          <Outlet />
+        </main>
         <QDrawer />
         <TanStackRouterDevtools />
-        <QFooter />
+        <div className="sticky bottom-0 w-full z-10 bg-white shadow-lg">
+          <QFooter />
+        </div>
       </div>
     </>
   ),
