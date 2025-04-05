@@ -1,21 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  Sidebar,
-  SidebarCollapse,
-  SidebarItem,
-  SidebarItemGroup,
-  SidebarItems,
-} from "flowbite-react";
+import { QSidebarProps } from "@/ui/QSidebar.ui";
+import { QSidebar } from "@/ui/QSidebar.ui";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/company/")({
   component: RouteComponent,
 });
 
-const moduleList: {
-  title: string;
-  href: string;
-  children: { title: string; href: string }[];
-}[] = [
+const moduleList: QSidebarProps = [
   { title: "Risk Management", href: "/company/erm", children: [] },
   {
     title: "Personnel Management",
@@ -31,44 +22,10 @@ const moduleList: {
   { title: "User Management", href: "/company/userManagement", children: [] },
 ];
 
-const noChildrenSidebar = (module: { title: string; href: string }) => {
-  return (
-    <SidebarItem as={Link} key={module.href} href={module.href}>
-      {module.title}
-    </SidebarItem>
-  );
-};
-
-const hasChildrenSidebar = (module: {
-  title: string;
-  href: string;
-  children: { title: string; href: string }[];
-}) => {
-  return (
-    <SidebarCollapse key={module.href} label={module.title}>
-      {module.children.map((child) => (
-        <SidebarItem as={Link} key={child.href} href={child.href}>
-          {child.title}
-        </SidebarItem>
-      ))}
-    </SidebarCollapse>
-  );
-};
-
 function RouteComponent() {
   return (
     <div>
-      <Sidebar>
-        <SidebarItems>
-          <SidebarItemGroup>
-            {moduleList.map((module) =>
-              module.children.length === 0
-                ? noChildrenSidebar(module)
-                : hasChildrenSidebar(module)
-            )}
-          </SidebarItemGroup>
-        </SidebarItems>
-      </Sidebar>
+      <QSidebar moduleList={moduleList} />
     </div>
   );
 }
