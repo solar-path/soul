@@ -1,63 +1,74 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import {
+  Sidebar,
+  SidebarCollapse,
+  SidebarItem,
+  SidebarItemGroup,
+  SidebarItems,
+} from "flowbite-react";
 
 export const Route = createFileRoute("/company/")({
   component: RouteComponent,
 });
 
+const moduleList: {
+  title: string;
+  href: string;
+  children: { title: string; href: string }[];
+}[] = [
+  { title: "Risk Management", href: "/company/erm", children: [] },
+  {
+    title: "Personnel Management",
+    href: "/company/hrm",
+    children: [
+      { title: "Employee", href: "/company/hrm/employee" },
+      { title: "Department", href: "/company/hrm/department" },
+      { title: "Position", href: "/company/hrm/position" },
+    ],
+  },
+  { title: "Address Book", href: "/company/addressBook", children: [] },
+  { title: "Settings", href: "/company/settings", children: [] },
+  { title: "User Management", href: "/company/userManagement", children: [] },
+];
+
+const noChildrenSidebar = (module: { title: string; href: string }) => {
+  return (
+    <SidebarItem as={Link} key={module.href} href={module.href}>
+      {module.title}
+    </SidebarItem>
+  );
+};
+
+const hasChildrenSidebar = (module: {
+  title: string;
+  href: string;
+  children: { title: string; href: string }[];
+}) => {
+  return (
+    <SidebarCollapse key={module.href} label={module.title}>
+      {module.children.map((child) => (
+        <SidebarItem as={Link} key={child.href} href={child.href}>
+          {child.title}
+        </SidebarItem>
+      ))}
+    </SidebarCollapse>
+  );
+};
+
 function RouteComponent() {
   return (
     <div>
-      Company Dashboard
-      <ul>
-        <li>
-          <Link to="/company/addressBook" className="[&.active]:font-bold">
-            Address Book
-          </Link>
-        </li>
-        <li>
-          <Link to="/company/erm" className="[&.active]:font-bold">
-            ERM
-          </Link>
-        </li>
-        <li>
-          <Link to="/company/hrm" className="[&.active]:font-bold">
-            HRM
-          </Link>
-          <ul>
-            <li>
-              <Link to="/company/hrm/employee" className="[&.active]:font-bold">
-                Employee
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/company/hrm/department"
-                className="[&.active]:font-bold"
-              >
-                Department
-              </Link>
-            </li>
-            <li>
-              <Link to="/company/hrm/position" className="[&.active]:font-bold">
-                Position
-              </Link>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <Link to="/company/settings" className="[&.active]:font-bold">
-            Settings
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/company/userManagement/user"
-            className="[&.active]:font-bold"
-          >
-            User Management
-          </Link>
-        </li>
-      </ul>
+      <Sidebar>
+        <SidebarItems>
+          <SidebarItemGroup>
+            {moduleList.map((module) =>
+              module.children.length === 0
+                ? noChildrenSidebar(module)
+                : hasChildrenSidebar(module)
+            )}
+          </SidebarItemGroup>
+        </SidebarItems>
+      </Sidebar>
     </div>
   );
 }
