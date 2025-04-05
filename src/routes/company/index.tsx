@@ -1,6 +1,6 @@
 import { QSidebarProps } from "@/ui/QSidebar.ui";
 import { QSidebar } from "@/ui/QSidebar.ui";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/company/")({
   component: RouteComponent,
@@ -24,8 +24,13 @@ const moduleList: QSidebarProps = [
 
 function RouteComponent() {
   return (
-    <div>
-      <QSidebar moduleList={moduleList} />
+    <div className="flex flex-row">
+      <div className="w-1/5">
+        <QSidebar moduleList={moduleList} />
+      </div>
+      <div className="w-4/5">
+        <Outlet />
+      </div>
     </div>
   );
 }

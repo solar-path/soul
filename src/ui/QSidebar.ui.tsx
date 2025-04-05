@@ -48,7 +48,7 @@ export const QSidebar = ({
 }) => {
   return (
     <div>
-      <Sidebar>
+      <Sidebar className="w-full h-full">
         <SidebarItems>
           <SidebarItemGroup>
             {moduleList.map((module) =>
