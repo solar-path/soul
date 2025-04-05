@@ -1,11 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
-import {
-  Sidebar,
-  SidebarItem,
-  SidebarItemGroup,
-  SidebarItems,
-} from "flowbite-react";
+import { QSidebar, QSidebarProps } from "@/ui/QSidebar.ui";
 import ReactMarkdown from "react-markdown";
 
 // Define the route
@@ -25,11 +20,14 @@ const slugToFileMap: Record<string, { title: string; file: string }> = {
   ia: { title: "Internal Audit", file: "internalAudit.md" },
 };
 
-// Create a list of all available documentation pages
-const postList = Object.entries(slugToFileMap).map(([slug, { title }]) => ({
-  title,
-  href: `/docs/${slug}`,
-}));
+// Create a list of all available documentation pages in QSidebar format
+const sidebarModules: QSidebarProps = Object.entries(slugToFileMap).map(
+  ([slug, { title }]) => ({
+    title,
+    href: `/docs/${slug}`,
+    children: [],
+  })
+);
 
 function DocsPage() {
   // Get the slug parameter from the route
@@ -279,22 +277,7 @@ function DocsPage() {
           <h3 className="text-lg font-semibold mb-3">Documentation</h3>
         </div>
         <div className="px-2 pb-4">
-          <Sidebar className="w-full">
-            <SidebarItems>
-              <SidebarItemGroup>
-                {postList.map((post) => (
-                  <SidebarItem
-                    key={post.href}
-                    as={Link}
-                    href={post.href}
-                    active={post.href === `/docs/${slug}`}
-                  >
-                    {post.title}
-                  </SidebarItem>
-                ))}
-              </SidebarItemGroup>
-            </SidebarItems>
-          </Sidebar>
+          <QSidebar moduleList={sidebarModules} />
         </div>
       </div>
 
