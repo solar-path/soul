@@ -9,6 +9,7 @@ import { logger } from "hono/logger";
 import { businessRouter } from "@/api/routes/business/business.routes";
 import { serveStatic } from "hono/bun";
 import { contactUsRouter } from "@/api/routes/contactUs/contactUs.routes";
+import { hrmRouter } from "./routes/hrm/hrm.routes";
 
 const app = new Hono<Context>().use(logger());
 
@@ -41,7 +42,8 @@ const routes = app
   .basePath("/api")
   .route("/auth", authRouter)
   .route("/business", businessRouter)
-  .route("/contact-us", contactUsRouter);
+  .route("/contact-us", contactUsRouter)
+  .route("/hrm", hrmRouter);
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) {
