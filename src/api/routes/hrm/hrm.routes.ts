@@ -38,6 +38,7 @@ import {
 } from "./employee/employee.zod";
 import { zValidator } from "@hono/zod-validator";
 import crypto from "crypto";
+import { uuidParamSchema } from "@/api/utils/id.zod";
 
 export const hrmRouter = new Hono<Context>()
   // CRUD department
@@ -64,6 +65,20 @@ export const hrmRouter = new Hono<Context>()
   .get("/department/:id", async (c) => {
     try {
       const id = c.req.param("id");
+
+      // Validate ID format
+      const result = uuidParamSchema.safeParse(id);
+      if (!result.success) {
+        return c.json<ApiResponse<null>>(
+          {
+            success: false,
+            message: "Invalid department ID format",
+            data: null,
+          },
+          400
+        );
+      }
+
       const department = await db
         .select()
         .from(departmentTable)
@@ -260,6 +275,20 @@ export const hrmRouter = new Hono<Context>()
   .get("/position/:id", async (c) => {
     try {
       const id = c.req.param("id");
+
+      // Validate ID format
+      const result = uuidParamSchema.safeParse(id);
+      if (!result.success) {
+        return c.json<ApiResponse<null>>(
+          {
+            success: false,
+            message: "Invalid position ID format",
+            data: null,
+          },
+          400
+        );
+      }
+
       const position = await db
         .select()
         .from(positionTable)
@@ -447,6 +476,20 @@ export const hrmRouter = new Hono<Context>()
   .get("/employee/:id", async (c) => {
     try {
       const id = c.req.param("id");
+
+      // Validate ID format
+      const result = uuidParamSchema.safeParse(id);
+      if (!result.success) {
+        return c.json<ApiResponse<null>>(
+          {
+            success: false,
+            message: "Invalid employee ID format",
+            data: null,
+          },
+          400
+        );
+      }
+
       const employee = await db
         .select()
         .from(orgchartTable)
