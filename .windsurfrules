@@ -2,7 +2,7 @@
 
 ## DEVELOPMENT ENVIRONMENT
 
-1. Use Bun as the JavaScript runtime
+1. Use Bun as the JavaScript runtime and package manager
 2. Utilize built-in Bun or Node.js functionality before adding new packages (e.g., bun.password.hash(), crypto.randomUUID())
 3. Use only commands defined in package.json (dev, dev:client, dev:api, build, preview, drizzle, seed)
 4. Add new commands to package.json only when absolutely necessary
