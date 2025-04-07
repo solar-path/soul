@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 import {
   renderVerificationEmail,
   renderWelcomeEmail,
@@ -10,22 +11,20 @@ import {
 
 // Email configuration
 const transporter = nodemailer.createTransport({
-  host: "localhost",
-  port: 1025, // Default MailHog SMTP port for local testing
+  host: process.env.EMAIL_HOSTNAME || "localhost",
+  port: parseInt(process.env.EMAIL_PORT || "1025"),
   secure: false,
   auth: {
-    user: "",
-    pass: "",
+    user: process.env.EMAIL_USERNAME || "",
+    pass: process.env.EMAIL_PASSWORD || "",
   },
-});
+} as SMTPTransport.Options);
 
 // Email settings
-// In production, these should be loaded from environment variables
-// const EMAIL_SERVICE = process.env.EMAIL_SERVICE;
-const EMAIL_USER = "notify@aneko.io"; // In production: process.env.EMAIL_USER
-// const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD; // Not used with MailHog for local testing
-const APP_NAME = "Adam";
-const BASE_URL = "http://localhost:5173";
+// Bun automatically loads environment variables from .env files
+const EMAIL_USER = process.env.EMAIL_USERNAME || "notify@example.com";
+const APP_NAME = process.env.APP_NAME || "Adam";
+const BASE_URL = process.env.APP_BASE_URL || "http://localhost:5173";
 
 /**
  * Send an email using nodemailer
