@@ -39,10 +39,11 @@ import {
 import { zValidator } from "@hono/zod-validator";
 import crypto from "crypto";
 import { uuidParamSchema } from "@/api/utils/id.zod";
+import { loggedIn } from "@/api/utils/loggedIn";
 
 export const hrmRouter = new Hono<Context>()
   // CRUD department
-  .get("/department", async (c) => {
+  .get("/department", loggedIn, async (c) => {
     try {
       const departmentList = await db.select().from(departmentTable);
       return c.json<ApiResponse<Department[]>>({
@@ -62,7 +63,7 @@ export const hrmRouter = new Hono<Context>()
     }
   })
 
-  .get("/department/:id", async (c) => {
+  .get("/department/:id", loggedIn, async (c) => {
     try {
       const id = c.req.param("id");
 
@@ -115,6 +116,7 @@ export const hrmRouter = new Hono<Context>()
   .post(
     "/newDepartment",
     zValidator("json", insertDepartmentSchema),
+    loggedIn,
     async (c) => {
       try {
         const data = c.req.valid("json") as InsertDepartment;
@@ -151,6 +153,7 @@ export const hrmRouter = new Hono<Context>()
   .put(
     "/editDepartment",
     zValidator("json", updateDepartmentSchema),
+    loggedIn,
     async (c) => {
       try {
         const data = c.req.valid("json") as UpdateDepartment;
@@ -203,6 +206,7 @@ export const hrmRouter = new Hono<Context>()
   .delete(
     "/deleteDepartment",
     zValidator("json", deleteDepartmentSchema),
+    loggedIn,
     async (c) => {
       try {
         const { id } = c.req.valid("json") as DeleteDepartment;
@@ -244,7 +248,7 @@ export const hrmRouter = new Hono<Context>()
     }
   )
   // CRUD position
-  .get("/position", async (c) => {
+  .get("/position", loggedIn, async (c) => {
     try {
       const positionList = await db.select().from(positionTable);
 
@@ -272,7 +276,7 @@ export const hrmRouter = new Hono<Context>()
     }
   })
 
-  .get("/position/:id", async (c) => {
+  .get("/position/:id", loggedIn, async (c) => {
     try {
       const id = c.req.param("id");
 
@@ -329,89 +333,100 @@ export const hrmRouter = new Hono<Context>()
     }
   })
 
-  .post("/newPosition", zValidator("json", insertPositionSchema), async (c) => {
-    try {
-      const data = c.req.valid("json") as InsertPosition;
-      const newPosition = {
-        ...data,
-        id: data.id || crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+  .post(
+    "/newPosition",
+    zValidator("json", insertPositionSchema),
+    loggedIn,
+    async (c) => {
+      try {
+        const data = c.req.valid("json") as InsertPosition;
+        const newPosition = {
+          ...data,
+          id: data.id || crypto.randomUUID(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
 
-      await db.insert(positionTable).values(newPosition);
+        await db.insert(positionTable).values(newPosition);
 
-      return c.json<ApiResponse<InsertPosition>>(
-        {
-          success: true,
-          message: "Position created successfully",
-          data: newPosition,
-        },
-        201
-      );
-    } catch (error) {
-      return c.json<ApiResponse<null>>(
-        {
-          success: false,
-          message: `Failed to create position: ${error instanceof Error ? error.message : "Unknown error"}`,
-          data: null,
-        },
-        500
-      );
-    }
-  })
-
-  .put("/editPosition", zValidator("json", updatePositionSchema), async (c) => {
-    try {
-      const data = c.req.valid("json") as UpdatePosition;
-
-      // Check if position exists
-      const existingPosition = await db
-        .select()
-        .from(positionTable)
-        .where(eq(positionTable.id, data.id));
-
-      if (!existingPosition || existingPosition.length === 0) {
+        return c.json<ApiResponse<InsertPosition>>(
+          {
+            success: true,
+            message: "Position created successfully",
+            data: newPosition,
+          },
+          201
+        );
+      } catch (error) {
         return c.json<ApiResponse<null>>(
           {
             success: false,
-            message: "Position not found",
+            message: `Failed to create position: ${error instanceof Error ? error.message : "Unknown error"}`,
             data: null,
           },
-          404
+          500
         );
       }
-
-      const updateData = {
-        ...data,
-        updatedAt: new Date().toISOString(),
-      };
-
-      await db
-        .update(positionTable)
-        .set(updateData)
-        .where(eq(positionTable.id, data.id));
-
-      return c.json<ApiResponse<UpdatePosition>>({
-        success: true,
-        message: "Position updated successfully",
-        data: updateData,
-      });
-    } catch (error) {
-      return c.json<ApiResponse<null>>(
-        {
-          success: false,
-          message: `Failed to update position: ${error instanceof Error ? error.message : "Unknown error"}`,
-          data: null,
-        },
-        500
-      );
     }
-  })
+  )
+
+  .put(
+    "/editPosition",
+    zValidator("json", updatePositionSchema),
+    loggedIn,
+    async (c) => {
+      try {
+        const data = c.req.valid("json") as UpdatePosition;
+
+        // Check if position exists
+        const existingPosition = await db
+          .select()
+          .from(positionTable)
+          .where(eq(positionTable.id, data.id));
+
+        if (!existingPosition || existingPosition.length === 0) {
+          return c.json<ApiResponse<null>>(
+            {
+              success: false,
+              message: "Position not found",
+              data: null,
+            },
+            404
+          );
+        }
+
+        const updateData = {
+          ...data,
+          updatedAt: new Date().toISOString(),
+        };
+
+        await db
+          .update(positionTable)
+          .set(updateData)
+          .where(eq(positionTable.id, data.id));
+
+        return c.json<ApiResponse<UpdatePosition>>({
+          success: true,
+          message: "Position updated successfully",
+          data: updateData,
+        });
+      } catch (error) {
+        return c.json<ApiResponse<null>>(
+          {
+            success: false,
+            message: `Failed to update position: ${error instanceof Error ? error.message : "Unknown error"}`,
+            data: null,
+          },
+          500
+        );
+      }
+    }
+  )
 
   .delete(
     "/deletePosition",
     zValidator("json", deletePositionSchema),
+    loggedIn,
     async (c) => {
       try {
         const { id } = c.req.valid("json") as DeletePosition;
@@ -453,7 +468,7 @@ export const hrmRouter = new Hono<Context>()
     }
   )
   // CRUD employee
-  .get("/employee", async (c) => {
+  .get("/employee", loggedIn, async (c) => {
     try {
       const employeeList = await db.select().from(orgchartTable);
       return c.json<ApiResponse<Employee[]>>({
@@ -473,7 +488,7 @@ export const hrmRouter = new Hono<Context>()
     }
   })
 
-  .get("/employee/:id", async (c) => {
+  .get("/employee/:id", loggedIn, async (c) => {
     try {
       const id = c.req.param("id");
 
@@ -523,89 +538,100 @@ export const hrmRouter = new Hono<Context>()
     }
   })
 
-  .post("/newEmployee", zValidator("json", insertEmployeeSchema), async (c) => {
-    try {
-      const data = c.req.valid("json") as InsertEmployee;
-      const newEmployee = {
-        ...data,
-        id: data.id || crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+  .post(
+    "/newEmployee",
+    zValidator("json", insertEmployeeSchema),
+    loggedIn,
+    async (c) => {
+      try {
+        const data = c.req.valid("json") as InsertEmployee;
+        const newEmployee = {
+          ...data,
+          id: data.id || crypto.randomUUID(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
 
-      await db.insert(orgchartTable).values(newEmployee);
+        await db.insert(orgchartTable).values(newEmployee);
 
-      return c.json<ApiResponse<InsertEmployee>>(
-        {
-          success: true,
-          message: "Employee created successfully",
-          data: newEmployee,
-        },
-        201
-      );
-    } catch (error) {
-      return c.json<ApiResponse<null>>(
-        {
-          success: false,
-          message: `Failed to create employee: ${error instanceof Error ? error.message : "Unknown error"}`,
-          data: null,
-        },
-        500
-      );
-    }
-  })
-
-  .put("/editEmployee", zValidator("json", updateEmployeeSchema), async (c) => {
-    try {
-      const data = c.req.valid("json") as UpdateEmployee;
-
-      // Check if employee exists
-      const existingEmployee = await db
-        .select()
-        .from(orgchartTable)
-        .where(eq(orgchartTable.id, data.id));
-
-      if (!existingEmployee || existingEmployee.length === 0) {
+        return c.json<ApiResponse<InsertEmployee>>(
+          {
+            success: true,
+            message: "Employee created successfully",
+            data: newEmployee,
+          },
+          201
+        );
+      } catch (error) {
         return c.json<ApiResponse<null>>(
           {
             success: false,
-            message: "Employee not found",
+            message: `Failed to create employee: ${error instanceof Error ? error.message : "Unknown error"}`,
             data: null,
           },
-          404
+          500
         );
       }
-
-      const updateData = {
-        ...data,
-        updatedAt: new Date().toISOString(),
-      };
-
-      await db
-        .update(orgchartTable)
-        .set(updateData)
-        .where(eq(orgchartTable.id, data.id));
-
-      return c.json<ApiResponse<UpdateEmployee>>({
-        success: true,
-        message: "Employee updated successfully",
-        data: updateData,
-      });
-    } catch (error) {
-      return c.json<ApiResponse<null>>(
-        {
-          success: false,
-          message: `Failed to update employee: ${error instanceof Error ? error.message : "Unknown error"}`,
-          data: null,
-        },
-        500
-      );
     }
-  })
+  )
+
+  .put(
+    "/editEmployee",
+    zValidator("json", updateEmployeeSchema),
+    loggedIn,
+    async (c) => {
+      try {
+        const data = c.req.valid("json") as UpdateEmployee;
+
+        // Check if employee exists
+        const existingEmployee = await db
+          .select()
+          .from(orgchartTable)
+          .where(eq(orgchartTable.id, data.id));
+
+        if (!existingEmployee || existingEmployee.length === 0) {
+          return c.json<ApiResponse<null>>(
+            {
+              success: false,
+              message: "Employee not found",
+              data: null,
+            },
+            404
+          );
+        }
+
+        const updateData = {
+          ...data,
+          updatedAt: new Date().toISOString(),
+        };
+
+        await db
+          .update(orgchartTable)
+          .set(updateData)
+          .where(eq(orgchartTable.id, data.id));
+
+        return c.json<ApiResponse<UpdateEmployee>>({
+          success: true,
+          message: "Employee updated successfully",
+          data: updateData,
+        });
+      } catch (error) {
+        return c.json<ApiResponse<null>>(
+          {
+            success: false,
+            message: `Failed to update employee: ${error instanceof Error ? error.message : "Unknown error"}`,
+            data: null,
+          },
+          500
+        );
+      }
+    }
+  )
 
   .delete(
     "/deleteEmployee",
     zValidator("json", deleteEmployeeSchema),
+    loggedIn,
     async (c) => {
       try {
         const { id } = c.req.valid("json") as DeleteEmployee;
