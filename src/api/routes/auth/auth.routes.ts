@@ -14,6 +14,7 @@ import {
   signInSchema,
   signUpSchema,
 } from "./auth.zod.ts";
+import { sendVerificationEmail } from "@/api/mail/mail.settings.ts";
 
 const checkUser = async (email: string) => {
   return await db
@@ -40,22 +41,21 @@ export const authRouter = new Hono<Context>()
       });
     }
 
+    const token = crypto.randomUUID();
+
     // Create a new user
     await db
       .insert(userTable)
       .values({
         id: crypto.randomUUID(),
         email,
-        token: crypto.randomUUID(),
+        token,
         password: await Bun.password.hash(password),
       })
       .returning();
 
     // Send account verification email
-    // const token = crypto.randomUUID();
-    // await sendAccountVerificationEmail(email, token);
-    // Log email sending for development purposes
-    // console.log(`Verification email sent to ${email}`);
+    await sendVerificationEmail(email, token);
 
     return c.json<ApiResponse>({
       success: true,

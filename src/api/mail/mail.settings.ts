@@ -1,5 +1,4 @@
 import nodemailer from "nodemailer";
-import SMTPTransport from "nodemailer/lib/smtp-transport";
 import {
   renderVerificationEmail,
   renderWelcomeEmail,
@@ -9,20 +8,25 @@ import {
   renderContactFormEmail,
 } from "./mail.renderer";
 
-// Email configuration
+// Configure nodemailer to use MailHog for development/testing
+// MailHog SMTP server runs on port 1025, web UI on port 8025
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOSTNAME || "localhost",
-  port: parseInt(process.env.EMAIL_PORT || "1025"),
+  host: "localhost",
+  port: 1025,
   secure: false,
-  auth: {
-    user: process.env.EMAIL_USERNAME || "",
-    pass: process.env.EMAIL_PASSWORD || "",
+  tls: {
+    rejectUnauthorized: false,
   },
-} as SMTPTransport.Options);
+});
+
+// Log that we're using MailHog as our mail server
+console.log(
+  "Using MailHog mail server on localhost:1025 (Web UI available at http://localhost:8025)"
+);
 
 // Email settings
 // Bun automatically loads environment variables from .env files
-const EMAIL_USER = process.env.EMAIL_USERNAME || "notify@example.com";
+const EMAIL_USER = process.env.EMAIL_USERNAME || "notify@adam.com";
 const APP_NAME = process.env.APP_NAME || "Adam";
 const BASE_URL = process.env.APP_BASE_URL || "http://localhost:5173";
 
@@ -36,7 +40,7 @@ const BASE_URL = process.env.APP_BASE_URL || "http://localhost:5173";
  */
 export const sendMail = async (to: string, subject: string, html: string) => {
   const mailOptions = {
-    from: EMAIL_USER,
+    from: `"${APP_NAME}" <${EMAIL_USER}>`,
     to,
     subject,
     html,
@@ -45,6 +49,7 @@ export const sendMail = async (to: string, subject: string, html: string) => {
   try {
     const result = await transporter.sendMail(mailOptions);
     console.log(`Email sent to ${to}: ${result.messageId}`);
+    console.log(`View email in MailHog UI: http://localhost:8025`);
     return result;
   } catch (error) {
     console.error("Error sending email:", error);
@@ -68,6 +73,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     });
 
     await sendMail(email, subject, html);
+    console.log(`Verification email sent to ${email}`);
   } catch (error) {
     console.error("Failed to send verification email:", error);
   }
@@ -92,6 +98,7 @@ export const sendInviteEmailToExistingNewUser = async (
     });
 
     await sendMail(email, subject, html);
+    console.log(`Invitation email sent to existing user: ${email}`);
   } catch (error) {
     console.error("Failed to send invitation email to existing user:", error);
   }
@@ -118,6 +125,7 @@ export const sendInviteEmailToNotExistingNewUser = async (
     });
 
     await sendMail(email, subject, html);
+    console.log(`Invitation email sent to new user: ${email}`);
   } catch (error) {
     console.error("Failed to send invitation email to new user:", error);
   }
@@ -138,6 +146,7 @@ export const sendWelcomeEmail = async (email: string) => {
     });
 
     await sendMail(email, subject, html);
+    console.log(`Welcome email sent to new user: ${email}`);
 
     // Database update logic can be added here if needed
     // Example:
@@ -165,6 +174,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
     });
 
     await sendMail(email, subject, html);
+    console.log(`Password reset email sent to ${email}`);
 
     // Database update logic can be added here if needed
     // Example:
@@ -196,7 +206,8 @@ export const sendContactUsFilledFormAcceptanceEmail = async (
       supportEmail: EMAIL_USER,
     });
 
-    return await sendMail(email, subject, html);
+    await sendMail(email, subject, html);
+    console.log(`Contact form confirmation email sent to ${email}`);
   } catch (error) {
     console.error("Failed to send contact form confirmation email:", error);
     throw error;
