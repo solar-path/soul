@@ -5,7 +5,7 @@ POST {{baseURL}}/auth/signup
 Content-Type: application/json
 
 {
-    "email": "john.doe@google.com",
+    "email": "johnny.doe@demo.com",
     "password": "M1r@nd@32",
     "confirmPassword": "M1r@nd@32",
     "termsAcceptance": true
@@ -16,7 +16,7 @@ POST {{baseURL}}/auth/signin
 Content-Type: application/json
 
 {
-    "email": "john.doe@go.com",
+    "email": "john.doe@demo.com",
     "password": "M1r@nd@32"
 }   
 

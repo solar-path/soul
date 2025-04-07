@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { z } from "zod";
 import {
   renderVerificationEmail,
   renderWelcomeEmail,
@@ -8,11 +9,28 @@ import {
   renderContactFormEmail,
 } from "./mail.renderer";
 
+// Define Zod schema for environment variables validation
+const EnvSchema = z.object({
+  EMAIL_USERNAME: z.string().min(1),
+  APP_NAME: z.string().min(1),
+  APP_BASE_URL: z.string().min(1),
+  EMAIL_HOSTNAME: z.string().min(1),
+  EMAIL_PORT: z.coerce.number().min(1),
+});
+
+// Parse and validate environment variables
+const env = EnvSchema.parse(process.env);
+
+// Email settings from validated environment variables
+const EMAIL_USER = env.EMAIL_USERNAME;
+const APP_NAME = env.APP_NAME;
+const BASE_URL = env.APP_BASE_URL;
+
 // Configure nodemailer to use MailHog for development/testing
 // MailHog SMTP server runs on port 1025, web UI on port 8025
 const transporter = nodemailer.createTransport({
-  host: "localhost",
-  port: 1025,
+  host: env.EMAIL_HOSTNAME,
+  port: env.EMAIL_PORT,
   secure: false,
   tls: {
     rejectUnauthorized: false,
@@ -21,14 +39,8 @@ const transporter = nodemailer.createTransport({
 
 // Log that we're using MailHog as our mail server
 console.log(
-  "Using MailHog mail server on localhost:1025 (Web UI available at http://localhost:8025)"
+  `Using mail server on ${env.EMAIL_HOSTNAME}:${env.EMAIL_PORT} (Web UI available at http://localhost:8025)`
 );
-
-// Email settings
-// Bun automatically loads environment variables from .env files
-const EMAIL_USER = process.env.EMAIL_USERNAME || "notify@adam.com";
-const APP_NAME = process.env.APP_NAME || "Adam";
-const BASE_URL = process.env.APP_BASE_URL || "http://localhost:5173";
 
 /**
  * Send an email using nodemailer
