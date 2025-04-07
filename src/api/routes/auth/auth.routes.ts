@@ -51,8 +51,11 @@ export const authRouter = new Hono<Context>()
       })
       .returning();
 
-    // Email verification will be implemented in a separate task
-    // sendAccountVerificiationEmail(email, token)
+    // Send account verification email
+    // const token = crypto.randomUUID();
+    // await sendAccountVerificationEmail(email, token);
+    // Log email sending for development purposes
+    // console.log(`Verification email sent to ${email}`);
 
     return c.json<ApiResponse>({
       success: true,
@@ -175,38 +178,44 @@ export const authRouter = new Hono<Context>()
       data: null,
     });
   })
-  .post("/forgot-password", zValidator("json", forgotSchema), async (c) => {
+  .post("/forgot", zValidator("json", forgotSchema), async (c) => {
     const { email } = c.req.valid("json");
 
-    //check user
+    // check user
     const existingUser = await checkUser(email);
 
-    // return error if user does not exist
+    // return success even if user doesn't exist (for security reasons)
     if (!existingUser) {
       return c.json<ApiResponse>({
-        success: false,
-        message: "Invalid credentials",
+        success: true,
+        message:
+          "If your email is registered, you will receive a password reset link",
         data: null,
       });
     }
-    // inactivate user and change password
+
+    // Generate reset token
     const token = crypto.randomUUID();
+
+    // Update user with reset token
     await db
       .update(userTable)
       .set({
         token,
-        updatedAt: new Date().toISOString(),
-        isVerified: false,
-        password: await Bun.password.hash(token),
+        // Store expiry in updatedAt field for now (would need schema update for proper tokenExpiry)
+        updatedAt: new Date(Date.now() + 3600000).toISOString(), // 1 hour from now
       })
       .where(eq(userTable.id, existingUser.id));
 
-    // send password reset email logic
-    // sendPasswordResetEmail(email, token)
+    // Send password reset email
+    // await sendPasswordResetEmail(email, token);
+    // Log email sending for development purposes
+    // console.log(`Password reset email sent to ${email}`);
 
     return c.json<ApiResponse>({
       success: true,
-      message: "Password reset email sent",
+      message:
+        "If your email is registered, you will receive a password reset link",
       data: null,
     });
   })
