@@ -13,7 +13,8 @@
     "postinstall": "flowbite-react patch",
     "drizzle": "bunx drizzle-kit generate && bun run src/api/database/migrate.ts",
     "seed": "bun run src/api/database/seed/seed.ts",
-    "drop": "bun run src/api/database/drop.ts"
+    "drop": "bun run src/api/database/drop.ts",
+    "db:reset": "bun drop && bun drizzle && bun seed"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.4.3",

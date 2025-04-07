@@ -59,7 +59,7 @@ export const authRouter = new Hono<Context>()
 
     return c.json<ApiResponse>({
       success: true,
-      message: `User ${email} created. Please follow the instructions in the email for account verification.`,
+      message: `User ${email} has been created. Please verity the account by follow the instructions mailed to you.`,
       data: null,
     });
   })

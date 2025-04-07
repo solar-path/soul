@@ -53,15 +53,17 @@ export const VerificationEmail: React.FC<VerificationEmailProps> = ({
               the button below:
             </Text>
 
-            <Button
-              href={verificationUrl}
-              style={{
-                ...styles.button,
-                padding: "12px 20px",
-              }}
-            >
-              Verify Email
-            </Button>
+            <div style={{ textAlign: "center" }}>
+              <Button
+                href={verificationUrl}
+                style={{
+                  ...styles.button,
+                  padding: "12px 20px",
+                }}
+              >
+                Verify Email
+              </Button>
+            </div>
 
             <Text style={styles.text}>
               If the button doesn't work, you can also copy and paste the
@@ -135,7 +137,7 @@ const styles = {
     marginBottom: "20px",
   },
   button: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#000000",
     borderRadius: "4px",
     color: "#fff",
     display: "inline-block",
@@ -143,11 +145,13 @@ const styles = {
     fontWeight: "bold",
     textDecoration: "none",
     textAlign: "center" as const,
-    width: "100%",
+    width: "auto",
     marginBottom: "20px",
+    marginRight: "auto",
+    marginLeft: "auto",
   },
   link: {
-    color: "#2563EB",
+    color: "#FF0000",
     textDecoration: "underline",
     wordBreak: "break-all" as const,
   },
