@@ -27,7 +27,7 @@ export const VerificationEmail: React.FC<VerificationEmailProps> = ({
   baseUrl = "http://localhost:5173",
   supportEmail = "notify@aneko.io",
 }) => {
-  const verificationUrl = `${baseUrl}/verify-account-${token}`;
+  const verificationUrl = `${baseUrl}/auth/verify/${token}`;
 
   return (
     <Html>

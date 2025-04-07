@@ -7,6 +7,7 @@ export const userTable = sqliteTable("user", {
   password: text("password").notNull(),
   fullname: text("fullname"),
   isVerified: integer("is_verified", { mode: "boolean" }).default(false),
+  tokenExpire: text("token_expire"),
   avatar: text("avatar"),
   dob: text("dob"),
   token: text("token"),

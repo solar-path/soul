@@ -42,6 +42,10 @@ export const authRouter = new Hono<Context>()
     }
 
     const token = crypto.randomUUID();
+    // Set token expiration to 24 hours from now
+    const tokenExpiry = new Date(
+      Date.now() + 24 * 60 * 60 * 1000
+    ).toISOString();
 
     // Create a new user
     await db
@@ -50,6 +54,8 @@ export const authRouter = new Hono<Context>()
         id: crypto.randomUUID(),
         email,
         token,
+        isVerified: false,
+        tokenExpire: tokenExpiry,
         password: await Bun.password.hash(password),
       })
       .returning();
@@ -60,6 +66,54 @@ export const authRouter = new Hono<Context>()
     return c.json<ApiResponse>({
       success: true,
       message: `User ${email} has been created. Please verity the account by follow the instructions mailed to you.`,
+      data: null,
+    });
+  })
+  .get("/verify/:token", async (c) => {
+    const token = c.req.param("token");
+
+    // Find user by token
+    const existingUser = await db
+      .select()
+      .from(userTable)
+      .where(eq(userTable.token, token))
+      .limit(1)
+      .then((result) => result[0]);
+
+    // Return error if user does not exist or token is invalid
+    if (!existingUser) {
+      return c.json<ApiResponse>({
+        success: false,
+        message: "Invalid verification token",
+        data: null,
+      });
+    }
+
+    // Check if token has expired (24 hours)
+    const tokenExpiry = new Date(existingUser.tokenExpire || "");
+    const now = new Date();
+    if (now > tokenExpiry) {
+      return c.json<ApiResponse>({
+        success: false,
+        message: "Verification token has expired. Please request a new one.",
+        data: null,
+      });
+    }
+
+    // Update user to verified status
+    await db
+      .update(userTable)
+      .set({
+        isVerified: true,
+        token: null,
+        tokenExpire: null,
+        updatedAt: new Date().toISOString(),
+      })
+      .where(eq(userTable.id, existingUser.id));
+
+    return c.json<ApiResponse>({
+      success: true,
+      message: "Account verified successfully. You can now log in.",
       data: null,
     });
   })
@@ -151,13 +205,29 @@ export const authRouter = new Hono<Context>()
   .post("/activate", zValidator("json", activateSchema), async (c) => {
     const { token } = c.req.valid("json");
     //check user
-    const existingUser = await checkUser(token);
+    const existingUser = await db
+      .select()
+      .from(userTable)
+      .where(eq(userTable.token, token))
+      .limit(1)
+      .then((result) => result[0]);
 
     // return error if user does not exist
     if (!existingUser) {
       return c.json<ApiResponse>({
         success: false,
         message: "Invalid token",
+        data: null,
+      });
+    }
+
+    // Check if token has expired (24 hours)
+    const tokenExpiry = new Date(existingUser.updatedAt || "");
+    const now = new Date();
+    if (now > tokenExpiry) {
+      return c.json<ApiResponse>({
+        success: false,
+        message: "Verification token has expired. Please request a new one.",
         data: null,
       });
     }

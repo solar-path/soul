@@ -20,6 +20,7 @@ import { Route as CompanyErmIndexImport } from './routes/company/erm/index'
 import { Route as CompanyAddressBookIndexImport } from './routes/company/addressBook/index'
 import { Route as AuthProfileIndexImport } from './routes/auth/profile/index'
 import { Route as CompanyUserManagementUserImport } from './routes/company/userManagement/user'
+import { Route as AuthVerifyTokenImport } from './routes/auth/verify.$token'
 import { Route as publicDocsSlugImport } from './routes/(public)/docs.$slug'
 import { Route as CompanyHrmPositionIndexImport } from './routes/company/hrm/position/index'
 import { Route as CompanyHrmEmployeeIndexImport } from './routes/company/hrm/employee/index'
@@ -81,6 +82,12 @@ const CompanyUserManagementUserRoute = CompanyUserManagementUserImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthVerifyTokenRoute = AuthVerifyTokenImport.update({
+  id: '/auth/verify/$token',
+  path: '/auth/verify/$token',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const publicDocsSlugRoute = publicDocsSlugImport.update({
   id: '/(public)/docs/$slug',
   path: '/docs/$slug',
@@ -135,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/docs/$slug'
       fullPath: '/docs/$slug'
       preLoaderRoute: typeof publicDocsSlugImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/verify/$token': {
+      id: '/auth/verify/$token'
+      path: '/auth/verify/$token'
+      fullPath: '/auth/verify/$token'
+      preLoaderRoute: typeof AuthVerifyTokenImport
       parentRoute: typeof rootRoute
     }
     '/company/userManagement/user': {
@@ -210,6 +224,7 @@ export interface FileRoutesByFullPath {
   '/': typeof publicIndexRoute
   '/company': typeof CompanyIndexRoute
   '/docs/$slug': typeof publicDocsSlugRoute
+  '/auth/verify/$token': typeof AuthVerifyTokenRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
   '/auth/profile': typeof AuthProfileIndexRoute
   '/company/addressBook': typeof CompanyAddressBookIndexRoute
@@ -226,6 +241,7 @@ export interface FileRoutesByTo {
   '/': typeof publicIndexRoute
   '/company': typeof CompanyIndexRoute
   '/docs/$slug': typeof publicDocsSlugRoute
+  '/auth/verify/$token': typeof AuthVerifyTokenRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
   '/auth/profile': typeof AuthProfileIndexRoute
   '/company/addressBook': typeof CompanyAddressBookIndexRoute
@@ -243,6 +259,7 @@ export interface FileRoutesById {
   '/(public)/': typeof publicIndexRoute
   '/company/': typeof CompanyIndexRoute
   '/(public)/docs/$slug': typeof publicDocsSlugRoute
+  '/auth/verify/$token': typeof AuthVerifyTokenRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
   '/auth/profile/': typeof AuthProfileIndexRoute
   '/company/addressBook/': typeof CompanyAddressBookIndexRoute
@@ -261,6 +278,7 @@ export interface FileRouteTypes {
     | '/'
     | '/company'
     | '/docs/$slug'
+    | '/auth/verify/$token'
     | '/company/userManagement/user'
     | '/auth/profile'
     | '/company/addressBook'
@@ -276,6 +294,7 @@ export interface FileRouteTypes {
     | '/'
     | '/company'
     | '/docs/$slug'
+    | '/auth/verify/$token'
     | '/company/userManagement/user'
     | '/auth/profile'
     | '/company/addressBook'
@@ -291,6 +310,7 @@ export interface FileRouteTypes {
     | '/(public)/'
     | '/company/'
     | '/(public)/docs/$slug'
+    | '/auth/verify/$token'
     | '/company/userManagement/user'
     | '/auth/profile/'
     | '/company/addressBook/'
@@ -308,6 +328,7 @@ export interface RootRouteChildren {
   publicIndexRoute: typeof publicIndexRoute
   CompanyIndexRoute: typeof CompanyIndexRoute
   publicDocsSlugRoute: typeof publicDocsSlugRoute
+  AuthVerifyTokenRoute: typeof AuthVerifyTokenRoute
   CompanyUserManagementUserRoute: typeof CompanyUserManagementUserRoute
   AuthProfileIndexRoute: typeof AuthProfileIndexRoute
   CompanyAddressBookIndexRoute: typeof CompanyAddressBookIndexRoute
@@ -324,6 +345,7 @@ const rootRouteChildren: RootRouteChildren = {
   publicIndexRoute: publicIndexRoute,
   CompanyIndexRoute: CompanyIndexRoute,
   publicDocsSlugRoute: publicDocsSlugRoute,
+  AuthVerifyTokenRoute: AuthVerifyTokenRoute,
   CompanyUserManagementUserRoute: CompanyUserManagementUserRoute,
   AuthProfileIndexRoute: AuthProfileIndexRoute,
   CompanyAddressBookIndexRoute: CompanyAddressBookIndexRoute,
@@ -349,6 +371,7 @@ export const routeTree = rootRoute
         "/(public)/",
         "/company/",
         "/(public)/docs/$slug",
+        "/auth/verify/$token",
         "/company/userManagement/user",
         "/auth/profile/",
         "/company/addressBook/",
@@ -371,6 +394,9 @@ export const routeTree = rootRoute
     },
     "/(public)/docs/$slug": {
       "filePath": "(public)/docs.$slug.tsx"
+    },
+    "/auth/verify/$token": {
+      "filePath": "auth/verify.$token.tsx"
     },
     "/company/userManagement/user": {
       "filePath": "company/userManagement/user.tsx"
