@@ -14,21 +14,25 @@ import {
   trackContactUsSchema,
 } from "@/api/routes/contactUs/contactUs.zod";
 import { eq } from "drizzle-orm";
+import { sendContactUsFilledFormAcceptanceEmail } from "@/api/mail/mail.settings";
 
 export const contactUsRouter = new Hono<Context>()
   .post("/new", zValidator("json", contactUsSchema), async (c) => {
     const { email, message } = c.req.valid("json");
 
+    const inquiryId = crypto.randomUUID();
+    
     const contactUs = await db
       .insert(contactUsTable)
       .values({
-        id: crypto.randomUUID(),
+        id: inquiryId,
         email,
         message,
       })
       .returning();
 
-    // TODO: Send email notification
+    // Send email notification with inquiry ID
+    sendContactUsFilledFormAcceptanceEmail(email, email, message, inquiryId);
 
     return c.json<ApiResponse<ContactUsResponse>>({
       success: true,

@@ -150,6 +150,7 @@ export async function renderInviteNewUserEmail(
  * @param email The recipient email address
  * @param name The name of the sender
  * @param message The message from the contact form
+ * @param inquiryId The unique ID of the inquiry
  * @param options Additional options for the email
  * @returns Promise resolving to HTML string
  */
@@ -157,6 +158,7 @@ export async function renderContactFormEmail(
   email: string,
   name: string,
   message: string,
+  inquiryId: string,
   options?: {
     appName?: string;
     supportEmail?: string;
@@ -166,6 +168,7 @@ export async function renderContactFormEmail(
     email,
     name,
     message,
+    inquiryId,
     ...options
   });
 }

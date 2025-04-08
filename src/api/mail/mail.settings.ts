@@ -204,22 +204,26 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
  * @param email Recipient email address
  * @param name Name of the sender
  * @param message Message from the contact form
+ * @param inquiryId Unique ID of the inquiry
  * @returns Promise that resolves when the email is sent
  */
 export const sendContactUsFilledFormAcceptanceEmail = async (
   email: string,
   name: string,
-  message: string
+  message: string,
+  inquiryId: string
 ) => {
   try {
     const subject = `Your Contact Form Submission was received`;
-    const html = await renderContactFormEmail(email, name, message, {
+    const html = await renderContactFormEmail(email, name, message, inquiryId, {
       appName: APP_NAME,
       supportEmail: EMAIL_USER,
     });
 
     await sendMail(email, subject, html);
-    console.log(`Contact form confirmation email sent to ${email}`);
+    console.log(
+      `Contact form confirmation email sent to ${email} with inquiry ID: ${inquiryId}`
+    );
   } catch (error) {
     console.error("Failed to send contact form confirmation email:", error);
     throw error;

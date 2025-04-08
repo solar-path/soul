@@ -15,6 +15,7 @@ interface ContactFormEmailProps {
   email: string;
   name: string;
   message: string;
+  inquiryId: string;
   appName?: string;
   supportEmail?: string;
 }
@@ -23,6 +24,7 @@ export const ContactFormEmail: React.FC<ContactFormEmailProps> = ({
   name,
   email,
   message,
+  inquiryId,
   appName,
   supportEmail,
 }) => {
@@ -51,7 +53,10 @@ export const ContactFormEmail: React.FC<ContactFormEmailProps> = ({
             </Section>
 
             <Text style={styles.text}>
-              Please keep this email for your records.
+              Your inquiry ID is: <span style={styles.code}>{inquiryId}</span>
+            </Text>
+            <Text style={styles.text}>
+              Please keep this email for your records. You can use this ID to track your inquiry status.
             </Text>
 
             <Hr style={styles.hr} />
