@@ -21,7 +21,7 @@ export const contactUsRouter = new Hono<Context>()
     const { email, message } = c.req.valid("json");
 
     const inquiryId = crypto.randomUUID();
-    
+
     const contactUs = await db
       .insert(contactUsTable)
       .values({
@@ -46,6 +46,21 @@ export const contactUsRouter = new Hono<Context>()
   .get("/find/:id", zValidator("param", trackContactUsSchema), async (c) => {
     const { id } = c.req.valid("param");
 
+    // First check if the contact form exists
+    const [contactForm] = await db
+      .select()
+      .from(contactUsTable)
+      .where(eq(contactUsTable.id, id))
+      .limit(1);
+
+    if (!contactForm) {
+      return c.json<ApiResponse<RespondToContactUs>>({
+        success: false,
+        message: "Contact form not found",
+        data: null,
+      });
+    }
+
     // Get the response if it exists
     const [response] = await db
       .select()
@@ -53,9 +68,19 @@ export const contactUsRouter = new Hono<Context>()
       .where(eq(respondToContactUsTable.contactUsID, id))
       .limit(1);
 
+    // Return the contact form data even if no response exists yet
     return c.json<ApiResponse<RespondToContactUs>>({
       success: true,
-      message: response ? "Response found" : "No response found",
-      data: response || null,
+      message: response
+        ? "Response found"
+        : "Contact form found, but no response yet",
+      data: response || {
+        id: "",
+        contactUsID: contactForm.id,
+        message: "",
+        author: "",
+        createdAt: null,
+        updatedAt: null,
+      },
     });
   });
