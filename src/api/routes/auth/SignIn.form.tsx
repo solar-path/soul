@@ -52,7 +52,10 @@ export default function SignInForm() {
       closeDrawer();
 
       // Show success message
-      showFlashMessage("success", "Successfully signed in");
+      showFlashMessage(
+        "success",
+        `${result.data?.email} successfully signed in`
+      );
 
       // Navigate to company page
       navigate({ to: "/company" });
