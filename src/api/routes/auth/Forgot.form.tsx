@@ -1,23 +1,52 @@
 import { Label, Button, TextInput, HelperText } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { forgotSchema } from "@/api/routes/auth/auth.zod";
+import { forgotSchema, type Forgot } from "@/api/routes/auth/auth.zod";
+import { trpc } from "@/utils/trpc";
+import { useMutation } from "@tanstack/react-query";
+import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
 
 export default function ForgotPasswordForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+    reset,
+  } = useForm<Forgot>({
     defaultValues: {
       email: "",
     },
     resolver: zodResolver(forgotSchema),
   });
 
+  const forgotPasswordMutation = useMutation({
+    mutationFn: async (data: Forgot) => {
+      const response = await trpc.auth.forgot.$post({
+        json: data,
+      });
+      return response.json();
+    },
+    onSuccess: (data) => {
+      if (data.success) {
+        reset();
+        showFlashMessage(
+          "success",
+          "If your email is registered, you will receive a password reset link"
+        );
+      }
+    },
+    onError: () => {
+      showFlashMessage("fail", "An error occurred. Please try again later.");
+    },
+  });
+
+  const onSubmit = (data: Forgot) => {
+    forgotPasswordMutation.mutate(data);
+  };
+
   return (
     <form
-      onSubmit={handleSubmit((data) => console.log(data))}
+      onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col w-full space-y-2"
     >
       <div>
@@ -31,8 +60,15 @@ export default function ForgotPasswordForm() {
         />
         <HelperText>{errors.email?.message}</HelperText>
       </div>
-      <Button type="submit" color="dark">
-        Send instructions
+
+      <Button
+        type="submit"
+        color="dark"
+        disabled={forgotPasswordMutation.isPending}
+      >
+        {forgotPasswordMutation.isPending
+          ? "Processing..."
+          : "Send instructions"}
       </Button>
     </form>
   );

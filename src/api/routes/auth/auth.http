@@ -11,6 +11,15 @@ Content-Type: application/json
     "termsAcceptance": true
 }
 
+### Forgot password
+POST {{baseURL}}/auth/forgot
+Content-Type: application/json
+
+{
+    "email": "itgroup.luck@gmail.com"
+}
+
+
 ### Sign in
 POST {{baseURL}}/auth/signin
 Content-Type: application/json

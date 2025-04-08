@@ -14,7 +14,10 @@ import {
   signInSchema,
   signUpSchema,
 } from "./auth.zod.ts";
-import { sendVerificationEmail } from "@/api/mail/mail.settings.ts";
+import {
+  sendPasswordResetEmail,
+  sendVerificationEmail,
+} from "@/api/mail/mail.settings.ts";
 
 const checkUser = async (email: string) => {
   return await db
@@ -266,21 +269,20 @@ export const authRouter = new Hono<Context>()
 
     // Generate reset token
     const token = crypto.randomUUID();
+    // Set token expiration to 1 hour from now
+    const tokenExpiry = new Date(Date.now() + 3600000).toISOString();
 
     // Update user with reset token
     await db
       .update(userTable)
       .set({
         token,
-        // Store expiry in updatedAt field for now (would need schema update for proper tokenExpiry)
-        updatedAt: new Date(Date.now() + 3600000).toISOString(), // 1 hour from now
+        tokenExpire: tokenExpiry,
       })
       .where(eq(userTable.id, existingUser.id));
 
     // Send password reset email
-    // await sendPasswordResetEmail(email, token);
-    // Log email sending for development purposes
-    // console.log(`Password reset email sent to ${email}`);
+    await sendPasswordResetEmail(email, token);
 
     return c.json<ApiResponse>({
       success: true,
