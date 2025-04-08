@@ -40,22 +40,25 @@ export const PasswordResetEmail: React.FC<PasswordResetEmailProps> = ({
               Password Reset Request
             </Heading>
 
-            <Text style={styles.text}>Hello {email},</Text>
+            <Text style={styles.text}>Dear {email},</Text>
 
             <Text style={styles.text}>
               We received a request to reset your password for your {appName}{" "}
-              account. Click the button below to set a new password. This link will expire in 1 hour:
+              account. Click the button below to set a new password. This link
+              will expire in 1 hour:
             </Text>
 
-            <Button
-              href={resetUrl}
-              style={{
-                ...styles.button,
-                padding: "12px 20px",
-              }}
-            >
-              Reset Password
-            </Button>
+            <div style={{ textAlign: "center" }}>
+              <Button
+                href={resetUrl}
+                style={{
+                  ...styles.button,
+                  padding: "12px 20px",
+                }}
+              >
+                Reset Password
+              </Button>
+            </div>
 
             <Text style={styles.text}>
               If the button doesn't work, you can also copy and paste the
@@ -132,7 +135,7 @@ const styles = {
     marginBottom: "20px",
   },
   button: {
-    backgroundColor: "#2196F3",
+    backgroundColor: "#000000",
     borderRadius: "4px",
     color: "#fff",
     display: "inline-block",
@@ -140,11 +143,13 @@ const styles = {
     fontWeight: "bold",
     textDecoration: "none",
     textAlign: "center" as const,
-    width: "100%",
+    width: "auto",
     marginBottom: "20px",
+    marginRight: "auto",
+    marginLeft: "auto",
   },
   link: {
-    color: "#2563EB",
+    color: "#FF0000",
     textDecoration: "underline",
     wordBreak: "break-all" as const,
   },

@@ -54,7 +54,7 @@ function VerifyAccount() {
                 color="dark"
                 onClick={() => fillDrawer(SignInForm, "Sign in")}
               >
-                Go to Login
+                Sign in
               </Button>
             </div>
           )}
