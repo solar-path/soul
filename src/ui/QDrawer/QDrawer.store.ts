@@ -1,33 +1,40 @@
 import { ComponentType } from "react";
-import { create } from "zustand";
+import { Store, useStore } from "@tanstack/react-store";
 
-// Client type for drawer component
-export type DrawerType = {
+// Define the store state
+interface DrawerState {
   title: string;
   isOpen: boolean;
   Form: ComponentType | null;
-};
-
-// Define the store state and actions
-interface DrawerState extends DrawerType {
-  open: (Form: ComponentType, title: string) => void;
-  close: () => void;
 }
 
-// Create the Zustand store
-export const useDrawerStore = create<DrawerState>((set) => ({
+// Create the TanStack Store
+export const drawerStore = new Store<DrawerState>({
   title: "",
   isOpen: false,
   Form: null,
-  open: (Form, title) => set({ Form, title, isOpen: true }),
-  close: () => set({ isOpen: false, Form: null, title: "" }),
-}));
+});
+
+// Hook to access the store state
+export const useDrawerStore = () => {
+  return useStore(drawerStore);
+};
 
 // Helper functions for external usage
 export const fillDrawer = (Form: ComponentType, title: string) => {
-  useDrawerStore.getState().open(Form, title);
+  drawerStore.setState((state) => ({
+    ...state,
+    Form,
+    title,
+    isOpen: true,
+  }));
 };
 
 export const closeDrawer = () => {
-  useDrawerStore.getState().close();
+  drawerStore.setState((state) => ({
+    ...state,
+    isOpen: false,
+    Form: null,
+    title: "",
+  }));
 };

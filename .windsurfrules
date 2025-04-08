@@ -6,6 +6,7 @@
 2. Utilize built-in Bun or Node.js functionality before adding new packages (e.g., bun.password.hash(), crypto.randomUUID())
 3. Use only commands defined in package.json (dev, dev:client, dev:api, build, preview, drizzle, seed)
 4. Add new commands to package.json only when absolutely necessary
+5. If task is assigned, do not stop process until task is completed and verified by bun run build
 
 ## TECHNOLOGY STACK
 
@@ -24,7 +25,7 @@
 - **Authentication**: Lucia (https://lucia-auth.com)
 - **Validation**: Zod (https://zod.dev)
 - **UI Components**: Flowbite-react (https://flowbite-react.com/)
-- **State Management**: zustand (https://github.com/pmndrs/zustand)
+- **State Management**: @tanstack/react-store (https://tanstack.com/store/latest)
 
 ## FILE NAMING CONVENTIONS
 
@@ -56,7 +57,7 @@
 ## STATE MANAGEMENT
 
 - Use TanStack Query for server state and API data fetching
-- Use zustand for global app state and local state
+- Use @tanstack/react-store for global app state and local state
 - Implement proper loading states for all async operations
 
 ## UI IMPLEMENTATION
@@ -136,7 +137,6 @@
 - Fix problems as they arise; don't let issues pile up
 - Module is complete when project successfully passes "bun run build" command
 - If user rejects a terminal command, propose an alternative solution
-- Do not stop process until module from assignment.md is completed
 
 ## MODULE COMPLETION CRITERIA
 

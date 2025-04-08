@@ -1,35 +1,37 @@
-import { create } from "zustand";
+import { Store, useStore } from "@tanstack/react-store";
 
-// Client type for flash message component
-export type FlashMessageType = {
+// Define the store state
+interface FlashMessageState {
   state: boolean;
   type: string;
   message: string;
-};
-
-// Define the store state and actions
-interface FlashMessageStore {
-  state: boolean;
-  type: string;
-  message: string;
-  show: (type: "success" | "fail", message: string) => void;
-  hide: () => void;
 }
 
-// Create the Zustand store
-export const useFlashMessageStore = create<FlashMessageStore>((set) => ({
+// Create the TanStack Store
+export const flashMessageStore = new Store<FlashMessageState>({
   state: false,
   type: "",
   message: "",
-  show: (type, message) => set({ state: true, type, message }),
-  hide: () => set({ state: false }),
-}));
+});
+
+// Hook to access the store state
+export const useFlashMessageStore = () => {
+  return useStore(flashMessageStore);
+};
 
 // Helper functions for external usage
 export const showFlashMessage = (type: "success" | "fail", message: string) => {
-  useFlashMessageStore.getState().show(type, message);
+  flashMessageStore.setState((state) => ({
+    ...state,
+    state: true,
+    type,
+    message,
+  }));
 };
 
 export const hideFlashMessage = () => {
-  useFlashMessageStore.getState().hide();
+  flashMessageStore.setState((state) => ({
+    ...state,
+    state: false,
+  }));
 };

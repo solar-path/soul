@@ -4,8 +4,12 @@ import QFooter from "@/ui/QFooter.ui";
 import QHeader from "@/ui/QHeader.ui";
 import QDrawer from "@/ui/QDrawer/QDrawer.ui";
 import QFlashMessage from "@/ui/QFlashMessage/QFlashMessage.ui";
+import { User } from "@/api/utils/types";
 
-export const Route = createRootRoute({
+type RouterContext = {
+  currentUser: User | null;
+};
+export const Route = createRootRoute<RouterContext>({
   component: () => (
     <>
       <div className="flex flex-col min-h-screen">

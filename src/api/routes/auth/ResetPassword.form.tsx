@@ -31,7 +31,7 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
 
   const [showPassword, setShowPassword] = useState(false);
   const [countdown, setCountdown] = useState<number | null>(null);
-  const currentUser = useClientStore((state) => state.currentUser);
+  const { currentUser } = useClientStore();
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
