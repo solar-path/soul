@@ -12,7 +12,11 @@ import { fillDrawer } from "./QDrawer/QDrawer.store";
 import SignUpForm from "@/api/routes/auth/SignUp.form";
 import SignInForm from "@/api/routes/auth/SignIn.form";
 
+// const authenticatedMenu = () => { }
+// const unauthenticatedMenu = () => { }
+
 export default function QHeader() {
+  // currentUser === null ? : ;
   return (
     <Navbar fluid rounded>
       <NavbarBrand as={Link} href="/">

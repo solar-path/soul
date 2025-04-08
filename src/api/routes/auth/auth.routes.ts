@@ -4,7 +4,7 @@ import { zValidator } from "@hono/zod-validator";
 import { lucia } from "@/api/utils/lucia";
 import { userTable } from "@/api/database/schema/auth.schema";
 import { db } from "@/api/database/database";
-import type { ApiResponse, User } from "@/api/utils/types";
+import type { ApiResponse } from "@/api/utils/types";
 import { eq } from "drizzle-orm";
 import { loggedIn } from "@/api/utils/loggedIn";
 import {
@@ -19,13 +19,49 @@ import {
   sendVerificationEmail,
 } from "@/api/mail/mail.settings.ts";
 
-const checkUser = async (email: string) => {
+// Helper function to find a user by any field
+const findUserBy = async (key: "email" | "token" | "id", value: string) => {
   return await db
     .select()
     .from(userTable)
-    .where(eq(userTable.email, email))
+    .where(
+      key === "email"
+        ? eq(userTable.email, value)
+        : key === "token"
+          ? eq(userTable.token, value)
+          : eq(userTable.id, value)
+    )
     .limit(1)
     .then((result) => result[0]);
+};
+
+// Convenience functions using the generic findUserBy
+const checkUser = async (email: string) => findUserBy("email", email);
+const findUserByToken = async (token: string) => findUserBy("token", token);
+
+const createApiResponse = <T = null>(
+  success: boolean,
+  message: string,
+  data: T = null as T
+): ApiResponse<T> => {
+  return { success, message, data };
+};
+
+const isTokenExpired = (tokenExpiry: string | null | undefined): boolean => {
+  if (!tokenExpiry) return true;
+  const expiry = new Date(tokenExpiry);
+  const now = new Date();
+  return now > expiry;
+};
+
+const generateToken = (
+  expiryHours = 24
+): { token: string; tokenExpiry: string } => {
+  const token = crypto.randomUUID();
+  const tokenExpiry = new Date(
+    Date.now() + expiryHours * 60 * 60 * 1000
+  ).toISOString();
+  return { token, tokenExpiry };
 };
 
 export const authRouter = new Hono<Context>()
@@ -37,18 +73,11 @@ export const authRouter = new Hono<Context>()
 
     // return error if user exists
     if (existingUser) {
-      return c.json<ApiResponse>({
-        success: false,
-        message: "User already exists",
-        data: null,
-      });
+      return c.json(createApiResponse(false, "User already exists"));
     }
 
-    const token = crypto.randomUUID();
-    // Set token expiration to 24 hours from now
-    const tokenExpiry = new Date(
-      Date.now() + 24 * 60 * 60 * 1000
-    ).toISOString();
+    // Generate verification token with 24 hour expiry
+    const { token, tokenExpiry } = generateToken(24);
 
     // Create a new user
     await db
@@ -66,41 +95,32 @@ export const authRouter = new Hono<Context>()
     // Send account verification email
     await sendVerificationEmail(email, token);
 
-    return c.json<ApiResponse>({
-      success: true,
-      message: `User ${email} has been created. Please verity the account by follow the instructions mailed to you.`,
-      data: null,
-    });
+    return c.json(
+      createApiResponse(
+        true,
+        `User ${email} has been created. Please verity the account by follow the instructions mailed to you.`
+      )
+    );
   })
   .get("/verify/:token", async (c) => {
     const token = c.req.param("token");
 
     // Find user by token
-    const existingUser = await db
-      .select()
-      .from(userTable)
-      .where(eq(userTable.token, token))
-      .limit(1)
-      .then((result) => result[0]);
+    const existingUser = await findUserByToken(token);
 
     // Return error if user does not exist or token is invalid
     if (!existingUser) {
-      return c.json<ApiResponse>({
-        success: false,
-        message: "Invalid verification token",
-        data: null,
-      });
+      return c.json(createApiResponse(false, "Invalid verification token"));
     }
 
     // Check if token has expired (24 hours)
-    const tokenExpiry = new Date(existingUser.tokenExpire || "");
-    const now = new Date();
-    if (now > tokenExpiry) {
-      return c.json<ApiResponse>({
-        success: false,
-        message: "Verification token has expired. Please request a new one.",
-        data: null,
-      });
+    if (isTokenExpired(existingUser.tokenExpire)) {
+      return c.json(
+        createApiResponse(
+          false,
+          "Verification token has expired. Please request a new one."
+        )
+      );
     }
 
     // Update user to verified status
@@ -114,33 +134,27 @@ export const authRouter = new Hono<Context>()
       })
       .where(eq(userTable.id, existingUser.id));
 
-    return c.json<ApiResponse>({
-      success: true,
-      message: "Account verified successfully. You can now log in.",
-      data: null,
-    });
+    return c.json(
+      createApiResponse(
+        true,
+        "Account verified successfully. You can now log in."
+      )
+    );
   })
   .post("/signin", zValidator("json", signInSchema), async (c) => {
     const { email, password } = c.req.valid("json");
+
     //check user
     const existingUser = await checkUser(email);
 
     // return error if user does not exist
     if (!existingUser) {
-      return c.json<ApiResponse>({
-        success: false,
-        message: "Invalid credentials",
-        data: null,
-      });
+      return c.json(createApiResponse(false, "Invalid credentials"));
     }
 
     // return error if user is not verified
     if (existingUser.isVerified === false && existingUser.token !== null) {
-      return c.json<ApiResponse>({
-        success: false,
-        message: "Account was not verified",
-        data: null,
-      });
+      return c.json(createApiResponse(false, "Account was not verified"));
     }
 
     // check password
@@ -148,91 +162,67 @@ export const authRouter = new Hono<Context>()
       password,
       existingUser.password
     );
+
+    // return error if password is invalid
     if (!validPassword) {
-      return c.json<ApiResponse>({
-        success: false,
-        message: "Invalid credentials",
-        data: null,
-      });
+      return c.json(createApiResponse(false, "Invalid credentials"));
     }
 
     // create session
-    const session = await lucia.createSession(existingUser.id, { email });
-    const sessionCookie = lucia.createSessionCookie(session.id).serialize();
+    const session = await lucia.createSession(existingUser.id, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    c.header("Set-Cookie", sessionCookie.serialize());
 
-    c.header("Set-Cookie", sessionCookie, { append: true });
-
-    return c.json<ApiResponse<User>>({
-      success: true,
-      message: "Logged in",
-      data: {
+    return c.json(
+      createApiResponse(true, "User logged in", {
         email: existingUser.email,
         fullname: existingUser.fullname,
         avatar: existingUser.avatar,
         id: existingUser.id,
-      },
-    });
+      })
+    );
   })
-  .get("/signout", loggedIn, async (c) => {
+  .post("/signout", loggedIn, async (c) => {
     const session = c.get("session");
-    if (!session) {
-      return c.json<ApiResponse>({
-        success: false,
-        message: "Not logged in",
-        data: null,
-      });
+    if (session) {
+      await lucia.invalidateSession(session.id);
     }
 
-    await lucia.invalidateSession(session.id);
-    c.header("Set-Cookie", lucia.createBlankSessionCookie().serialize());
-    return c.json<ApiResponse>({
-      success: true,
-      message: "Logged out successfully",
-      data: null,
-    });
+    const sessionCookie = lucia.createBlankSessionCookie();
+    c.header("Set-Cookie", sessionCookie.serialize());
+
+    return c.json(createApiResponse(true, "User logged out"));
   })
   .get("/user", loggedIn, async (c) => {
     const user = c.get("user")!;
 
-    return c.json<ApiResponse<User>>({
-      success: true,
-      message: "User fetched",
-      data: {
+    return c.json(
+      createApiResponse(true, "User fetched", {
         email: user.email,
         fullname: user.fullname,
         avatar: user.avatar,
         id: user.id,
-      },
-    });
+      })
+    );
   })
   .post("/activate", zValidator("json", activateSchema), async (c) => {
     const { token } = c.req.valid("json");
     //check user
-    const existingUser = await db
-      .select()
-      .from(userTable)
-      .where(eq(userTable.token, token))
-      .limit(1)
-      .then((result) => result[0]);
+    const existingUser = await findUserByToken(token);
 
     // return error if user does not exist
     if (!existingUser) {
-      return c.json<ApiResponse>({
-        success: false,
-        message: "Invalid token",
-        data: null,
-      });
+      return c.json(createApiResponse(false, "Invalid token"));
     }
 
     // Check if token has expired (24 hours)
-    const tokenExpiry = new Date(existingUser.updatedAt || "");
-    const now = new Date();
-    if (now > tokenExpiry) {
-      return c.json<ApiResponse>({
-        success: false,
-        message: "Verification token has expired. Please request a new one.",
-        data: null,
-      });
+    if (isTokenExpired(existingUser.updatedAt)) {
+      return c.json(
+        createApiResponse(
+          false,
+          "Verification token has expired. Please request a new one."
+        )
+      );
     }
 
     // update user
@@ -245,11 +235,7 @@ export const authRouter = new Hono<Context>()
       })
       .where(eq(userTable.id, existingUser.id));
 
-    return c.json<ApiResponse>({
-      success: true,
-      message: "Account activated. Please log in.",
-      data: null,
-    });
+    return c.json(createApiResponse(true, "Account activated. Please log in."));
   })
   .post("/forgot", zValidator("json", forgotSchema), async (c) => {
     const { email } = c.req.valid("json");
@@ -257,20 +243,16 @@ export const authRouter = new Hono<Context>()
     // check user
     const existingUser = await checkUser(email);
 
+    const successMessage =
+      "If your email is registered, you will receive a password reset link";
+
     // return success even if user doesn't exist (for security reasons)
     if (!existingUser) {
-      return c.json<ApiResponse>({
-        success: true,
-        message:
-          "If your email is registered, you will receive a password reset link",
-        data: null,
-      });
+      return c.json(createApiResponse(true, successMessage));
     }
 
-    // Generate reset token
-    const token = crypto.randomUUID();
-    // Set token expiration to 1 hour from now
-    const tokenExpiry = new Date(Date.now() + 3600000).toISOString();
+    // Generate reset token with 1 hour expiry
+    const { token, tokenExpiry } = generateToken(1);
 
     // Update user with reset token
     await db
@@ -284,12 +266,7 @@ export const authRouter = new Hono<Context>()
     // Send password reset email
     await sendPasswordResetEmail(email, token);
 
-    return c.json<ApiResponse>({
-      success: true,
-      message:
-        "If your email is registered, you will receive a password reset link",
-      data: null,
-    });
+    return c.json(createApiResponse(true, successMessage));
   })
   .post(
     "/reset-password",
@@ -298,31 +275,21 @@ export const authRouter = new Hono<Context>()
       const { token, password } = c.req.valid("json");
 
       // Find user by token
-      const existingUser = await db
-        .select()
-        .from(userTable)
-        .where(eq(userTable.token, token))
-        .limit(1)
-        .then((result) => result[0]);
+      const existingUser = await findUserByToken(token);
 
       // Return error if user does not exist or token is invalid
       if (!existingUser) {
-        return c.json<ApiResponse>({
-          success: false,
-          message: "Invalid or expired token",
-          data: null,
-        });
+        return c.json(createApiResponse(false, "Invalid or expired token"));
       }
 
       // Check if token has expired (1 hour)
-      const tokenExpiry = new Date(existingUser.tokenExpire || "");
-      const now = new Date();
-      if (now > tokenExpiry) {
-        return c.json<ApiResponse>({
-          success: false,
-          message: "Password reset token has expired. Please request a new one.",
-          data: null,
-        });
+      if (isTokenExpired(existingUser.tokenExpire)) {
+        return c.json(
+          createApiResponse(
+            false,
+            "Password reset token has expired. Please request a new one."
+          )
+        );
       }
 
       // update user
@@ -336,10 +303,6 @@ export const authRouter = new Hono<Context>()
         })
         .where(eq(userTable.id, existingUser.id));
 
-      return c.json<ApiResponse>({
-        success: true,
-        message: "Password reset successfully",
-        data: null,
-      });
+      return c.json(createApiResponse(true, "Password reset successfully"));
     }
   );
