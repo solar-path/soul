@@ -23,11 +23,11 @@ interface PasswordResetEmailProps {
 export const PasswordResetEmail: React.FC<PasswordResetEmailProps> = ({
   email,
   token,
-  appName = "Adam",
-  baseUrl = "http://localhost:5173",
-  supportEmail = "notify@aneko.io",
+  appName,
+  baseUrl,
+  supportEmail,
 }) => {
-  const resetUrl = `${baseUrl}/forgot/update-${token}`;
+  const resetUrl = `${baseUrl}/auth/reset/${token}`;
 
   return (
     <Html>
@@ -44,7 +44,7 @@ export const PasswordResetEmail: React.FC<PasswordResetEmailProps> = ({
 
             <Text style={styles.text}>
               We received a request to reset your password for your {appName}{" "}
-              account. Click the button below to set a new password:
+              account. Click the button below to set a new password. This link will expire in 1 hour:
             </Text>
 
             <Button

@@ -25,9 +25,9 @@ export const InviteNewUserEmail: React.FC<InviteNewUserEmailProps> = ({
   email,
   token,
   workspaceTitle,
-  appName = "Adam",
-  baseUrl = "http://localhost:5173",
-  supportEmail = "notify@aneko.io",
+  appName,
+  baseUrl,
+  supportEmail,
 }) => {
   const acceptInviteUrl = `${baseUrl}/accept-invite-${token}`;
 

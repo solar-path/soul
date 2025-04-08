@@ -20,9 +20,9 @@ interface WelcomeEmailProps {
 }
 
 export const WelcomeEmail: React.FC<WelcomeEmailProps> = ({
-  appName = "Adam",
-  baseUrl = "http://localhost:5173",
-  supportEmail = "notify@aneko.io",
+  appName,
+  baseUrl,
+  supportEmail,
 }) => {
   const loginUrl = `${baseUrl}/login`;
 

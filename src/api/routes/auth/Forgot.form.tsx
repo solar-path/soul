@@ -5,6 +5,7 @@ import { forgotSchema, type Forgot } from "@/api/routes/auth/auth.zod";
 import { trpc } from "@/utils/trpc";
 import { useMutation } from "@tanstack/react-query";
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
+import { closeDrawer } from "@/ui/QDrawer/QDrawer.store";
 
 export default function ForgotPasswordForm() {
   const {
@@ -33,6 +34,7 @@ export default function ForgotPasswordForm() {
           "success",
           "If your email is registered, you will receive a password reset link"
         );
+        closeDrawer();
       }
     },
     onError: () => {

@@ -23,8 +23,8 @@ export const ContactFormEmail: React.FC<ContactFormEmailProps> = ({
   name,
   email,
   message,
-  appName = "Adam",
-  supportEmail = "notify@aneko.io",
+  appName,
+  supportEmail,
 }) => {
   return (
     <Html>

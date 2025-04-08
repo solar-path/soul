@@ -25,9 +25,9 @@ export const InviteExistingUserEmail: React.FC<
 > = ({
   email,
   workspaceTitle,
-  appName = "Adam",
-  baseUrl = "http://localhost:5173",
-  supportEmail = "notify@aneko.io",
+  appName,
+  baseUrl,
+  supportEmail,
 }) => {
   const appUrl = baseUrl;
 

@@ -297,23 +297,30 @@ export const authRouter = new Hono<Context>()
     async (c) => {
       const { token, password } = c.req.valid("json");
 
-      //check user
-      const existingUser = await checkUser(token);
+      // Find user by token
+      const existingUser = await db
+        .select()
+        .from(userTable)
+        .where(eq(userTable.token, token))
+        .limit(1)
+        .then((result) => result[0]);
 
-      // return error if user does not exist
+      // Return error if user does not exist or token is invalid
       if (!existingUser) {
         return c.json<ApiResponse>({
           success: false,
-          message: "Invalid credentials",
+          message: "Invalid or expired token",
           data: null,
         });
       }
 
-      // return error if token does not match
-      if (existingUser.token !== token) {
+      // Check if token has expired (1 hour)
+      const tokenExpiry = new Date(existingUser.tokenExpire || "");
+      const now = new Date();
+      if (now > tokenExpiry) {
         return c.json<ApiResponse>({
           success: false,
-          message: "Invalid token",
+          message: "Password reset token has expired. Please request a new one.",
           data: null,
         });
       }

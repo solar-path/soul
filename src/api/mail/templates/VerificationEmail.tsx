@@ -23,9 +23,9 @@ interface VerificationEmailProps {
 export const VerificationEmail: React.FC<VerificationEmailProps> = ({
   email,
   token,
-  appName = "Adam",
-  baseUrl = "http://localhost:5173",
-  supportEmail = "notify@aneko.io",
+  appName,
+  baseUrl,
+  supportEmail,
 }) => {
   const verificationUrl = `${baseUrl}/auth/verify/${token}`;
 

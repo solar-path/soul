@@ -21,6 +21,7 @@ import { Route as CompanyAddressBookIndexImport } from './routes/company/address
 import { Route as AuthProfileIndexImport } from './routes/auth/profile/index'
 import { Route as CompanyUserManagementUserImport } from './routes/company/userManagement/user'
 import { Route as AuthVerifyTokenImport } from './routes/auth/verify.$token'
+import { Route as AuthResetTokenImport } from './routes/auth/reset.$token'
 import { Route as publicDocsSlugImport } from './routes/(public)/docs.$slug'
 import { Route as CompanyHrmPositionIndexImport } from './routes/company/hrm/position/index'
 import { Route as CompanyHrmEmployeeIndexImport } from './routes/company/hrm/employee/index'
@@ -88,6 +89,12 @@ const AuthVerifyTokenRoute = AuthVerifyTokenImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthResetTokenRoute = AuthResetTokenImport.update({
+  id: '/auth/reset/$token',
+  path: '/auth/reset/$token',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const publicDocsSlugRoute = publicDocsSlugImport.update({
   id: '/(public)/docs/$slug',
   path: '/docs/$slug',
@@ -142,6 +149,13 @@ declare module '@tanstack/react-router' {
       path: '/docs/$slug'
       fullPath: '/docs/$slug'
       preLoaderRoute: typeof publicDocsSlugImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/reset/$token': {
+      id: '/auth/reset/$token'
+      path: '/auth/reset/$token'
+      fullPath: '/auth/reset/$token'
+      preLoaderRoute: typeof AuthResetTokenImport
       parentRoute: typeof rootRoute
     }
     '/auth/verify/$token': {
@@ -224,6 +238,7 @@ export interface FileRoutesByFullPath {
   '/': typeof publicIndexRoute
   '/company': typeof CompanyIndexRoute
   '/docs/$slug': typeof publicDocsSlugRoute
+  '/auth/reset/$token': typeof AuthResetTokenRoute
   '/auth/verify/$token': typeof AuthVerifyTokenRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
   '/auth/profile': typeof AuthProfileIndexRoute
@@ -241,6 +256,7 @@ export interface FileRoutesByTo {
   '/': typeof publicIndexRoute
   '/company': typeof CompanyIndexRoute
   '/docs/$slug': typeof publicDocsSlugRoute
+  '/auth/reset/$token': typeof AuthResetTokenRoute
   '/auth/verify/$token': typeof AuthVerifyTokenRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
   '/auth/profile': typeof AuthProfileIndexRoute
@@ -259,6 +275,7 @@ export interface FileRoutesById {
   '/(public)/': typeof publicIndexRoute
   '/company/': typeof CompanyIndexRoute
   '/(public)/docs/$slug': typeof publicDocsSlugRoute
+  '/auth/reset/$token': typeof AuthResetTokenRoute
   '/auth/verify/$token': typeof AuthVerifyTokenRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
   '/auth/profile/': typeof AuthProfileIndexRoute
@@ -278,6 +295,7 @@ export interface FileRouteTypes {
     | '/'
     | '/company'
     | '/docs/$slug'
+    | '/auth/reset/$token'
     | '/auth/verify/$token'
     | '/company/userManagement/user'
     | '/auth/profile'
@@ -294,6 +312,7 @@ export interface FileRouteTypes {
     | '/'
     | '/company'
     | '/docs/$slug'
+    | '/auth/reset/$token'
     | '/auth/verify/$token'
     | '/company/userManagement/user'
     | '/auth/profile'
@@ -310,6 +329,7 @@ export interface FileRouteTypes {
     | '/(public)/'
     | '/company/'
     | '/(public)/docs/$slug'
+    | '/auth/reset/$token'
     | '/auth/verify/$token'
     | '/company/userManagement/user'
     | '/auth/profile/'
@@ -328,6 +348,7 @@ export interface RootRouteChildren {
   publicIndexRoute: typeof publicIndexRoute
   CompanyIndexRoute: typeof CompanyIndexRoute
   publicDocsSlugRoute: typeof publicDocsSlugRoute
+  AuthResetTokenRoute: typeof AuthResetTokenRoute
   AuthVerifyTokenRoute: typeof AuthVerifyTokenRoute
   CompanyUserManagementUserRoute: typeof CompanyUserManagementUserRoute
   AuthProfileIndexRoute: typeof AuthProfileIndexRoute
@@ -345,6 +366,7 @@ const rootRouteChildren: RootRouteChildren = {
   publicIndexRoute: publicIndexRoute,
   CompanyIndexRoute: CompanyIndexRoute,
   publicDocsSlugRoute: publicDocsSlugRoute,
+  AuthResetTokenRoute: AuthResetTokenRoute,
   AuthVerifyTokenRoute: AuthVerifyTokenRoute,
   CompanyUserManagementUserRoute: CompanyUserManagementUserRoute,
   AuthProfileIndexRoute: AuthProfileIndexRoute,
@@ -371,6 +393,7 @@ export const routeTree = rootRoute
         "/(public)/",
         "/company/",
         "/(public)/docs/$slug",
+        "/auth/reset/$token",
         "/auth/verify/$token",
         "/company/userManagement/user",
         "/auth/profile/",
@@ -394,6 +417,9 @@ export const routeTree = rootRoute
     },
     "/(public)/docs/$slug": {
       "filePath": "(public)/docs.$slug.tsx"
+    },
+    "/auth/reset/$token": {
+      "filePath": "auth/reset.$token.tsx"
     },
     "/auth/verify/$token": {
       "filePath": "auth/verify.$token.tsx"

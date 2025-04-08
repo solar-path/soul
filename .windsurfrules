@@ -56,7 +56,7 @@
 ## STATE MANAGEMENT
 
 - Use TanStack Query for server state and API data fetching
-- Use Preact/signal for global app state and local state
+- Use zustand for global app state and local state
 - Implement proper loading states for all async operations
 
 ## UI IMPLEMENTATION
