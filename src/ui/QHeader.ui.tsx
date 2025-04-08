@@ -1,5 +1,5 @@
 // React is automatically imported by the JSX transform
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import Logo from "@/assets/logo.png";
 import {
   Avatar,
@@ -17,10 +17,43 @@ import {
 import { fillDrawer } from "./QDrawer/QDrawer.store";
 import SignUpForm from "@/api/routes/auth/SignUp.form";
 import SignInForm from "@/api/routes/auth/SignIn.form";
-import { useClientStore } from "@/utils/client.store";
+import { clearCurrentUser, useClientStore } from "@/utils/client.store";
+import { useMutation } from "@tanstack/react-query";
+import { trpc } from "@/utils/trpc";
+import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
 
 export default function QHeader() {
   const { currentUser } = useClientStore();
+  const navigate = useNavigate();
+
+  const signOutMutation = useMutation({
+    mutationFn: async () => {
+      const response = await trpc["auth"].signout.$post();
+      const result = await response.json();
+      if (!result.success) {
+        throw new Error(result.message);
+      }
+      return result;
+    },
+    onSuccess: () => {
+      showFlashMessage(
+        "success",
+        `${currentUser?.email} successfully signed out`
+      );
+      clearCurrentUser();
+      navigate({ to: "/" });
+    },
+    onError: (error) => {
+      showFlashMessage(
+        "fail",
+        error instanceof Error ? error.message : "Failed to sign out"
+      );
+    },
+  });
+
+  const handleSignOut = () => {
+    signOutMutation.mutate();
+  };
 
   const authenticatedMenu = () => {
     return (
@@ -52,7 +85,7 @@ export default function QHeader() {
               User account
             </DropdownItem>
             <DropdownDivider />
-            <DropdownItem>Sign out</DropdownItem>
+            <DropdownItem onClick={handleSignOut}>Sign out</DropdownItem>
           </Dropdown>
           <NavbarToggle />
         </div>
