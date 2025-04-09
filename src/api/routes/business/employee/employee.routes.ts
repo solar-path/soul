@@ -365,7 +365,10 @@ export const employeeRoutes = new Hono<{ Variables: Context }>()
             departmentTable,
             eq(orgchartTable.departmentID, departmentTable.id)
           )
-          .leftJoin(positionTable, eq(orgchartTable.positionID, positionTable.id))
+          .leftJoin(
+            positionTable,
+            eq(orgchartTable.positionID, positionTable.id)
+          )
           .where(eq(orgchartTable.id, updatedEmployee[0].id));
 
         return c.json(
@@ -377,7 +380,10 @@ export const employeeRoutes = new Hono<{ Variables: Context }>()
         );
       } catch (error) {
         console.error("Error updating employee:", error);
-        return c.json(createApiResponse(false, "Failed to update employee"), 500);
+        return c.json(
+          createApiResponse(false, "Failed to update employee"),
+          500
+        );
       }
     }
   )

@@ -4,7 +4,10 @@
 # After signing in, copy the auth_session cookie value from the response and paste it here
 @authCookie = yqyerfn7vlpojoeaxqcp6yuvwn6ibp7ohblsn3lj
 
-### First, sign in to get authenticated
+# After creating a company, copy its ID from the response and paste it here
+@companyId = 06bd1642-7502-40b0-b58c-ccc110aac659
+
+### 👍 First, sign in to get authenticated
 # This is required for all company operations
 # This request will set cookies that will be used for subsequent requests
 POST {{authUrl}}/signin
@@ -15,18 +18,18 @@ Content-Type: application/json
     "password": "M1r@nd@32"
 }
 
-### Get all companies
+### 👍 Get all companies
 GET {{baseUrl}}/companyList
 Content-Type: application/json
 Cookie: auth_session={{authCookie}}; 
 
-### Get company by ID
-# Replace the ID with an actual company ID
-GET {{baseUrl}}/12345678-1234-1234-1234-123456789abc
+### 👍 Get company by ID
+# First create a company, then copy its ID to the @companyId variable at the top
+GET {{baseUrl}}/{{companyId}}
 Content-Type: application/json
-Cookie: auth_session={{authCookie}}; Path=/; HttpOnly; SameSite=Lax
+Cookie: auth_session={{authCookie}}
 
-### Create a new company
+### 👍 Create a new company
 POST {{baseUrl}}/newCompany
 Content-Type: application/json
 Cookie: auth_session={{authCookie}}; Path=/; HttpOnly; SameSite=Lax
@@ -34,8 +37,8 @@ Cookie: auth_session={{authCookie}}; Path=/; HttpOnly; SameSite=Lax
 {
     "title": "Test Company Ltd",
     "bin": "123456789",
-    "countryID": "12345678-1234-1234-1234-123456789abc",
-    "industryID": "12345678-1234-1234-1234-123456789abc",
+    "countryID": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "industryID": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
     "logo": "https://example.com/logo.png",
     "contact": {
         "phone": "+1234567890",
@@ -51,17 +54,17 @@ Cookie: auth_session={{authCookie}}; Path=/; HttpOnly; SameSite=Lax
     }
 }
 
-### Update a company
-# Replace the ID with an actual company ID
-PATCH {{baseUrl}}/updateCompany/12345678-1234-1234-1234-123456789abc
+### 👍 Update a company
+# First create a company, then copy its ID to the @companyId variable at the top
+PATCH {{baseUrl}}/updateCompany/{{companyId}}
 Content-Type: application/json
-Cookie: auth_session={{authCookie}}; Path=/; HttpOnly; SameSite=Lax
+Cookie: auth_session={{authCookie}}
 
 {
     "title": "Updated Test Company Ltd",
     "bin": "987654321",
-    "countryID": "12345678-1234-1234-1234-123456789abc",
-    "industryID": "12345678-1234-1234-1234-123456789abc",
+    "countryID": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "industryID": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
     "logo": "https://example.com/updated-logo.png",
     "contact": {
         "phone": "+0987654321",
@@ -77,14 +80,15 @@ Cookie: auth_session={{authCookie}}; Path=/; HttpOnly; SameSite=Lax
     }
 }
 
-### Delete a company
-# Replace the ID with an actual company ID
-DELETE {{baseUrl}}/12345678-1234-1234-1234-123456789abc
+### 👍 Delete a company
+# First create a company, then copy its ID to the @companyId variable at the top
+DELETE {{baseUrl}}/{{companyId}}
 Content-Type: application/json
-Cookie: auth_session={{authCookie}}; Path=/; HttpOnly; SameSite=Lax
+Cookie: auth_session={{authCookie}}
 
 # Notes:
 # 1. After signing in, copy the auth_session cookie value from the response and update the @authCookie variable at the top
 # 2. For GET, UPDATE, and DELETE operations, replace the example UUID with an actual company ID
-# 3. The company cannot be deleted if it has departments or positions
-# 4. Only users who are part of the company can update or delete it
+# 3. All UUIDs must be valid UUID v4 format (e.g., f47ac10b-58cc-4372-a567-0e02b2c3d479)
+# 4. The company cannot be deleted if it has departments or positions
+# 5. Only users who are part of the company can update or delete it

@@ -25,7 +25,7 @@ import {
   CompanyResponse,
   CompaniesListResponse,
 } from "./company.zod";
-import { uuidParamSchema } from "@/api/utils/id.zod";
+import { idSchema } from "@/api/utils/id.zod";
 
 // Company routes
 export const companyRoutes = new Hono<{ Variables: Context }>()
@@ -55,9 +55,9 @@ export const companyRoutes = new Hono<{ Variables: Context }>()
       );
     }
   })
-  .get("/:id", loggedIn, zValidator("param", uuidParamSchema), async (c) => {
+  .get("/:id", loggedIn, zValidator("param", idSchema), async (c) => {
     try {
-      const id = c.req.valid("param");
+      const { id } = c.req.valid("param");
       const company = await db
         .select()
         .from(companyTable)
@@ -189,11 +189,11 @@ export const companyRoutes = new Hono<{ Variables: Context }>()
   .patch(
     "/updateCompany/:id",
     loggedIn,
-    zValidator("param", uuidParamSchema),
+    zValidator("param", idSchema),
     zValidator("json", updateCompanySchema),
     async (c) => {
       try {
-        const id = c.req.valid("param");
+        const { id } = c.req.valid("param");
         const data = c.req.valid("json");
 
         // Check if company exists
@@ -315,9 +315,9 @@ export const companyRoutes = new Hono<{ Variables: Context }>()
       }
     }
   )
-  .delete("/:id", loggedIn, zValidator("param", uuidParamSchema), async (c) => {
+  .delete("/:id", loggedIn, zValidator("param", idSchema), async (c) => {
     try {
-      const id = c.req.valid("param");
+      const { id } = c.req.valid("param");
 
       // Check if company exists
       const company = await db
