@@ -20,6 +20,7 @@ import {
   DepartmentResponse,
   DepartmentsListResponse,
 } from "./department.zod";
+import { idSchema } from "@/api/utils/id.zod";
 
 // Department routes with CRUD operations
 export const departmentRoutes = new Hono<{ Variables: Context }>()
@@ -44,9 +45,9 @@ export const departmentRoutes = new Hono<{ Variables: Context }>()
     }
   })
   // Get a department by ID
-  .get("/:id", loggedIn, async (c) => {
+  .get("/:id", loggedIn, zValidator("param", idSchema), async (c) => {
     try {
-      const id = c.req.param("id");
+      const { id } = c.req.valid("param");
       const department = await db
         .select()
         .from(departmentTable)

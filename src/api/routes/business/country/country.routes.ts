@@ -10,6 +10,8 @@ import { eq } from "drizzle-orm";
 import { db } from "@/api/database/database";
 import { loggedIn } from "@/api/utils/loggedIn";
 import { countryTable } from "@/api/database/schema/business.schema";
+import { zValidator } from "@hono/zod-validator";
+import { idSchema } from "@/api/utils/id.zod";
 
 import { CountryResponse, CountriesListResponse } from "./country.zod";
 import { createApiResponse } from "@/api/utils/types";
@@ -35,9 +37,9 @@ export const countryRoutes = new Hono<{ Variables: Context }>()
       );
     }
   })
-  .get("/:id", loggedIn, async (c) => {
+  .get("/:id", loggedIn, zValidator("param", idSchema), async (c) => {
     try {
-      const id = c.req.param("id");
+      const { id } = c.req.valid("param");
       const country = await db
         .select()
         .from(countryTable)
