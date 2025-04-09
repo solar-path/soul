@@ -1,0 +1,90 @@
+@baseUrl = http://localhost:3000/api/business/company
+@authUrl = http://localhost:3000/api/auth
+
+# After signing in, copy the auth_session cookie value from the response and paste it here
+@authCookie = yqyerfn7vlpojoeaxqcp6yuvwn6ibp7ohblsn3lj
+
+### First, sign in to get authenticated
+# This is required for all company operations
+# This request will set cookies that will be used for subsequent requests
+POST {{authUrl}}/signin
+Content-Type: application/json
+
+{
+    "email": "itgroup.luck@gmail.com",
+    "password": "M1r@nd@32"
+}
+
+### Get all companies
+GET {{baseUrl}}/companyList
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}; 
+
+### Get company by ID
+# Replace the ID with an actual company ID
+GET {{baseUrl}}/12345678-1234-1234-1234-123456789abc
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}; Path=/; HttpOnly; SameSite=Lax
+
+### Create a new company
+POST {{baseUrl}}/newCompany
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}; Path=/; HttpOnly; SameSite=Lax
+
+{
+    "title": "Test Company Ltd",
+    "bin": "123456789",
+    "countryID": "12345678-1234-1234-1234-123456789abc",
+    "industryID": "12345678-1234-1234-1234-123456789abc",
+    "logo": "https://example.com/logo.png",
+    "contact": {
+        "phone": "+1234567890",
+        "email": "contact@testcompany.com",
+        "website": "https://testcompany.com"
+    },
+    "address": {
+        "street": "123 Test Street",
+        "city": "Test City",
+        "state": "Test State",
+        "postalCode": "12345",
+        "country": "Test Country"
+    }
+}
+
+### Update a company
+# Replace the ID with an actual company ID
+PATCH {{baseUrl}}/updateCompany/12345678-1234-1234-1234-123456789abc
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}; Path=/; HttpOnly; SameSite=Lax
+
+{
+    "title": "Updated Test Company Ltd",
+    "bin": "987654321",
+    "countryID": "12345678-1234-1234-1234-123456789abc",
+    "industryID": "12345678-1234-1234-1234-123456789abc",
+    "logo": "https://example.com/updated-logo.png",
+    "contact": {
+        "phone": "+0987654321",
+        "email": "updated@testcompany.com",
+        "website": "https://updated-testcompany.com"
+    },
+    "address": {
+        "street": "456 Updated Street",
+        "city": "Updated City",
+        "state": "Updated State",
+        "postalCode": "54321",
+        "country": "Updated Country"
+    }
+}
+
+### Delete a company
+# Replace the ID with an actual company ID
+DELETE {{baseUrl}}/12345678-1234-1234-1234-123456789abc
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}; Path=/; HttpOnly; SameSite=Lax
+
+# Notes:
+# 1. After signing in, copy the auth_session cookie value from the response and update the @authCookie variable at the top
+# 2. For GET, UPDATE, and DELETE operations, replace the example UUID with an actual company ID
+# 3. The company cannot be deleted if it has departments or positions
+# 4. Only users who are part of the company can update or delete it

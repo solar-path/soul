@@ -6,10 +6,15 @@ import { HTTPException } from "hono/http-exception";
 import type { ApiResponse } from "@/api/utils/types";
 import { authRouter } from "@/api/routes/auth/auth.routes";
 import { logger } from "hono/logger";
-import { businessRouter } from "@/api/routes/business/business.routes";
 import { serveStatic } from "hono/bun";
 import { contactUsRouter } from "@/api/routes/contactUs/contactUs.routes";
 import { hrmRouter } from "./routes/hrm/hrm.routes";
+import { companyRoutes } from "./routes/business/company/company.routes";
+import { departmentRoutes } from "./routes/business/department/department.routes";
+import { industryRoutes } from "./routes/business/industry/industry.routes";
+import { countryRoutes } from "./routes/business/country/country.routes";
+import { employeeRoutes } from "./routes/business/employee/employee.routes";
+import { positionRoutes } from "./routes/business/position/position.routes";
 
 const app = new Hono<Context>().use(logger());
 
@@ -41,7 +46,12 @@ app.use("*", cors(), async (c, next) => {
 const routes = app
   .basePath("/api")
   .route("/auth", authRouter)
-  .route("/business", businessRouter)
+  .route("/business/company", companyRoutes)
+  .route("/business/employee", employeeRoutes)
+  .route("/business/position", positionRoutes)
+  .route("/business/department", departmentRoutes)
+  .route("/business/industry", industryRoutes)
+  .route("/business/country", countryRoutes)
   .route("/contact-us", contactUsRouter)
   .route("/hrm", hrmRouter);
 

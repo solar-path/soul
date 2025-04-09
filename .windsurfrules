@@ -6,7 +6,7 @@
 2. Utilize built-in Bun or Node.js functionality before adding new packages (e.g., bun.password.hash(), crypto.randomUUID())
 3. Use only commands defined in package.json (dev, dev:client, dev:api, build, preview, drizzle, seed)
 4. Add new commands to package.json only when absolutely necessary
-5. If task is assigned, do not stop process until task is completed and verified by bun run build
+5. If task is assigned, do not stop process until task is completed and verified by bun run build - for frontend only (any changes in src/routes folder)
 
 ## TECHNOLOGY STACK
 

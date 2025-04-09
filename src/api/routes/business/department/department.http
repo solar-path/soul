@@ -1,0 +1,5 @@
+@baseUrl = http://localhost:3000/api
+
+### get countries
+GET {{baseUrl}}/business/country
+Content-Type: application/json

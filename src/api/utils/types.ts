@@ -19,3 +19,12 @@ export const timestampFields = {
   createdAt: z.string().nullable().optional(),
   updatedAt: z.string().nullable().optional(),
 } as const;
+
+// Helper function to create API responses
+export const createApiResponse = <T = null>(
+  success: boolean,
+  message: string,
+  data: T = null as T
+): ApiResponse<T> => {
+  return { success, message, data };
+};

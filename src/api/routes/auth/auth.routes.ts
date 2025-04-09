@@ -4,7 +4,7 @@ import { zValidator } from "@hono/zod-validator";
 import { lucia } from "@/api/utils/lucia";
 import { userTable } from "@/api/database/schema/auth.schema";
 import { db } from "@/api/database/database";
-import type { ApiResponse } from "@/api/utils/types";
+import { createApiResponse } from "@/api/utils/types";
 import { eq } from "drizzle-orm";
 import { loggedIn } from "@/api/utils/loggedIn";
 import {
@@ -38,14 +38,6 @@ const findUserBy = async (key: "email" | "token" | "id", value: string) => {
 // Convenience functions using the generic findUserBy
 const checkUser = async (email: string) => findUserBy("email", email);
 const findUserByToken = async (token: string) => findUserBy("token", token);
-
-const createApiResponse = <T = null>(
-  success: boolean,
-  message: string,
-  data: T = null as T
-): ApiResponse<T> => {
-  return { success, message, data };
-};
 
 const isTokenExpired = (tokenExpiry: string | null | undefined): boolean => {
   if (!tokenExpiry) return true;
