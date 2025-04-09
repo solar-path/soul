@@ -139,6 +139,7 @@ export const departmentRoutes = new Hono<{ Variables: Context }>()
   .put(
     "/:id",
     loggedIn,
+    zValidator("param", idSchema),
     zValidator("json", updateDepartmentSchema),
     async (c) => {
       try {
@@ -220,7 +221,7 @@ export const departmentRoutes = new Hono<{ Variables: Context }>()
     }
   )
   // Delete a department
-  .delete("/:id", loggedIn, async (c) => {
+  .delete("/:id", loggedIn, zValidator("param", idSchema), async (c) => {
     try {
       const id = c.req.param("id");
 

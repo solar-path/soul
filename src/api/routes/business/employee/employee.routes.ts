@@ -26,6 +26,7 @@ import {
   EmployeeResponse,
   EmployeesListResponse,
 } from "./employee.zod";
+import { idSchema } from "@/api/utils/id.zod";
 
 // Employee routes with CRUD operations
 export const employeeRoutes = new Hono<{ Variables: Context }>()
@@ -275,6 +276,7 @@ export const employeeRoutes = new Hono<{ Variables: Context }>()
   .patch(
     "/:id",
     loggedIn,
+    zValidator("param", idSchema),
     zValidator("json", updateEmployeeSchema),
     async (c) => {
       try {
@@ -388,7 +390,7 @@ export const employeeRoutes = new Hono<{ Variables: Context }>()
     }
   )
   // Delete employee
-  .delete("/:id", loggedIn, async (c) => {
+  .delete("/:id", loggedIn, zValidator("param", idSchema), async (c) => {
     try {
       const id = c.req.param("id");
 
