@@ -17,6 +17,8 @@ import {
   departmentTable,
   orgchartTable,
   positionTable,
+  countryTable,
+  industryTable,
 } from "@/api/database/schema/business.schema";
 
 import {
@@ -106,6 +108,28 @@ export const companyRoutes = new Hono<{ Variables: Context }>()
             createApiResponse(false, "User not authenticated"),
             401
           );
+        }
+
+        // Validate that countryID exists
+        const country = await db
+          .select()
+          .from(countryTable)
+          .where(eq(countryTable.id, data.countryID))
+          .limit(1);
+
+        if (!country || country.length === 0) {
+          return c.json(createApiResponse(false, "Country not found"), 400);
+        }
+
+        // Validate that industryID exists
+        const industry = await db
+          .select()
+          .from(industryTable)
+          .where(eq(industryTable.id, data.industryID))
+          .limit(1);
+
+        if (!industry || industry.length === 0) {
+          return c.json(createApiResponse(false, "Industry not found"), 400);
         }
         // Check if company with same BIN and country already exists
         const [existingCompany] = await db
@@ -234,6 +258,32 @@ export const companyRoutes = new Hono<{ Variables: Context }>()
             ),
             403
           );
+        }
+
+        // Validate countryID if provided
+        if (data.countryID) {
+          const country = await db
+            .select()
+            .from(countryTable)
+            .where(eq(countryTable.id, data.countryID))
+            .limit(1);
+
+          if (!country || country.length === 0) {
+            return c.json(createApiResponse(false, "Country not found"), 400);
+          }
+        }
+
+        // Validate industryID if provided
+        if (data.industryID) {
+          const industry = await db
+            .select()
+            .from(industryTable)
+            .where(eq(industryTable.id, data.industryID))
+            .limit(1);
+
+          if (!industry || industry.length === 0) {
+            return c.json(createApiResponse(false, "Industry not found"), 400);
+          }
         }
 
         // Check if updating to an existing BIN in the same country

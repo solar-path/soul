@@ -36,6 +36,9 @@ export const addressSchema = z.object({
 export const createCompanySchema = insertCompanySchema.extend({
   contact: contactSchema.optional(),
   address: addressSchema.optional(),
+  // Ensure countryID and industryID are valid UUIDs
+  countryID: z.string().uuid({ message: "Country ID must be a valid UUID" }),
+  industryID: z.string().uuid({ message: "Industry ID must be a valid UUID" }),
 }).omit({ 
   id: true,
   createdAt: true, 
