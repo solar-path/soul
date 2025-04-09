@@ -7,7 +7,7 @@
 # After getting the country list, copy a country ID from the response and paste it here
 @countryId = 15643d76-17c4-402c-8ba1-19f49cda6b30
 
-### First, sign in to get authenticated
+### 👍 First, sign in to get authenticated
 # This is required for all country operations
 # This request will set cookies that will be used for subsequent requests
 POST {{authUrl}}/signin
@@ -18,12 +18,12 @@ Content-Type: application/json
     "password": "M1r@nd@32"
 }
 
-### Get all countries
+### 👍 Get all countries
 GET {{baseUrl}}
 Content-Type: application/json
 Cookie: auth_session={{authCookie}}
 
-### Get country by ID
+### 👍 Get country by ID
 # First get all countries, then copy a country ID to the @countryId variable at the top
 GET {{baseUrl}}/{{countryId}}
 Content-Type: application/json

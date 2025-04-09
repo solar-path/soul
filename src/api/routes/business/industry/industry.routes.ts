@@ -6,19 +6,29 @@
 
 import { Hono } from "hono";
 import type { Context } from "@/api/utils/context";
-import { eq } from "drizzle-orm";
+import { and, eq, isNotNull } from "drizzle-orm";
 import { db } from "@/api/database/database";
 import { loggedIn } from "@/api/utils/loggedIn";
 import { createApiResponse } from "@/api/utils/types";
 import { industryTable } from "@/api/database/schema/business.schema";
 
 import { IndustryResponse, IndustriesListResponse } from "./industry.zod";
+import { zValidator } from "@hono/zod-validator";
+import { idSchema } from "@/api/utils/id.zod";
 
 // Industry routes (read-only)
 export const industryRoutes = new Hono<{ Variables: Context }>()
   .get("/", loggedIn, async (c) => {
     try {
-      const industries = await db.select().from(industryTable);
+      const industries = await db
+        .select()
+        .from(industryTable)
+        .where(
+          and(
+            isNotNull(industryTable.parentID),
+            isNotNull(industryTable.description)
+          )
+        );
 
       return c.json(
         createApiResponse<IndustriesListResponse["data"]>(
@@ -35,9 +45,9 @@ export const industryRoutes = new Hono<{ Variables: Context }>()
       );
     }
   })
-  .get("/:id", loggedIn, async (c) => {
+  .get("/:id", loggedIn, zValidator("param", idSchema), async (c) => {
     try {
-      const id = c.req.param("id");
+      const { id } = c.req.valid("param");
       const industry = await db
         .select()
         .from(industryTable)

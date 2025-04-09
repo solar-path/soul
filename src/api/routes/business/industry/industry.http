@@ -1,5 +1,30 @@
-@baseUrl = http://localhost:3000/api
+@baseUrl = http://localhost:3000/api/business/industry
+@authUrl = http://localhost:3000/api/auth
 
-### get countries
-GET {{baseUrl}}/business/country
+# After signing in, copy the auth_session cookie value from the response and paste it here
+@authCookie = yqyerfn7vlpojoeaxqcp6yuvwn6ibp7ohblsn3lj
+
+# After getting the industry list, copy an industry ID from the response and paste it here
+@industryId = 7ffd9a7c-edb2-4f59-8812-10ac4c0d509b
+
+### First, sign in to get authenticated
+# This is required for all industry operations
+# This request will set cookies that will be used for subsequent requests
+POST {{authUrl}}/signin
 Content-Type: application/json
+
+{
+    "email": "admin@example.com",
+    "password": "M1r@nd@32"
+}
+
+### 👍 Get all industries
+GET {{baseUrl}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+### 👍 Get industry by ID
+# First get all industries, then copy an industry ID to the @industryId variable at the top
+GET {{baseUrl}}/{{industryId}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
