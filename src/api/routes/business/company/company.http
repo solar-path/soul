@@ -2,10 +2,10 @@
 @authUrl = http://localhost:3000/api/auth
 
 # After signing in, copy the auth_session cookie value from the response and paste it here
-@authCookie = yqyerfn7vlpojoeaxqcp6yuvwn6ibp7ohblsn3lj
+@authCookie = buieeusbbqo4jbiswltcvpideadankxcsuq2bys7
 
 # After creating a company, copy its ID from the response and paste it here
-@companyId = 06bd1642-7502-40b0-b58c-ccc110aac659
+@companyId = da1fdf2d-6787-4a15-8c1a-66a74558e3f0
 
 ### 👍 First, sign in to get authenticated
 # This is required for all company operations
@@ -30,6 +30,8 @@ Content-Type: application/json
 Cookie: auth_session={{authCookie}}
 
 ### 👍 Create a new company
+# countryID validation is required 
+# industryID validation is required 
 POST {{baseUrl}}/newCompany
 Content-Type: application/json
 Cookie: auth_session={{authCookie}}; Path=/; HttpOnly; SameSite=Lax
@@ -37,8 +39,8 @@ Cookie: auth_session={{authCookie}}; Path=/; HttpOnly; SameSite=Lax
 {
     "title": "Test Company Ltd",
     "bin": "123456789",
-    "countryID": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-    "industryID": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "countryID": "237b9ca3-9ae2-41f0-85cb-e71dd83e4bf5",
+    "industryID": "eae77c5f-9ecb-4c4b-b345-97a916e67e87",
     "logo": "https://example.com/logo.png",
     "contact": {
         "phone": "+1234567890",
@@ -63,8 +65,8 @@ Cookie: auth_session={{authCookie}}
 {
     "title": "Updated Test Company Ltd",
     "bin": "987654321",
-    "countryID": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-    "industryID": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+   "countryID": "237b9ca3-9ae2-41f0-85cb-e71dd83e4bf5",
+    "industryID": "eae77c5f-9ecb-4c4b-b345-97a916e67e87",
     "logo": "https://example.com/updated-logo.png",
     "contact": {
         "phone": "+0987654321",
