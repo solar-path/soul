@@ -1,5 +1,92 @@
-@baseUrl = http://localhost:3000/api
+@baseUrl = http://localhost:3000/api/business/position
+@authUrl = http://localhost:3000/api/auth
 
-### get countries
-GET {{baseUrl}}/business/country
+# After signing in, copy the auth_session cookie value from the response and paste it here
+@authCookie = buieeusbbqo4jbiswltcvpideadankxcsuq2bys7
+
+# After creating a position, copy its ID from the response and paste it here
+@positionId = 26fb7f29-88df-42be-b69b-9d4ab38fcb2e
+
+# Company ID for position operations
+@companyId = da1fdf2d-6787-4a15-8c1a-66a74558e3f0
+
+### 👍 First, sign in to get authenticated
+# This is required for all position operations
+POST {{authUrl}}/signin
 Content-Type: application/json
+
+{
+    "email": "itgroup.luck@gmail.com",
+    "password": "M1r@nd@32"
+}
+
+### 👍 Get all positions
+GET {{baseUrl}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+### 👍 Get position by ID
+# First create a position, then copy its ID to the @positionId variable at the top
+GET {{baseUrl}}/{{positionId}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+### 👍 Create a new position
+POST {{baseUrl}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+{
+    "title": "Test Position",
+    "companyID": "{{companyId}}",
+    "parentID": null,
+    "isVacant": true,
+    "jobDescription": {
+        "responsibilities": ["Task 1", "Task 2"],
+        "requirements": ["Requirement 1", "Requirement 2"],
+        "qualifications": ["Qualification 1", "Qualification 2"],
+        "benefits": ["Benefit 1", "Benefit 2"]
+    },
+    "salary": {
+        "min": 50000,
+        "max": 80000,
+        "currency": "USD",
+        "period": "yearly"
+    }
+}
+
+### 👍 Update a position
+# First create a position, then copy its ID to the @positionId variable at the top
+PATCH {{baseUrl}}/{{positionId}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+{
+    "title": "Updated Test Position",
+    "isVacant": false,
+    "jobDescription": {
+        "responsibilities": ["Updated Task 1", "Updated Task 2"],
+        "requirements": ["Updated Requirement 1", "Updated Requirement 2"],
+        "qualifications": ["Updated Qualification 1", "Updated Qualification 2"],
+        "benefits": ["Updated Benefit 1", "Updated Benefit 2"]
+    },
+    "salary": {
+        "min": 60000,
+        "max": 90000,
+        "currency": "USD",
+        "period": "yearly"
+    }
+}
+
+### 👍 Delete a position
+# First create a position, then copy its ID to the @positionId variable at the top
+DELETE {{baseUrl}}/{{positionId}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+# Notes:
+# 1. After signing in, copy the auth_session cookie value from the response and update the @authCookie variable at the top
+# 2. For GET, UPDATE, and DELETE operations, replace the example UUID with an actual position ID
+# 3. All UUIDs must be valid UUID v4 format
+# 4. The position cannot be deleted if it has employees assigned to it
+# 5. Only users who are part of the company can update or delete its positions

@@ -1,5 +1,70 @@
-@baseUrl = http://localhost:3000/api
+@baseUrl = http://localhost:3000/api/business/department
+@authUrl = http://localhost:3000/api/auth
 
-### get countries
-GET {{baseUrl}}/business/country
+# After signing in, copy the auth_session cookie value from the response and paste it here
+@authCookie = buieeusbbqo4jbiswltcvpideadankxcsuq2bys7
+
+# After creating a department, copy its ID from the response and paste it here
+@departmentId =dde3c757-93d1-4bca-baf3-157f39dc871f
+
+# Company ID for department operations
+@companyId = da1fdf2d-6787-4a15-8c1a-66a74558e3f0
+
+### 👍 First, sign in to get authenticated
+# This is required for all department operations
+POST {{authUrl}}/signin
 Content-Type: application/json
+
+{
+    "email": "itgroup.luck@gmail.com",
+    "password": "M1r@nd@32"
+}
+
+### 👍 Get all departments
+GET {{baseUrl}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+### 👍 Get department by ID
+# First create a department, then copy its ID to the @departmentId variable at the top
+GET {{baseUrl}}/{{departmentId}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+### 👍 Create a new department
+POST {{baseUrl}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+{
+    "title": "Test Department",
+    "companyID": "{{companyId}}",
+    "parentID": null,
+    "headcount": 10
+}
+
+### 👍 Update a department
+# First create a department, then copy its ID to the @departmentId variable at the top
+PUT {{baseUrl}}/{{departmentId}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+{
+    "title": "Updated Test Department",
+    "companyID": "{{companyId}}",
+    "parentID": null,
+    "headcount": 15
+}
+
+### 👍 Delete a department
+# First create a department, then copy its ID to the @departmentId variable at the top
+DELETE {{baseUrl}}/{{departmentId}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+# Notes:
+# 1. After signing in, copy the auth_session cookie value from the response and update the @authCookie variable at the top
+# 2. For GET, UPDATE, and DELETE operations, replace the example UUID with an actual department ID
+# 3. All UUIDs must be valid UUID v4 format
+# 4. The department cannot be deleted if it has positions or employees assigned to it
+# 5. Only users who are part of the company can update or delete its departments

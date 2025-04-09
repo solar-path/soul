@@ -1,5 +1,86 @@
-@baseUrl = http://localhost:3000/api
+@baseUrl = http://localhost:3000/api/business/employee
+@authUrl = http://localhost:3000/api/auth
 
-### get countries
-GET {{baseUrl}}/business/country
+# After signing in, copy the auth_session cookie value from the response and paste it here
+@authCookie = buieeusbbqo4jbiswltcvpideadankxcsuq2bys7
+
+# After creating an employee, copy its ID from the response and paste it here
+@employeeId = 16a73f5c-4773-4468-b179-6680e9f0dd9
+
+# IDs for employee operations
+@companyId = da1fdf2d-6787-4a15-8c1a-66a74558e3f0
+@departmentId = de02478d-d062-40c5-abf0-3df557fc0917
+@positionId = a8b21b31-bfb0-4acf-8767-cd5bb71cf338
+@userId = 16a73f5c-4773-4468-b179-6680e9f0dd9
+
+### 👍 First, sign in to get authenticated
+# This is required for all employee operations
+POST {{authUrl}}/signin
 Content-Type: application/json
+
+{
+    "email": "itgroup.luck@gmail.com",
+    "password": "M1r@nd@32"
+}
+
+### 👍 Get all employees
+GET {{baseUrl}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+### 👍 Get employees by company ID
+GET {{baseUrl}}/company/{{companyId}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+### 👍 Get employees by department ID
+GET {{baseUrl}}/department/{{departmentId}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+### 👍 Get employees by position ID
+GET {{baseUrl}}/position/{{positionId}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+### 👍 Get employee by ID
+# First create an employee, then copy its ID to the @employeeId variable at the top
+GET {{baseUrl}}/{{employeeId}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+### 👍 Create a new employee
+POST {{baseUrl}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+{
+    "companyID": "{{companyId}}",
+    "departmentID": "{{departmentId}}",
+    "positionID": "{{positionId}}",
+    "employeeID": "{{userId}}"
+}
+
+### 👍 Update an employee
+# First create an employee, then copy its ID to the @employeeId variable at the top
+PATCH {{baseUrl}}/{{employeeId}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+{
+    "departmentID": "{{departmentId}}",
+    "positionID": "{{positionId}}"
+}
+
+### 👍 Delete an employee
+# First create an employee, then copy its ID to the @employeeId variable at the top
+DELETE {{baseUrl}}/{{employeeId}}
+Content-Type: application/json
+Cookie: auth_session={{authCookie}}
+
+# Notes:
+# 1. After signing in, copy the auth_session cookie value from the response and update the @authCookie variable at the top
+# 2. For GET, UPDATE, and DELETE operations, replace the example UUID with an actual employee ID
+# 3. All UUIDs must be valid UUID v4 format
+# 4. Only users who are part of the company can update or delete its employees
+# 5. Before creating an employee, make sure to have valid company, department, position, and user IDs
