@@ -115,7 +115,13 @@ export default function QHeader() {
             alt="Achieving Excellence Logo"
           />
         </NavbarBrand>
-        <div className="flex md:order-2">
+        <div className="flex md:order-2 space-x-4">
+          <button
+            onClick={() => fillDrawer(SignUpForm, "Sign up")}
+            className="hover:text-red-700"
+          >
+            Sign up
+          </button>
           <Button
             color="dark"
             onClick={() => fillDrawer(SignInForm, "Sign in")}
@@ -130,12 +136,6 @@ export default function QHeader() {
           </NavbarLink>
           <NavbarLink as={Link} href="/pricing">
             Pricing
-          </NavbarLink>
-          <NavbarLink onClick={() => fillDrawer(SignUpForm, "Sign up")}>
-            Sign up
-          </NavbarLink>
-          <NavbarLink onClick={() => fillDrawer(SignInForm, "Sign in")}>
-            Sign in
           </NavbarLink>
         </NavbarCollapse>
       </Navbar>
