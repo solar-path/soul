@@ -7,7 +7,7 @@ import {
   RespondToContactUs,
 } from "./contactUs.zod";
 import { fillDrawer } from "@/ui/QDrawer/QDrawer.store";
-import ContactUsForm from "./ContactUs.form";
+import ContactUsForm from "@/api/routes/contactUs/ContactUs.form";
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
 import { trpc } from "@/utils/trpc";
 import { useState } from "react";
@@ -88,11 +88,13 @@ export default function FindContactUsResponse() {
             <span className="font-semibold">Contact ID:</span>{" "}
             {record.contactUsID}
           </p>
-          
+
           {record.id ? (
             <>
               <div className="bg-green-100 p-3 rounded-md mb-3">
-                <p className="font-semibold text-green-800">Response received!</p>
+                <p className="font-semibold text-green-800">
+                  Response received!
+                </p>
               </div>
               <p>
                 <span className="font-semibold">Response ID:</span> {record.id}
@@ -118,8 +120,12 @@ export default function FindContactUsResponse() {
             </>
           ) : (
             <div className="bg-yellow-100 p-3 rounded-md">
-              <p className="font-semibold text-yellow-800">Your inquiry has been received!</p>
-              <p className="text-yellow-700 mt-2">We're still working on a response. Please check back later.</p>
+              <p className="font-semibold text-yellow-800">
+                Your inquiry has been received!
+              </p>
+              <p className="text-yellow-700 mt-2">
+                We're still working on a response. Please check back later.
+              </p>
             </div>
           )}
         </div>

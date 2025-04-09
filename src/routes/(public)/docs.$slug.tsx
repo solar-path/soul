@@ -182,7 +182,7 @@ function DocsPage() {
     h2: (props: React.ComponentPropsWithoutRef<"h2">) => (
       <h2
         id={props.id}
-        className="text-2xl font-semibold mt-5 mb-3 text-gray-800 border-b pb-1 scroll-mt-20"
+        className="text-2xl font-semibold mt-5 mb-3 text-gray-800  pb-1 scroll-mt-20"
         {...props}
       />
     ),
@@ -272,7 +272,7 @@ function DocsPage() {
   return (
     <div className="flex flex-row">
       {/* Documentation Navigation Sidebar */}
-      <div className="w-1/5 h-[calc(100vh-64px)] overflow-y-auto border-r">
+      <div className="w-1/5 h-[calc(100vh-64px)] overflow-y-auto">
         <div className="p-4 sticky top-0 bg-white z-10">
           <h3 className="text-lg font-semibold mb-3">Documentation</h3>
         </div>
@@ -301,7 +301,7 @@ function DocsPage() {
       </div>
 
       {/* Table of Contents */}
-      <div className="w-1/5 h-[calc(100vh-64px)] overflow-y-auto border-l">
+      <div className="w-1/5 h-[calc(100vh-64px)] overflow-y-auto">
         <div className="p-4 sticky top-0 bg-white z-10">
           <h2 className="text-lg font-semibold">Table of Contents</h2>
         </div>

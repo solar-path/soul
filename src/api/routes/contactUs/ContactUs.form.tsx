@@ -1,11 +1,14 @@
 import { Label, TextInput, Textarea, Button, HelperText } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { contactUsSchema, ContactUs } from "./contactUs.zod";
+import {
+  contactUsSchema,
+  ContactUs,
+} from "@/api/routes/contactUs/contactUs.zod";
 import { closeDrawer, fillDrawer } from "@/ui/QDrawer/QDrawer.store";
 import { trpc } from "@/utils/trpc";
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
-import FindContactUsResponse from "./findContactUsResponse.form";
+import FindContactUsResponse from "@/api/routes/contactUs/findContactUsResponse.form";
 
 export default function ContactUsForm() {
   const {
