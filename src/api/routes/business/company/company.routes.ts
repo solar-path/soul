@@ -170,7 +170,6 @@ export const companyRoutes = new Hono<{ Variables: Context }>()
               contact: data.contact ? JSON.stringify(data.contact) : null,
               address: data.address ? JSON.stringify(data.address) : null,
               createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
             })
             .returning();
 

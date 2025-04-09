@@ -12,10 +12,13 @@ export const countryTable = sqliteTable("business_country", {
   updatedAt: text("updated_at"),
 });
 
+// Define the industry table with self-reference
 export const industryTable = sqliteTable("business_industry", {
   id: text("id").primaryKey(),
   title: text("title").notNull(),
-  parentID: text("parent_id").references((): any => industryTable.id),
+  parentID: text("parent_id").references(
+    (): ReturnType<typeof text> => industryTable.id
+  ),
   description: text("description"),
   createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
   updatedAt: text("updated_at"),
@@ -34,10 +37,13 @@ export const companyTable = sqliteTable("business_company", {
   updatedAt: text("updated_at"),
 });
 
+// Define the department table with self-reference
 export const departmentTable = sqliteTable("business_department", {
   id: text("id").primaryKey(),
   title: text("title").notNull(),
-  parentID: text("parent_id").references((): any => departmentTable.id),
+  parentID: text("parent_id").references(
+    (): ReturnType<typeof text> => departmentTable.id
+  ),
   headcount: integer("headcount"),
   companyID: text("company_id")
     .notNull()
@@ -55,7 +61,9 @@ export const positionTable = sqliteTable("business_position", {
   jobDescription: text("job_description", { mode: "json" }), // Store as JSON string
   salary: text("salary", { mode: "json" }), // Store as JSON string
   isVacant: integer("is_vacant", { mode: "boolean" }).default(true),
-  parentID: text("parent_id").references((): any => positionTable.id),
+  parentID: text("parent_id").references(
+    (): ReturnType<typeof text> => positionTable.id
+  ),
   createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
   updatedAt: text("updated_at"),
 });

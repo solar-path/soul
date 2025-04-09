@@ -107,7 +107,6 @@ export const departmentRoutes = new Hono<{ Variables: Context }>()
         }
 
         // Create new department
-        const timestamp = new Date().toISOString();
         const newDepartment = await db
           .insert(departmentTable)
           .values({
@@ -116,8 +115,7 @@ export const departmentRoutes = new Hono<{ Variables: Context }>()
             parentID: data.parentID || null,
             headcount: data.headcount || null,
             companyID: data.companyID,
-            createdAt: timestamp,
-            updatedAt: timestamp,
+            createdAt: new Date().toISOString(),
           })
           .returning();
 

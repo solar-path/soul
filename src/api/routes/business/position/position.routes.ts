@@ -15,6 +15,7 @@ import {
   orgchartTable,
 } from "@/api/database/schema/business.schema";
 import type { Context } from "@/api/utils/context";
+import type { Position } from "./position.zod";
 
 import {
   createPositionSchema,
@@ -28,7 +29,16 @@ export const positionRoutes = new Hono<{ Variables: Context }>()
   // Get all positions
   .get("/", loggedIn, async (c) => {
     try {
-      const positions = await db.select().from(positionTable);
+      const rawPositions = await db.select().from(positionTable);
+
+      // Process JSON fields to ensure proper typing
+      const positions = rawPositions.map((pos) => ({
+        ...pos,
+        jobDescription: pos.jobDescription
+          ? JSON.parse(pos.jobDescription as string)
+          : null,
+        salary: pos.salary ? JSON.parse(pos.salary as string) : null,
+      })) as Position[];
 
       return c.json(
         createApiResponse<PositionsListResponse["data"]>(
@@ -50,10 +60,19 @@ export const positionRoutes = new Hono<{ Variables: Context }>()
     try {
       const id = c.req.param("id");
 
-      const position = await db
+      const rawPosition = await db
         .select()
         .from(positionTable)
         .where(eq(positionTable.id, id));
+
+      // Process JSON fields to ensure proper typing
+      const position = rawPosition.map((pos) => ({
+        ...pos,
+        jobDescription: pos.jobDescription
+          ? JSON.parse(pos.jobDescription as string)
+          : null,
+        salary: pos.salary ? JSON.parse(pos.salary as string) : null,
+      })) as Position[];
 
       if (!position || position.length === 0) {
         return c.json(createApiResponse(false, "Position not found"), 404);
@@ -121,11 +140,22 @@ export const positionRoutes = new Hono<{ Variables: Context }>()
         })
         .returning();
 
+      // Process JSON fields for the response
+      const processedPosition = {
+        ...newPosition[0],
+        jobDescription: newPosition[0].jobDescription
+          ? JSON.parse(newPosition[0].jobDescription as string)
+          : null,
+        salary: newPosition[0].salary
+          ? JSON.parse(newPosition[0].salary as string)
+          : null,
+      } as Position;
+
       return c.json(
         createApiResponse<PositionResponse["data"]>(
           true,
           "Position created successfully",
-          newPosition[0]
+          processedPosition
         )
       );
     } catch (error) {
@@ -225,11 +255,22 @@ export const positionRoutes = new Hono<{ Variables: Context }>()
           .where(eq(positionTable.id, id))
           .returning();
 
+        // Process JSON fields for the response
+        const processedPosition = {
+          ...updatedPosition[0],
+          jobDescription: updatedPosition[0].jobDescription
+            ? JSON.parse(updatedPosition[0].jobDescription as string)
+            : null,
+          salary: updatedPosition[0].salary
+            ? JSON.parse(updatedPosition[0].salary as string)
+            : null,
+        } as Position;
+
         return c.json(
           createApiResponse<PositionResponse["data"]>(
             true,
             "Position updated successfully",
-            updatedPosition[0]
+            processedPosition
           )
         );
       } catch (error) {
