@@ -28,6 +28,7 @@ export const QError = ({ error }: { error: Error }) => {
         <div className="mt-4 space-y-4">
           <Button
             className="w-full"
+            color="red"
             onClick={() => {
               router.invalidate();
             }}

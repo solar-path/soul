@@ -3,6 +3,7 @@ import AIcon from "@/assets/icon.png";
 import { Button } from "flowbite-react";
 import { fillDrawer } from "@/ui/QDrawer/QDrawer.store";
 import SignUpForm from "@/api/routes/auth/SignUp.form";
+
 export const Route = createFileRoute("/(public)/")({
   component: Index,
 });
