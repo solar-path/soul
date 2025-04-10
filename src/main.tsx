@@ -10,6 +10,7 @@ import { createTheme, ThemeProvider } from "flowbite-react";
 import { QueryClient } from "@tanstack/react-query";
 import { QPageNotFound } from "./ui/QPageNotFound.ui";
 import { QSnipper } from "./ui/QSnipper.ui";
+import { QError } from "./ui/QError.ui";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +30,7 @@ const router = createRouter({
   },
   defaultPendingComponent: QSnipper,
   defaultNotFoundComponent: QPageNotFound,
+  defaultErrorComponent: ({ error }) => <QError error={error} />,
 });
 
 // Register the router instance for type safety
