@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
 import { QSidebar, QSidebarProps } from "@/ui/QSidebar.ui";
 import ReactMarkdown from "react-markdown";
+import { QNotFound } from "@/ui/QNotFound.ui";
 
 // Define the route
 export const Route = createFileRoute("/(public)/docs/$slug")({
@@ -32,16 +33,24 @@ const sidebarModules: QSidebarProps = Object.entries(slugToFileMap).map(
 function DocsPage() {
   // Get the slug parameter from the route
   const { slug } = Route.useParams();
+  const [markdownContent, setMarkdownContent] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState<boolean>(false);
 
   // Redirect to intro if no slug is provided
   useEffect(() => {
     if (slug === "") {
       window.location.href = "/docs/intro";
     }
+
+    // Check if the slug exists in our mapping
+    if (slug && !slugToFileMap[slug]) {
+      setNotFound(true);
+    } else {
+      setNotFound(false);
+    }
   }, [slug]);
-  const [markdownContent, setMarkdownContent] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchMarkdownContent() {
@@ -268,6 +277,11 @@ function DocsPage() {
       </a>
     );
   };
+
+  // If the slug doesn't exist, show the QNotFound component
+  if (notFound) {
+    return <QNotFound />;
+  }
 
   return (
     <div className="flex flex-row">
