@@ -17,13 +17,14 @@ import {
 import { fillDrawer } from "./QDrawer/QDrawer.store";
 import SignUpForm from "@/api/routes/auth/SignUp.form";
 import SignInForm from "@/api/routes/auth/SignIn.form";
-import { clearCurrentUser, useClientStore } from "@/utils/client.store";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { trpc } from "@/utils/trpc";
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
+import { useUser } from "@/utils/client.store";
 
 export default function QHeader() {
-  const { currentUser } = useClientStore();
+  const { data: currentUser } = useUser();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const signOutMutation = useMutation({
@@ -40,7 +41,8 @@ export default function QHeader() {
         "success",
         `${currentUser?.email} successfully signed out`
       );
-      clearCurrentUser();
+      // Update the query cache to remove the user
+      queryClient.setQueryData(["currentUser"], null);
       navigate({ to: "/" });
     },
     onError: (error) => {

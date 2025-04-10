@@ -8,7 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { fillDrawer } from "@/ui/QDrawer/QDrawer.store";
 import SignInForm from "./SignIn.form";
-import { useClientStore, setCurrentUser } from "@/utils/client.store";
+import { useUser, useSetUser } from "@/utils/client.store";
 import { useNavigate } from "@tanstack/react-router";
 
 interface ResetPasswordFormProps {
@@ -31,7 +31,8 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
 
   const [showPassword, setShowPassword] = useState(false);
   const [countdown, setCountdown] = useState<number | null>(null);
-  const { currentUser } = useClientStore();
+  const { data: currentUser } = useUser();
+  const { setUser } = useSetUser();
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -41,21 +42,21 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   // Effect to handle countdown and sign out
   useEffect(() => {
     if (countdown === null) return;
-    
+
     if (countdown <= 0) {
       // Sign out the user
-      setCurrentUser(null);
+      setUser(null);
       navigate({ to: "/" });
       fillDrawer(SignInForm, "Sign in");
       return;
     }
-    
+
     const timer = setTimeout(() => {
       setCountdown(countdown - 1);
     }, 1000);
-    
+
     return () => clearTimeout(timer);
-  }, [countdown, navigate]);
+  }, [countdown, navigate, setUser]);
 
   const resetPasswordMutation = useMutation({
     mutationFn: async (data: ResetPassword) => {
@@ -73,11 +74,14 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     onSuccess: () => {
       // Clear form
       reset();
-      
+
       if (currentUser) {
         // If user is authenticated, start countdown for sign out
         setCountdown(3);
-        showFlashMessage("success", "Password reset successfully. You will be signed out in 3 seconds.");
+        showFlashMessage(
+          "success",
+          "Password reset successfully. You will be signed out in 3 seconds."
+        );
       } else {
         // If not authenticated, just show success message
         showFlashMessage("success", "Password reset successfully");
@@ -105,7 +109,7 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
       <p className="text-sm text-gray-600">
         Please enter your new password below.
       </p>
-      
+
       <div>
         <Label htmlFor="password">New Password</Label>
         <div className="relative">

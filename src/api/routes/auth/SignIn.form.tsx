@@ -7,10 +7,10 @@ import SignUpForm from "./SignUp.form";
 import ForgotPasswordForm from "./Forgot.form";
 import { trpc } from "@/utils/trpc";
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
-import { useMutation } from "@tanstack/react-query";
-import { setCurrentUser } from "@/utils/client.store";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { useSetUser } from "@/utils/client.store";
 
 export default function SignInForm() {
   const {
@@ -33,6 +33,8 @@ export default function SignInForm() {
   };
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { setUser } = useSetUser();
 
   const signInMutation = useMutation({
     mutationFn: async (data: SignIn) => {
@@ -49,7 +51,9 @@ export default function SignInForm() {
     },
     onSuccess: (result) => {
       // Clear form and close drawer
-      setCurrentUser(result.data);
+      setUser(result.data);
+      // Update the query cache
+      queryClient.setQueryData(["currentUser"], result.data);
       reset();
       closeDrawer();
       // Show success message

@@ -30,11 +30,12 @@
 ## FILE NAMING CONVENTIONS
 
 - **Forms**: \*.form.tsx
-- **Guides**: \*.guide.tsx
+- **Guides**: \*.md
 - **Database Schemas**: \*.schema.ts
 - **Validation Schemas**: \*.zod.ts
 - **Pages**: \*.page.tsx
 - **Layouts**: \*.layout.tsx
+- **UI Components**: \*.ui.tsx
 
 ## DATABASE RULES
 
@@ -56,9 +57,27 @@
 
 ## STATE MANAGEMENT
 
-- Use TanStack Query for server state and API data fetching
-- Use @tanstack/react-store for global app state and local state
-- Implement proper loading states for all async operations
+- Use TanStack Query for:
+
+  - Server state management
+  - API data fetching
+  - Global application state that interacts with the server
+  - Authentication state
+  - Any data that needs to be cached, refetched, or synchronized with the server
+  - Implementing loading, error, and success states for async operations
+
+- Use @tanstack/react-store for:
+
+  - UI-only state in \*.ui.tsx components
+  - Local component state that doesn't require server interaction
+  - Ephemeral UI state (modals, tooltips, etc.)
+  - Theme preferences and UI configuration
+
+- State Management Best Practices:
+  - Keep server and UI state clearly separated
+  - Use custom hooks to encapsulate state logic
+  - Implement proper loading states for all async operations
+  - Avoid redundant state between TanStack Query and TanStack Store
 
 ## UI IMPLEMENTATION
 

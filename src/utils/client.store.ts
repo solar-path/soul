@@ -1,27 +1,45 @@
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { trpc } from "@/utils/trpc";
 import { User } from "@/api/utils/types";
-import { Store, useStore } from "@tanstack/react-store";
-// import { Company, Country, Industry, User } from "@/lib/types";
 
-// Define the store state
-interface ClientState {
-  currentUser: User | null;
+/**
+ * Custom hook for fetching and managing the current user
+ * Uses TanStack Query for caching and automatic refetching
+ */
+export function useUser() {
+  return useQuery({
+    queryKey: ["currentUser"],
+    queryFn: async (): Promise<User | null> => {
+      try {
+        const response = await trpc.auth.user.$get();
+        if (!response.ok) return null;
+
+        const result = await response.json();
+        if (!result.success) return null;
+
+        return result.data;
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        return null;
+      }
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnWindowFocus: true,
+  });
 }
 
-// Create the TanStack Store
-export const clientStore = new Store<ClientState>({
-  currentUser: null,
-});
+/**
+ * Helper function to set the current user in the query cache
+ */
+export function useSetUser() {
+  const queryClient = useQueryClient();
 
-// Hook to access the store state
-export const useClientStore = () => {
-  return useStore(clientStore);
-};
-
-// Helper functions for external usage
-export const setCurrentUser = (user: User | null) => {
-  clientStore.setState((state) => ({ ...state, currentUser: user }));
-};
-
-export const clearCurrentUser = () => {
-  clientStore.setState((state) => ({ ...state, currentUser: null }));
-};
+  return {
+    setUser: (user: User | null) => {
+      queryClient.setQueryData(["currentUser"], user);
+    },
+    invalidateUser: () => {
+      queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+    },
+  };
+}
