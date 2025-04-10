@@ -32,7 +32,7 @@ export default function ContactUsForm() {
       setIsSubmittingForm(true);
       // Add artificial delay to prevent double submissions even with fast network
       await new Promise((resolve) => setTimeout(resolve, 300));
-      
+
       const response = await trpc["contact-us"].new.$post({
         json: data,
       });
@@ -42,8 +42,10 @@ export default function ContactUsForm() {
         closeDrawer();
         reset();
         showFlashMessage("success", result.message);
+        return null;
       } else {
         showFlashMessage("fail", result.message);
+        return null;
       }
     } finally {
       setIsSubmittingForm(false);
@@ -79,8 +81,8 @@ export default function ContactUsForm() {
           </div>
           <HelperText>{errors.message?.message}</HelperText>
         </div>
-        <Button 
-          type="submit" 
+        <Button
+          type="submit"
           color="dark"
           disabled={isSubmitting || isSubmittingForm}
         >
