@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
 import { QSidebar, QSidebarProps } from "@/ui/QSidebar.ui";
 import ReactMarkdown from "react-markdown";
-import { QPageNotFound } from "@/ui/QNotFound.ui";
+import { QPageNotFound } from "@/ui/QPageNotFound.ui";
 
 // Define the route
 export const Route = createFileRoute("/(public)/docs/$slug")({

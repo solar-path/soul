@@ -6,9 +6,10 @@ import "./global.css";
 import { routeTree } from "./routeTree.gen";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { createTheme, Spinner, ThemeProvider } from "flowbite-react";
+import { createTheme, ThemeProvider } from "flowbite-react";
 import { QueryClient } from "@tanstack/react-query";
-import { QPageNotFound } from "./ui/QNotFound.ui";
+import { QPageNotFound } from "./ui/QPageNotFound.ui";
+import { QSnipper } from "./ui/QSnipper.ui";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,13 +27,7 @@ const router = createRouter({
   context: {
     queryClient,
   },
-  defaultPendingComponent: () => {
-    return (
-      <div className="flex size-full items-center justify-center p-2 text-2xl">
-        <Spinner color="failure" aria-label="Failure spinner example" />
-      </div>
-    );
-  },
+  defaultPendingComponent: QSnipper,
   defaultNotFoundComponent: QPageNotFound,
 });
 
