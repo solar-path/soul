@@ -1,335 +1,425 @@
-// import { useState, useEffect } from "preact/hooks";
-// import { useForm } from "react-hook-form";
-// import {
-//   Label,
-//   TextInput,
-//   Button,
-//   Textarea,
-//   FileInput,
-//   Tooltip,
-//   Spinner,
-//   HelperText,
-// } from "flowbite-react";
-// import QInput from "@/lib/ui/QInput.ui";
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { fillFlashMessage } from "@/lib/ui/QFlashMessage.ui";
-// import { closeDrawer } from "@/lib/ui/QDrawer.ui";
-// import { useQuery } from "@tanstack/react-query";
-// import { trpc } from "@/lib/trpc";
+import { useCallback } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import {
+  Label,
+  TextInput,
+  Button,
+  Textarea,
+  FileInput,
+  Tooltip,
+  Spinner,
+  HelperText,
+} from "flowbite-react";
+import QInput from "@/ui/QInput/QInput.ui";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { trpc } from "@/utils/trpc";
+import { z } from "zod";
+import { createCompanySchema, updateCompanySchema } from "./company.zod";
 
-// import { countryList, industryList } from "@/lib/client.store";
+import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
+import { closeDrawer } from "@/ui/QDrawer/QDrawer.store";
 
-// export function CompanyForm({ currentCompany = null }) {
-//   const [logoFile, setLogoFile] = useState(null);
-//   const [isLoading, setIsLoading] = useState(true);
+// Define form schema based on Zod validation schemas
+const formSchema = z.object({
+  id: z.string().optional(),
+  title: z.string().min(1, "Company name is required"),
+  description: z.string().optional(),
+  bin: z.string().optional(),
+  logo: z.unknown().optional(),
+  // Fields for the QInput components
+  residence: z.string().optional(),
+  industry: z.string().optional(),
+  // IDs that will be mapped to countryID and industryID
+  residenceId: z.string().uuid({ message: "Please select a valid country" }),
+  industryId: z.string().uuid({ message: "Please select a valid industry" }),
+  // Contact fields
+  phone: z.string().optional(),
+  website: z.string().url().optional().or(z.string().length(0)),
+  // Address fields
+  addressLine: z.string().optional(),
+  city: z.string().optional(),
+  country: z.string().optional(),
+  postcode: z.string().optional(),
+  state: z.string().optional(),
+});
 
-//   const {
-//     register,
-//     handleSubmit,
-//     setValue,
-//     formState: { errors, isValid, isDirty, dirtyFields },
-//     watch,
-//   } = useForm({
-//     defaultValues: {
-//       id: currentCompany?.id || "",
-//       title: currentCompany?.title || "",
-//       description: currentCompany?.description || "",
-//       bin: currentCompany?.bin || "",
-//       logo: null,
-//       residence: currentCompany?.expand?.residence?.title || "",
-//       industry: currentCompany?.expand?.industry?.title || "",
-//       residenceId:
-//         typeof currentCompany?.residence === "object"
-//           ? currentCompany?.residence?.id
-//           : currentCompany?.residence || "",
-//       industryId:
-//         typeof currentCompany?.industry === "object"
-//           ? currentCompany?.industry?.id
-//           : currentCompany?.industry || "",
-//       phone: currentCompany?.phone || "",
-//       website: currentCompany?.website || "",
-//       addressLine: currentCompany?.address?.addressLine || "",
-//       city: currentCompany?.address?.city || "",
-//       country: currentCompany?.address?.country || "",
-//       postcode: currentCompany?.address?.postcode || "",
-//       state: currentCompany?.address?.state || "",
-//     },
-//     resolver: zodResolver(companySchema),
-//   });
+type CompanyFormValues = z.infer<typeof formSchema>;
 
-//   useEffect(() => {
-//     console.log("Form Errors:", errors);
-//     console.log("Form State:", { isValid, isDirty, dirtyFields });
-//   }, [errors, isValid, isDirty, dirtyFields]);
+interface CompanyFormProps {
+  currentCompany?: Record<string, unknown> | null;
+}
 
-//   const { data } = useQuery({
-//     queryKey: ["countryList"],
-//     queryFn: async () => {
-//       const response = await trpc.business.country.$get();
-//       countryList.value = await response.json();
-//     },
-//   });
+export function CompanyForm({ currentCompany = null }: CompanyFormProps) {
+  // File upload handler for future implementation
+  const handleLogoUpload = useCallback((file: File | null) => {
+    // This will be implemented in the future for logo uploads
+    console.log("Logo file selected:", file?.name);
+  }, []);
 
-//   const { data } = useQuery({
-//     queryKey: ["industryList"],
-//     queryFn: async () => {
-//       const response = await trpc.business.industry.$get();
-//       industryList.value = await response.json();
-//     },
-//   });
+  // Fetch countries and industries for dropdown selection
+  const { data: countries, isLoading: countriesLoading } = useQuery({
+    queryKey: ["countries"],
+    queryFn: async () => {
+      const response = await trpc.business.country.$get();
+      return response.json();
+    },
+  });
 
-//   const handleFormSubmit = async (data) => {
-//     try {
-//       console.log("Form validation passed. Submitting data:", data);
-//       const formData = new FormData();
+  const { data: industries, isLoading: industriesLoading } = useQuery({
+    queryKey: ["industries"],
+    queryFn: async () => {
+      const response = await trpc.business.industry.$get();
+      return response.json();
+    },
+  });
 
-//       // Basic fields
-//       formData.append("title", data.title);
-//       formData.append("description", data.description || "");
-//       formData.append("bin", data.bin);
-//       formData.append("residence", data.residenceId);
-//       formData.append("industry", data.industryId);
-//       formData.append("phone", data.phone || "");
-//       formData.append("website", data.website || "");
+  // Create mutation for adding a new company
+  const createMutation = useMutation({
+    mutationFn: async (data: Record<string, unknown>) => {
+      // Using the correct endpoint based on the API routes
+      const response = await fetch("/api/business/company/newCompany", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(createCompanySchema.parse(data)),
+        credentials: "include",
+      });
+      return response.json();
+    },
+    onSuccess: (data) => {
+      showFlashMessage("success", `${data.title} has been created`);
+      window.dispatchEvent(new CustomEvent("companyCreated", { detail: data }));
+      closeDrawer();
+    },
+    onError: (error: Error) => {
+      showFlashMessage("fail", error.message);
+    },
+  });
 
-//       // Address object
-//       const address = {
-//         addressLine: data.addressLine || "",
-//         city: data.city || "",
-//         country: data.country || "",
-//         postcode: data.postcode || "",
-//         state: data.state || "",
-//       };
-//       formData.append("address", JSON.stringify(address));
+  // Update mutation for editing an existing company
+  const updateMutation = useMutation({
+    mutationFn: async (data: Record<string, unknown>) => {
+      // Using the correct endpoint based on the API routes
+      const response = await fetch(
+        `/api/business/company/updateCompany/${data.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updateCompanySchema.parse(data)),
+          credentials: "include",
+        }
+      );
+      return response.json();
+    },
+    onSuccess: (data) => {
+      showFlashMessage("success", `${data.title} has been updated`);
+      window.dispatchEvent(new CustomEvent("companyUpdated", { detail: data }));
+      closeDrawer();
+    },
+    onError: (error: Error) => {
+      showFlashMessage("fail", error.message);
+    },
+  });
 
-//       // Logo handling - simplified like avatar
-//       if (logoFile) {
-//         formData.append("logo", logoFile);
-//       }
+  // Extract values from currentCompany with proper type handling
+  const getCompanyValue = <T,>(path: string, defaultValue: T): T => {
+    const parts = path.split(".");
+    let value: Record<string, unknown> | null = currentCompany as Record<
+      string,
+      unknown
+    > | null;
 
-//       if (currentCompany) {
-//         await pb
-//           .collection("business_company")
-//           .update(currentCompany.id, formData);
-//         const expandedRecord = await pb
-//           .collection("business_company")
-//           .getOne(currentCompany.id, {
-//             expand: "industry,residence",
-//           });
+    for (const part of parts) {
+      if (!value || typeof value !== "object") return defaultValue;
+      value = value[part] as Record<string, unknown> | null;
+    }
 
-//         fillFlashMessage("success", `${data.title} has been updated`);
-//         window.dispatchEvent(
-//           new CustomEvent("companyUpdated", { detail: expandedRecord })
-//         );
-//       } else {
-//         const record = await pb.collection("business_company").create(formData);
-//         const expandedRecord = await pb
-//           .collection("business_company")
-//           .getOne(record.id, {
-//             expand: "industry,residence",
-//           });
+    return (value as unknown as T) ?? defaultValue;
+  };
 
-//         fillFlashMessage("success", `${data.title} has been created`);
-//         window.dispatchEvent(
-//           new CustomEvent("companyCreated", { detail: expandedRecord })
-//         );
-//       }
-//       closeDrawer();
-//     } catch (error) {
-//       fillFlashMessage("fail", error.message);
-//     }
-//   };
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+    watch,
+  } = useForm<CompanyFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      id: getCompanyValue<string>("id", ""),
+      title: getCompanyValue<string>("title", ""),
+      description: getCompanyValue<string>("description", ""),
+      bin: getCompanyValue<string>("bin", ""),
+      logo: null,
+      residence: getCompanyValue<string>("expand.residence.title", ""),
+      industry: getCompanyValue<string>("expand.industry.title", ""),
+      residenceId:
+        typeof getCompanyValue<unknown>("residence", "") === "object"
+          ? getCompanyValue<{ id: string }>("residence", { id: "" }).id
+          : getCompanyValue<string>("residence", ""),
+      industryId:
+        typeof getCompanyValue<unknown>("industry", "") === "object"
+          ? getCompanyValue<{ id: string }>("industry", { id: "" }).id
+          : getCompanyValue<string>("industry", ""),
+      phone: getCompanyValue<string>("phone", ""),
+      website: getCompanyValue<string>("website", ""),
+      addressLine: getCompanyValue<string>("address.street", ""),
+      city: getCompanyValue<string>("address.city", ""),
+      country: getCompanyValue<string>("address.country", ""),
+      postcode: getCompanyValue<string>("address.postalCode", ""),
+      state: getCompanyValue<string>("address.state", ""),
+    },
+  });
 
-//   const handleSearchSelect = (field, value, id) => {
-//     setValue(field, value);
-//     setValue(`${field}Id`, id);
-//   };
+  // Type-safe form submission handler
+  const onSubmit: SubmitHandler<CompanyFormValues> = (data) => {
+    try {
+      // Prepare the data for submission according to the API schemas
+      const apiData: Record<string, unknown> = {
+        title: data.title,
+        description: data.description || "",
+        bin: data.bin || "",
+        logo: data.logo || null,
+        // Map form fields to API schema fields
+        countryID: data.residenceId, // Map residenceId to countryID for API
+        industryID: data.industryId, // Map industryId to industryID for API
+        // Create address object according to the addressSchema
+        address: {
+          street: data.addressLine || "",
+          city: data.city || "",
+          state: data.state || "",
+          postalCode: data.postcode || "",
+          country: data.country || "",
+        },
+        // Create contact object according to the contactSchema
+        contact: {
+          phone: data.phone || "",
+          website: data.website || "",
+        },
+      };
 
-//   return (
-//     <>
-//       {isLoading ? (
-//         <Spinner />
-//       ) : (
-//         <form
-//           onSubmit={handleSubmit(handleFormSubmit)}
-//           className="flex flex-col space-y-2"
-//         >
-//           <input type="hidden" {...register("id")} />
-//           <input type="hidden" {...register("residenceId")} />
-//           <input type="hidden" {...register("industryId")} />
+      // Add ID if updating an existing company
+      if (data.id) {
+        apiData.id = data.id;
+      }
 
-//           {/* Company Name */}
-//           <div>
-//             <Label htmlFor="title">Company name</Label>
-//             <TextInput
-//               id="title"
-//               {...register("title")}
-//               color={errors.title ? "failure" : "gray"}
-//             />
-//             <HelperText>{errors.title?.message}</HelperText>
-//           </div>
+      if (currentCompany) {
+        // Update existing company
+        updateMutation.mutate(apiData);
+      } else {
+        // Create new company
+        createMutation.mutate(apiData);
+      }
+    } catch (error) {
+      showFlashMessage(
+        "fail",
+        error instanceof Error ? error.message : "An unknown error occurred"
+      );
+    }
+  };
 
-//           {/* BIN */}
-//           <div>
-//             <Label htmlFor="bin">Business Identification Number</Label>
-//             <TextInput
-//               id="bin"
-//               {...register("bin")}
-//               color={errors.bin ? "failure" : "gray"}
-//             />
-//             <HelperText>{errors.bin?.message}</HelperText>
-//           </div>
+  // Determine if any loading state is active
+  const isLoading =
+    countriesLoading ||
+    industriesLoading ||
+    createMutation.isPending ||
+    updateMutation.isPending;
 
-//           {/* Description */}
-//           <div>
-//             <Label htmlFor="description">Description</Label>
-//             <Textarea
-//               id="description"
-//               rows={2}
-//               {...register("description")}
-//               color={errors.description ? "failure" : "gray"}
-//             />
-//             <HelperText>{errors.description?.message}</HelperText>
-//           </div>
+  return (
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-4"
+      data-testid="company-form"
+    >
+      {/* Company Name */}
+      <div>
+        <Label htmlFor="title">Company Name</Label>
+        <TextInput
+          id="title"
+          type="text"
+          {...register("title")}
+          color={errors.title ? "failure" : "gray"}
+        />
+        {errors.title && (
+          <HelperText color="failure">{errors.title.message}</HelperText>
+        )}
+      </div>
 
-//           {/* Logo Upload - modified to match avatar pattern */}
-//           <div className="relative group">
-//             <Tooltip
-//               content={
-//                 <ul className="list-disc pl-4">
-//                   <li>Max file size: 5MB</li>
-//                   <li>Allowed file types: png, jpeg</li>
-//                 </ul>
-//               }
-//             >
-//               <Label htmlFor="logo">Company Logo</Label>
-//             </Tooltip>
+      {/* BIN */}
+      <div>
+        <Label htmlFor="bin">Business Identification Number</Label>
+        <TextInput
+          id="bin"
+          {...register("bin")}
+          color={errors.bin ? "failure" : "gray"}
+        />
+        <HelperText>{errors.bin?.message}</HelperText>
+      </div>
 
-//             <div className="flex flex-col gap-2">
-//               <FileInput
-//                 className="w-full"
-//                 id="logo"
-//                 accept="image/png, image/jpeg"
-//                 onChange={(e) => setLogoFile(e.target.files[0])}
-//               />
-//             </div>
-//           </div>
+      {/* Description */}
+      <div>
+        <Label htmlFor="description">Description</Label>
+        <Textarea
+          id="description"
+          rows={2}
+          {...register("description")}
+          color={errors.description ? "failure" : "gray"}
+        />
+        <HelperText>{errors.description?.message}</HelperText>
+      </div>
 
-//           {/* Industry */}
-//           <QInput
-//             label="Industry"
-//             value={watch("industry")}
-//             error={errors.industry?.message}
-//             items={industryList.value}
-//             searchField="title"
-//             displayAsHelper="description"
-//             onChange={(e) =>
-//               handleSearchSelect(
-//                 "industry",
-//                 e.target.value,
-//                 e.target.dataset.id
-//               )
-//             }
-//           />
+      {/* Logo Upload - modified to match avatar pattern */}
+      <div className="relative group">
+        <Tooltip
+          content={
+            <ul className="list-disc pl-4">
+              <li>Max file size: 5MB</li>
+              <li>Allowed file types: png, jpeg</li>
+            </ul>
+          }
+        >
+          <Label htmlFor="logo">Company Logo</Label>
+        </Tooltip>
 
-//           {/* Residence */}
-//           <QInput
-//             label="Residence"
-//             id="residence"
-//             name="residence"
-//             value={watch("residence")}
-//             error={errors.residence?.message}
-//             items={countryList.value}
-//             searchField="title"
-//             onChange={(e) =>
-//               handleSearchSelect(
-//                 "residence",
-//                 e.target.value,
-//                 e.target.dataset.id
-//               )
-//             }
-//           />
+        <div className="flex flex-col gap-2">
+          <FileInput
+            className="w-full"
+            id="logo"
+            accept="image/png, image/jpeg"
+            onChange={(e) => handleLogoUpload(e.target.files?.[0] || null)}
+          />
+        </div>
+      </div>
 
-//           {/* Phone */}
-//           <div>
-//             <Label htmlFor="phone">Phone</Label>
-//             <TextInput
-//               id="phone"
-//               {...register("phone")}
-//               color={errors.phone ? "failure" : "gray"}
-//             />
-//             <HelperText>{errors.phone?.message}</HelperText>
-//           </div>
+      {/* Country */}
+      <div>
+        <QInput
+          label="Country"
+          id="residence"
+          name="residence"
+          value={watch("residence")}
+          items={countries?.data || []}
+          searchField="title"
+          displayAsHelper="code"
+          error={errors.residenceId?.message}
+          onChange={(e) => {
+            setValue("residence", e.target.value);
+            setValue("residenceId", e.target.dataset.id || "");
+          }}
+        />
+      </div>
 
-//           {/* Website */}
-//           <div>
-//             <Label htmlFor="website">Website</Label>
-//             <TextInput
-//               id="website"
-//               {...register("website")}
-//               color={errors.website ? "failure" : "gray"}
-//             />
-//             <HelperText>{errors.website?.message}</HelperText>
-//           </div>
+      {/* Industry */}
+      <div>
+        <QInput
+          label="Industry"
+          id="industry"
+          name="industry"
+          value={watch("industry")}
+          items={industries?.data || []}
+          searchField="title"
+          error={errors.industryId?.message}
+          onChange={(e) => {
+            setValue("industry", e.target.value);
+            setValue("industryId", e.target.dataset.id || "");
+          }}
+        />
+      </div>
 
-//           {/* Address Section */}
-//           <div className="flex flex-col space-y-2">
-//             <div>
-//               <Label htmlFor="addressLine">Address line</Label>
-//               <TextInput
-//                 id="addressLine"
-//                 {...register("addressLine")}
-//                 color={errors.addressLine ? "failure" : "gray"}
-//               />
-//               <HelperText>{errors.addressLine?.message}</HelperText>
-//             </div>
+      {/* Phone */}
+      <div>
+        <Label htmlFor="phone">Phone</Label>
+        <TextInput
+          id="phone"
+          {...register("phone")}
+          color={errors.phone ? "failure" : "gray"}
+        />
+        <HelperText>{errors.phone?.message}</HelperText>
+      </div>
 
-//             <div className="flex flex-row space-x-2">
-//               <div className="w-1/2">
-//                 <Label htmlFor="state">State</Label>
-//                 <TextInput
-//                   id="state"
-//                   {...register("state")}
-//                   color={errors.state ? "failure" : "gray"}
-//                 />
-//                 <HelperText>{errors.state?.message}</HelperText>
-//               </div>
-//               <div className="w-1/2">
-//                 <Label htmlFor="city">City</Label>
-//                 <TextInput
-//                   id="city"
-//                   {...register("city")}
-//                   color={errors.city ? "failure" : "gray"}
-//                 />
-//                 <HelperText>{errors.city?.message}</HelperText>
-//               </div>
-//             </div>
+      {/* Website */}
+      <div>
+        <Label htmlFor="website">Website</Label>
+        <TextInput
+          id="website"
+          {...register("website")}
+          color={errors.website ? "failure" : "gray"}
+        />
+        <HelperText>{errors.website?.message}</HelperText>
+      </div>
 
-//             <div className="flex flex-row space-x-2">
-//               <div className="w-1/2">
-//                 <Label htmlFor="postcode">Postcode</Label>
-//                 <TextInput
-//                   id="postcode"
-//                   {...register("postcode")}
-//                   color={errors.postcode ? "failure" : "gray"}
-//                 />
-//                 <HelperText>{errors.postcode?.message}</HelperText>
-//               </div>
-//               <div className="w-1/2">
-//                 <Label htmlFor="country">Country</Label>
-//                 <TextInput
-//                   id="country"
-//                   {...register("country")}
-//                   color={errors.country ? "failure" : "gray"}
-//                 />
-//                 <HelperText>{errors.country?.message}</HelperText>
-//               </div>
-//             </div>
-//           </div>
+      {/* Address Section */}
+      <div className="flex flex-col space-y-2">
+        <div>
+          <Label htmlFor="addressLine">Address line</Label>
+          <TextInput
+            id="addressLine"
+            {...register("addressLine")}
+            color={errors.addressLine ? "failure" : "gray"}
+          />
+          <HelperText>{errors.addressLine?.message}</HelperText>
+        </div>
 
-//           <Button type="submit">{currentCompany ? "Update" : "Create"}</Button>
-//         </form>
-//       )}
-//     </>
-//   );
-// }
+        <div className="flex flex-row space-x-2">
+          <div className="w-1/2">
+            <Label htmlFor="state">State</Label>
+            <TextInput
+              id="state"
+              {...register("state")}
+              color={errors.state ? "failure" : "gray"}
+            />
+            <HelperText>{errors.state?.message}</HelperText>
+          </div>
+          <div className="w-1/2">
+            <Label htmlFor="city">City</Label>
+            <TextInput
+              id="city"
+              {...register("city")}
+              color={errors.city ? "failure" : "gray"}
+            />
+            <HelperText>{errors.city?.message}</HelperText>
+          </div>
+        </div>
+
+        <div className="flex flex-row space-x-2">
+          <div className="w-1/2">
+            <Label htmlFor="postcode">Postcode</Label>
+            <TextInput
+              id="postcode"
+              {...register("postcode")}
+              color={errors.postcode ? "failure" : "gray"}
+            />
+            <HelperText>{errors.postcode?.message}</HelperText>
+          </div>
+          <div className="w-1/2">
+            <Label htmlFor="country">Country</Label>
+            <TextInput
+              id="country"
+              {...register("country")}
+              color={errors.country ? "failure" : "gray"}
+            />
+            <HelperText>{errors.country?.message}</HelperText>
+          </div>
+        </div>
+      </div>
+
+      {/* Submit Button */}
+      <div className="flex justify-end">
+        <Button type="submit" color="dark" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Spinner size="sm" className="mr-2" />
+              {currentCompany ? "Updating" : "Creating"}...
+            </>
+          ) : (
+            <>{currentCompany ? "Update" : "Create"} Company</>
+          )}
+        </Button>
+      </div>
+    </form>
+  );
+}
