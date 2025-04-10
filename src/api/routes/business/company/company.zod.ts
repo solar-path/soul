@@ -41,6 +41,7 @@ export const createCompanySchema = insertCompanySchema.extend({
   industryID: z.string().uuid({ message: "Industry ID must be a valid UUID" }),
 }).omit({ 
   id: true,
+  slug: true, // Slug is generated on the server
   createdAt: true, 
   updatedAt: true 
 });

@@ -12,6 +12,7 @@ import { zValidator } from "@hono/zod-validator";
 import { db } from "@/api/database/database";
 import { loggedIn } from "@/api/utils/loggedIn";
 import { createApiResponse } from "@/api/utils/types";
+import { generateUniqueSlug } from "@/api/utils/slugify";
 import {
   companyTable,
   departmentTable,
@@ -31,6 +32,7 @@ import { idSchema } from "@/api/utils/id.zod";
 
 // Company routes
 export const companyRoutes = new Hono<{ Variables: Context }>()
+  // Get all companies
   .get("/companyList", loggedIn, async (c) => {
     try {
       const companies = await db.select().from(companyTable);
@@ -57,6 +59,7 @@ export const companyRoutes = new Hono<{ Variables: Context }>()
       );
     }
   })
+  // Get company by ID
   .get("/:id", loggedIn, zValidator("param", idSchema), async (c) => {
     try {
       const { id } = c.req.valid("param");
@@ -157,15 +160,20 @@ export const companyRoutes = new Hono<{ Variables: Context }>()
         // Define proper type based on company table structure
         let newCompany: (typeof companyTable.$inferSelect)[] = [];
         await db.transaction(async (tx) => {
+          // Generate unique slug for the company
+          const slug = await generateUniqueSlug(data.title);
+
           // Create new company
+          const companyId = crypto.randomUUID();
           newCompany = await tx
             .insert(companyTable)
             .values({
-              id: crypto.randomUUID(),
+              id: companyId,
               title: data.title,
               bin: data.bin,
               countryID: data.countryID,
               industryID: data.industryID,
+              slug: slug, // Add the generated slug
               logo: data.logo || null,
               contact: data.contact ? JSON.stringify(data.contact) : null,
               address: data.address ? JSON.stringify(data.address) : null,
@@ -310,6 +318,12 @@ export const companyRoutes = new Hono<{ Variables: Context }>()
           }
         }
 
+        // If title is being updated, generate a new slug
+        let slug = company[0].slug;
+        if (data.title !== undefined && data.title !== company[0].title) {
+          slug = await generateUniqueSlug(data.title, id);
+        }
+
         const updatedCompany = await db
           .update(companyTable)
           .set({
@@ -323,6 +337,7 @@ export const companyRoutes = new Hono<{ Variables: Context }>()
               data.industryID !== undefined
                 ? data.industryID
                 : company[0].industryID,
+            slug: slug, // Update the slug if title changed
             logo: data.logo !== undefined ? data.logo : company[0].logo,
             contact:
               data.contact !== undefined

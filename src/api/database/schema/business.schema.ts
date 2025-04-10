@@ -30,6 +30,7 @@ export const companyTable = sqliteTable("business_company", {
   bin: text("bin").notNull(),
   countryID: text("country_id").notNull(),
   industryID: text("industry_id").notNull(),
+  slug: text("slug").notNull().unique(),
   logo: text("logo"),
   contact: text("contact", { mode: "json" }), // Store as JSON string
   address: text("address", { mode: "json" }), // Store as JSON string

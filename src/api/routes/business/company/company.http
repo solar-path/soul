@@ -2,7 +2,7 @@
 @authUrl = http://localhost:3000/api/auth
 
 # After signing in, copy the auth_session cookie value from the response and paste it here
-@authCookie = buieeusbbqo4jbiswltcvpideadankxcsuq2bys7
+@authCookie = b773b6htdbe4mzzvmlrtlszdjezts5jv4e6r3yjc
 
 # After creating a company, copy its ID from the response and paste it here
 @companyId = da1fdf2d-6787-4a15-8c1a-66a74558e3f0
@@ -37,15 +37,15 @@ Content-Type: application/json
 Cookie: auth_session={{authCookie}}; Path=/; HttpOnly; SameSite=Lax
 
 {
-    "title": "Test Company Ltd",
+    "title": "Stratum, llc",
     "bin": "123456789",
-    "countryID": "237b9ca3-9ae2-41f0-85cb-e71dd83e4bf5",
-    "industryID": "eae77c5f-9ecb-4c4b-b345-97a916e67e87",
+    "countryID": "211f9aa2-94ff-4f75-809e-cb05ddbe3452",
+    "industryID": "f9b4d289-2559-4d9d-9bdd-55b85dec8d77",
     "logo": "https://example.com/logo.png",
     "contact": {
         "phone": "+1234567890",
-        "email": "contact@testcompany.com",
-        "website": "https://testcompany.com"
+        "email": "contact@stratumllc.com",
+        "website": "https://stratumllc.com"
     },
     "address": {
         "street": "123 Test Street",
