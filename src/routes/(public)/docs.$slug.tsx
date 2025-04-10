@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
 import { QSidebar, QSidebarProps } from "@/ui/QSidebar.ui";
 import ReactMarkdown from "react-markdown";
-import { QNotFound } from "@/ui/QNotFound.ui";
+import { QPageNotFound } from "@/ui/QNotFound.ui";
 
 // Define the route
 export const Route = createFileRoute("/(public)/docs/$slug")({
@@ -278,9 +278,9 @@ function DocsPage() {
     );
   };
 
-  // If the slug doesn't exist, show the QNotFound component
+  // If the slug doesn't exist, show the QPageNotFound component
   if (notFound) {
-    return <QNotFound />;
+    return <QPageNotFound />;
   }
 
   return (

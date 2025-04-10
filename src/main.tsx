@@ -8,7 +8,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createTheme, Spinner, ThemeProvider } from "flowbite-react";
 import { QueryClient } from "@tanstack/react-query";
-import { QNotFound } from "./ui/QNotFound.ui";
+import { QPageNotFound } from "./ui/QNotFound.ui";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,7 +33,7 @@ const router = createRouter({
       </div>
     );
   },
-  defaultNotFoundComponent: QNotFound,
+  defaultNotFoundComponent: QPageNotFound,
 });
 
 // Register the router instance for type safety

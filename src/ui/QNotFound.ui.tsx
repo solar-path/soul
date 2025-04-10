@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Button, Card } from "flowbite-react";
 import { HiHome } from "react-icons/hi";
 
-export function QNotFound() {
+export function QPageNotFound() {
   return (
     <div className="flex min-h-screen w-full items-center justify-center p-4">
       <Card className="max-w-md">
