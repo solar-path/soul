@@ -20,7 +20,7 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<ResetPassword>({
     defaultValues: {
       token,
@@ -59,6 +59,8 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
 
   const resetPasswordMutation = useMutation({
     mutationFn: async (data: ResetPassword) => {
+      // Add artificial delay to prevent double submissions even with fast network
+      await new Promise((resolve) => setTimeout(resolve, 300));
       const response = await trpc.auth["reset-password"].$post({
         json: data,
       });
@@ -127,9 +129,9 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
       <Button
         type="submit"
         color="dark"
-        disabled={resetPasswordMutation.isPending}
+        disabled={isSubmitting || resetPasswordMutation.isPending}
       >
-        {resetPasswordMutation.isPending
+        {isSubmitting || resetPasswordMutation.isPending
           ? "Processing..."
           : "Reset Password"}
       </Button>

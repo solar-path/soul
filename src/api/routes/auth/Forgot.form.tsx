@@ -11,7 +11,7 @@ export default function ForgotPasswordForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset,
   } = useForm<Forgot>({
     defaultValues: {
@@ -22,6 +22,8 @@ export default function ForgotPasswordForm() {
 
   const forgotPasswordMutation = useMutation({
     mutationFn: async (data: Forgot) => {
+      // Add artificial delay to prevent double submissions even with fast network
+      await new Promise((resolve) => setTimeout(resolve, 300));
       const response = await trpc.auth.forgot.$post({
         json: data,
       });
@@ -66,9 +68,9 @@ export default function ForgotPasswordForm() {
       <Button
         type="submit"
         color="dark"
-        disabled={forgotPasswordMutation.isPending}
+        disabled={isSubmitting || forgotPasswordMutation.isPending}
       >
-        {forgotPasswordMutation.isPending
+        {isSubmitting || forgotPasswordMutation.isPending
           ? "Processing..."
           : "Send instructions"}
       </Button>

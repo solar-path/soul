@@ -17,7 +17,7 @@ export default function SignInForm() {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SignIn>({
     defaultValues: {
       email: "",
@@ -36,6 +36,8 @@ export default function SignInForm() {
 
   const signInMutation = useMutation({
     mutationFn: async (data: SignIn) => {
+      // Add artificial delay to prevent double submissions even with fast network
+      await new Promise((resolve) => setTimeout(resolve, 300));
       const response = await trpc["auth"].signin.$post({
         json: data,
       });
@@ -50,21 +52,21 @@ export default function SignInForm() {
       setCurrentUser(result.data);
       reset();
       closeDrawer();
-
       // Show success message
       showFlashMessage(
         "success",
         `${result.data?.email} successfully signed in`
       );
-
       // Navigate to company page
       navigate({ to: "/company" });
+      return null;
     },
     onError: (error) => {
       showFlashMessage(
         "fail",
         error instanceof Error ? error.message : "Failed to sign in"
       );
+      return null;
     },
   });
 
@@ -110,8 +112,12 @@ export default function SignInForm() {
         </div>
       </div>
 
-      <Button type="submit" color="dark">
-        Login
+      <Button
+        type="submit"
+        color="dark"
+        disabled={isSubmitting || signInMutation.isPending}
+      >
+        {isSubmitting || signInMutation.isPending ? "Signing in..." : "Login"}
       </Button>
 
       <ul>

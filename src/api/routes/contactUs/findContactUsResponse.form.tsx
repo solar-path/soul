@@ -14,11 +14,12 @@ import { useState } from "react";
 
 export default function FindContactUsResponse() {
   const [record, setRecord] = useState<RespondToContactUs | null>(null);
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
       id: "",
@@ -28,6 +29,10 @@ export default function FindContactUsResponse() {
 
   const handletrackContactUs = async (data: TrackContactUs) => {
     try {
+      setIsSubmittingForm(true);
+      // Add artificial delay to prevent double submissions even with fast network
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      
       const response = await trpc["contact-us"].find[":id"].$get({
         param: {
           id: data.id,
@@ -48,6 +53,8 @@ export default function FindContactUsResponse() {
         "fail",
         error instanceof Error ? error.message : "Unknown error"
       );
+    } finally {
+      setIsSubmittingForm(false);
     }
   };
 
@@ -67,8 +74,12 @@ export default function FindContactUsResponse() {
           <HelperText>{errors.id?.message}</HelperText>
         </div>
 
-        <Button type="submit" color="dark">
-          Find
+        <Button 
+          type="submit" 
+          color="dark"
+          disabled={isSubmitting || isSubmittingForm}
+        >
+          {isSubmitting || isSubmittingForm ? "Searching..." : "Find"}
         </Button>
 
         <p>

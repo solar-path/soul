@@ -63,6 +63,7 @@
 ## UI IMPLEMENTATION
 
 - All forms must be implemented using React Hook Form
+- All forms must have proper loading states and prevent double submissions
 - Forms should be placed in right-hand-side Drawer components
 - Drawers cannot be closed until the form is submitted or cancelled
 - Drawers may contain clickable references to other forms

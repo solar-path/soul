@@ -13,7 +13,7 @@ export default function SignUpForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset,
   } = useForm<SignUp>({
     defaultValues: {
@@ -34,6 +34,8 @@ export default function SignUpForm() {
 
   const signUpMutation = useMutation({
     mutationFn: async (data: SignUp) => {
+      // Add artificial delay to prevent double submissions even with fast network
+      await new Promise((resolve) => setTimeout(resolve, 300));
       const response = await trpc["auth"].signup.$post({
         json: data,
       });
@@ -144,8 +146,12 @@ export default function SignUpForm() {
         )}
       </div>
 
-      <Button type="submit" color="dark">
-        Register
+      <Button 
+        type="submit" 
+        color="dark"
+        disabled={isSubmitting || signUpMutation.isPending}
+      >
+        {isSubmitting || signUpMutation.isPending ? "Registering..." : "Register"}
       </Button>
       <ul>
         <li>

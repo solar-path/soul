@@ -9,13 +9,14 @@ import { closeDrawer, fillDrawer } from "@/ui/QDrawer/QDrawer.store";
 import { trpc } from "@/utils/trpc";
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
 import FindContactUsResponse from "@/api/routes/contactUs/findContactUsResponse.form";
+import { useState } from "react";
 
 export default function ContactUsForm() {
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
       email: "",
@@ -24,18 +25,28 @@ export default function ContactUsForm() {
     resolver: zodResolver(contactUsSchema),
   });
 
-  const handleInquiry = async (data: ContactUs) => {
-    const response = await trpc["contact-us"].new.$post({
-      json: data,
-    });
-    const result = await response.json();
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
 
-    if (result.success) {
-      closeDrawer();
-      reset();
-      showFlashMessage("success", result.message);
-    } else {
-      showFlashMessage("fail", result.message);
+  const handleInquiry = async (data: ContactUs) => {
+    try {
+      setIsSubmittingForm(true);
+      // Add artificial delay to prevent double submissions even with fast network
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      
+      const response = await trpc["contact-us"].new.$post({
+        json: data,
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        closeDrawer();
+        reset();
+        showFlashMessage("success", result.message);
+      } else {
+        showFlashMessage("fail", result.message);
+      }
+    } finally {
+      setIsSubmittingForm(false);
     }
   };
   return (
@@ -68,8 +79,12 @@ export default function ContactUsForm() {
           </div>
           <HelperText>{errors.message?.message}</HelperText>
         </div>
-        <Button type="submit" color="dark">
-          Submit
+        <Button 
+          type="submit" 
+          color="dark"
+          disabled={isSubmitting || isSubmittingForm}
+        >
+          {isSubmitting || isSubmittingForm ? "Submitting..." : "Submit"}
         </Button>
 
         <p className="text-sm">
