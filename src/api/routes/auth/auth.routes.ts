@@ -7,6 +7,9 @@ import { db } from "@/api/database/database";
 import { createApiResponse } from "@/api/utils/types";
 import { eq } from "drizzle-orm";
 import { loggedIn } from "@/api/utils/loggedIn";
+import { mkdir, writeFile } from "node:fs/promises";
+import { join } from "node:path";
+import { existsSync } from "node:fs";
 import {
   activateSchema,
   forgotSchema,
@@ -356,4 +359,84 @@ export const authRouter = new Hono<Context>()
         })
       );
     }
-  );
+  )
+  .post("/uploadAvatar", loggedIn, async (c) => {
+    try {
+      const user = c.get("user")!;
+
+      // Get the file from the request
+      const formData = await c.req.formData();
+      const avatarFile = formData.get("avatar");
+
+      if (!avatarFile || !(avatarFile instanceof File)) {
+        return c.json(
+          createApiResponse(false, "No avatar file provided", null),
+          400
+        );
+      }
+
+      // Validate file type
+      const validTypes = ["image/jpeg", "image/png", "image/jpg"];
+      if (!validTypes.includes(avatarFile.type)) {
+        return c.json(
+          createApiResponse(
+            false,
+            "Invalid file type. Only JPG and PNG are allowed",
+            null
+          ),
+          400
+        );
+      }
+
+      // Validate file size (max 2MB)
+      const maxSize = 2 * 1024 * 1024; // 2MB
+      if (avatarFile.size > maxSize) {
+        return c.json(
+          createApiResponse(false, "File too large. Maximum size is 2MB", null),
+          400
+        );
+      }
+
+      // Create uploads directory if it doesn't exist
+      const uploadsDir = join(process.cwd(), "public", "uploads", "avatars");
+      if (!existsSync(uploadsDir)) {
+        await mkdir(uploadsDir, { recursive: true });
+      }
+
+      // Generate a unique filename
+      const fileExtension = avatarFile.type.split("/")[1];
+      const fileName = `${user.id}-${Date.now()}.${fileExtension}`;
+      const filePath = join(uploadsDir, fileName);
+
+      // Convert File to ArrayBuffer and then to Buffer
+      const arrayBuffer = await avatarFile.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      // Write the file to disk
+      await writeFile(filePath, buffer);
+
+      // Generate the URL for the avatar
+      const avatarUrl = `/uploads/avatars/${fileName}`;
+
+      // Update the user's avatar in the database
+      await db
+        .update(userTable)
+        .set({
+          avatar: avatarUrl,
+          updatedAt: new Date().toISOString(),
+        })
+        .where(eq(userTable.id, user.id));
+
+      return c.json(
+        createApiResponse(true, "Avatar uploaded successfully", {
+          avatarUrl,
+        })
+      );
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
+      return c.json(
+        createApiResponse(false, "Failed to upload avatar", null),
+        500
+      );
+    }
+  });

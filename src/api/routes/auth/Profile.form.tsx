@@ -1,8 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Label, TextInput, Button, Select, Spinner } from "flowbite-react";
+import {
+  Label,
+  TextInput,
+  Button,
+  Select,
+  Spinner,
+  FileInput,
+  Avatar,
+} from "flowbite-react";
 import { closeDrawer } from "@/ui/QDrawer/QDrawer.store";
 import { useUser, useSetUser } from "@/utils/client.store";
 import { useMutation } from "@tanstack/react-query";
@@ -33,7 +41,9 @@ type AccountFormValues = z.infer<typeof accountSchema>;
 export default function ProfileForm() {
   const { data: currentUser, isLoading } = useUser();
   const { invalidateUser } = useSetUser();
-  // No need for upload state as it's handled elsewhere
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   // Parse contact and address if they exist
   const contact = currentUser?.contact
@@ -51,7 +61,7 @@ export default function ProfileForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
   } = useForm<AccountFormValues>({
     resolver: zodResolver(accountSchema),
@@ -98,15 +108,52 @@ export default function ProfileForm() {
     address?.country,
   ]);
 
+  // Function to handle avatar upload
+  const handleAvatarUpload = async (): Promise<string | null> => {
+    if (!avatarFile) return currentUser?.avatar || null;
+
+    setIsUploading(true);
+    try {
+      // Create a FormData object to send the file
+      const formData = new FormData();
+      formData.append("avatar", avatarFile);
+
+      // Upload the avatar file
+      const response = await fetch("/api/auth/uploadAvatar", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+      if (!result.success) {
+        throw new Error(result.message || "Failed to upload avatar");
+      }
+
+      return result.data.avatarUrl;
+    } catch (error) {
+      console.error("Avatar upload error:", error);
+      showFlashMessage(
+        "fail",
+        error instanceof Error ? error.message : "Failed to upload avatar"
+      );
+      return currentUser?.avatar || null;
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   // Update profile mutation
   const updateProfileMutation = useMutation({
     mutationFn: async (data: AccountFormValues) => {
+      // Upload avatar if a new one is selected
+      const avatarUrl = await handleAvatarUpload();
+
       // Prepare the data for the API
       const payload = {
         fullname: data.fullname,
         gender: data.gender,
         dob: data.dob,
-        avatar: data.avatar,
+        avatar: avatarUrl || undefined, // Use undefined instead of null to match the expected type
         contact: JSON.stringify({
           phone: data.phone,
         }),
@@ -137,23 +184,25 @@ export default function ProfileForm() {
       } else {
         showFlashMessage("fail", data.message || "Failed to update profile");
       }
+      setIsUploading(false);
     },
     onError: (error) => {
       showFlashMessage(
         "fail",
-        error instanceof Error ? error.message : "An error occurred"
+        error instanceof Error ? error.message : "Failed to update profile"
       );
+      setIsUploading(false);
     },
   });
 
   // Handle form submission
-  const onSubmit = (data: AccountFormValues) => {
+  const onSubmit = async (data: AccountFormValues) => {
     updateProfileMutation.mutate(data);
   };
 
-  if (isLoading) {
+  if (isLoading || isUploading) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className="flex justify-center items-center h-full">
         <Spinner size="xl" />
       </div>
     );
@@ -161,6 +210,46 @@ export default function ProfileForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <h3 className="font-semibold mb-2">Profile Picture</h3>
+      <div className="mb-4">
+        <div className="flex items-center space-x-4 mb-2">
+          <Avatar
+            img={avatarPreview || currentUser?.avatar || undefined}
+            rounded
+            size="lg"
+            alt="User avatar"
+            placeholderInitials={
+              currentUser?.fullname?.charAt(0).toUpperCase() || "U"
+            }
+          />
+          <div className="ml-4">
+            <FileInput
+              id="avatar"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  setAvatarFile(file);
+                  // Create a preview URL
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    setAvatarPreview(reader.result as string);
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              color={errors.avatar ? "failure" : "gray"}
+              helper-text={
+                errors.avatar?.message ||
+                "Upload a profile picture (JPG, PNG, max 2MB)"
+              }
+            />
+          </div>
+        </div>
+      </div>
+
+      <h3 className="font-semibold mb-2">General Information</h3>
+
       <div>
         <Label htmlFor="fullname">Full Name</Label>
         <TextInput
@@ -215,7 +304,7 @@ export default function ProfileForm() {
         />
       </div>
 
-      <div className="border-t pt-4 mt-4">
+      <div className="pt-4 mt-4">
         <h3 className="font-semibold mb-2">Address Information</h3>
         <div>
           <Label htmlFor="street">Street</Label>
@@ -274,16 +363,16 @@ export default function ProfileForm() {
         <Button
           color="light"
           onClick={() => closeDrawer()}
-          disabled={isSubmitting || updateProfileMutation.isPending}
+          disabled={isUploading || updateProfileMutation.isPending}
         >
           Cancel
         </Button>
         <Button
           type="submit"
           color="dark"
-          disabled={isSubmitting || updateProfileMutation.isPending}
+          disabled={isUploading || updateProfileMutation.isPending}
         >
-          {isSubmitting || updateProfileMutation.isPending
+          {isUploading || updateProfileMutation.isPending
             ? "Updating..."
             : "Update Profile"}
         </Button>
