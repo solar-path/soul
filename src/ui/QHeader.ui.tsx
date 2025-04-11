@@ -77,7 +77,7 @@ export default function QHeader() {
           >
             <DropdownHeader>
               <span className="block text-sm">
-                {currentUser?.fullname ?? "undefined"}
+                {currentUser?.fullname ?? "not provided"}
               </span>
               <span className="block truncate text-sm font-medium">
                 {currentUser?.email ?? "no email"}

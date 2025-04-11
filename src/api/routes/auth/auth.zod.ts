@@ -51,3 +51,14 @@ export const resetPasswordSchema = z.object({
 });
 
 export type ResetPassword = z.infer<typeof resetPasswordSchema>;
+
+export const updateProfileSchema = z.object({
+  fullname: z.string().min(1, "Name is required"),
+  gender: z.string().optional(),
+  dob: z.string().optional(),
+  avatar: z.string().optional(),
+  contact: z.string().optional(),
+  address: z.string().optional(),
+});
+
+export type UpdateProfile = z.infer<typeof updateProfileSchema>;

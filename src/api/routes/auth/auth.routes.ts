@@ -13,6 +13,7 @@ import {
   resetPasswordSchema,
   signInSchema,
   signUpSchema,
+  updateProfileSchema,
 } from "./auth.zod.ts";
 import {
   sendPasswordResetEmail,
@@ -296,5 +297,46 @@ export const authRouter = new Hono<Context>()
         .where(eq(userTable.id, existingUser.id));
 
       return c.json(createApiResponse(true, "Password reset successfully"));
+    }
+  )
+  .post(
+    "/updateProfile",
+    loggedIn,
+    zValidator("json", updateProfileSchema),
+    async (c) => {
+      const user = c.get("user")!;
+      const { fullname, gender, dob, avatar, contact, address } =
+        c.req.valid("json");
+
+      // Update user profile
+      await db
+        .update(userTable)
+        .set({
+          fullname,
+          gender,
+          dob,
+          avatar,
+          contact,
+          address,
+          updatedAt: new Date().toISOString(),
+        })
+        .where(eq(userTable.id, user.id));
+
+      // Return updated user data
+      return c.json(
+        createApiResponse(true, "Profile updated successfully", {
+          id: user.id,
+          email: user.email,
+          fullname,
+          avatar,
+          gender,
+          dob,
+          contact,
+          address,
+          // Use existing values from the database for these fields
+          // instead of trying to access them from the user object
+          updatedAt: new Date().toISOString(),
+        })
+      );
     }
   );
