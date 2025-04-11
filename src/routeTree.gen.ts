@@ -18,10 +18,10 @@ import { Route as CompanySettingsIndexImport } from './routes/company/settings/i
 import { Route as CompanyHrmIndexImport } from './routes/company/hrm/index'
 import { Route as CompanyErmIndexImport } from './routes/company/erm/index'
 import { Route as CompanyAddressBookIndexImport } from './routes/company/addressBook/index'
-import { Route as AuthProfileIndexImport } from './routes/auth/profile/index'
 import { Route as CompanyUserManagementUserImport } from './routes/company/userManagement/user'
 import { Route as AuthVerifyTokenImport } from './routes/auth/verify.$token'
 import { Route as AuthResetTokenImport } from './routes/auth/reset.$token'
+import { Route as AuthProfileIdImport } from './routes/auth/profile.$id'
 import { Route as publicDocsSlugImport } from './routes/(public)/docs.$slug'
 import { Route as CompanyHrmPositionIndexImport } from './routes/company/hrm/position/index'
 import { Route as CompanyHrmEmployeeIndexImport } from './routes/company/hrm/employee/index'
@@ -71,12 +71,6 @@ const CompanyAddressBookIndexRoute = CompanyAddressBookIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthProfileIndexRoute = AuthProfileIndexImport.update({
-  id: '/auth/profile/',
-  path: '/auth/profile/',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const CompanyUserManagementUserRoute = CompanyUserManagementUserImport.update({
   id: '/company/userManagement/user',
   path: '/company/userManagement/user',
@@ -92,6 +86,12 @@ const AuthVerifyTokenRoute = AuthVerifyTokenImport.update({
 const AuthResetTokenRoute = AuthResetTokenImport.update({
   id: '/auth/reset/$token',
   path: '/auth/reset/$token',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthProfileIdRoute = AuthProfileIdImport.update({
+  id: '/auth/profile/$id',
+  path: '/auth/profile/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -151,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publicDocsSlugImport
       parentRoute: typeof rootRoute
     }
+    '/auth/profile/$id': {
+      id: '/auth/profile/$id'
+      path: '/auth/profile/$id'
+      fullPath: '/auth/profile/$id'
+      preLoaderRoute: typeof AuthProfileIdImport
+      parentRoute: typeof rootRoute
+    }
     '/auth/reset/$token': {
       id: '/auth/reset/$token'
       path: '/auth/reset/$token'
@@ -170,13 +177,6 @@ declare module '@tanstack/react-router' {
       path: '/company/userManagement/user'
       fullPath: '/company/userManagement/user'
       preLoaderRoute: typeof CompanyUserManagementUserImport
-      parentRoute: typeof rootRoute
-    }
-    '/auth/profile/': {
-      id: '/auth/profile/'
-      path: '/auth/profile'
-      fullPath: '/auth/profile'
-      preLoaderRoute: typeof AuthProfileIndexImport
       parentRoute: typeof rootRoute
     }
     '/company/addressBook/': {
@@ -238,10 +238,10 @@ export interface FileRoutesByFullPath {
   '/': typeof publicIndexRoute
   '/company': typeof CompanyIndexRoute
   '/docs/$slug': typeof publicDocsSlugRoute
+  '/auth/profile/$id': typeof AuthProfileIdRoute
   '/auth/reset/$token': typeof AuthResetTokenRoute
   '/auth/verify/$token': typeof AuthVerifyTokenRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
-  '/auth/profile': typeof AuthProfileIndexRoute
   '/company/addressBook': typeof CompanyAddressBookIndexRoute
   '/company/erm': typeof CompanyErmIndexRoute
   '/company/hrm': typeof CompanyHrmIndexRoute
@@ -256,10 +256,10 @@ export interface FileRoutesByTo {
   '/': typeof publicIndexRoute
   '/company': typeof CompanyIndexRoute
   '/docs/$slug': typeof publicDocsSlugRoute
+  '/auth/profile/$id': typeof AuthProfileIdRoute
   '/auth/reset/$token': typeof AuthResetTokenRoute
   '/auth/verify/$token': typeof AuthVerifyTokenRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
-  '/auth/profile': typeof AuthProfileIndexRoute
   '/company/addressBook': typeof CompanyAddressBookIndexRoute
   '/company/erm': typeof CompanyErmIndexRoute
   '/company/hrm': typeof CompanyHrmIndexRoute
@@ -275,10 +275,10 @@ export interface FileRoutesById {
   '/(public)/': typeof publicIndexRoute
   '/company/': typeof CompanyIndexRoute
   '/(public)/docs/$slug': typeof publicDocsSlugRoute
+  '/auth/profile/$id': typeof AuthProfileIdRoute
   '/auth/reset/$token': typeof AuthResetTokenRoute
   '/auth/verify/$token': typeof AuthVerifyTokenRoute
   '/company/userManagement/user': typeof CompanyUserManagementUserRoute
-  '/auth/profile/': typeof AuthProfileIndexRoute
   '/company/addressBook/': typeof CompanyAddressBookIndexRoute
   '/company/erm/': typeof CompanyErmIndexRoute
   '/company/hrm/': typeof CompanyHrmIndexRoute
@@ -295,10 +295,10 @@ export interface FileRouteTypes {
     | '/'
     | '/company'
     | '/docs/$slug'
+    | '/auth/profile/$id'
     | '/auth/reset/$token'
     | '/auth/verify/$token'
     | '/company/userManagement/user'
-    | '/auth/profile'
     | '/company/addressBook'
     | '/company/erm'
     | '/company/hrm'
@@ -312,10 +312,10 @@ export interface FileRouteTypes {
     | '/'
     | '/company'
     | '/docs/$slug'
+    | '/auth/profile/$id'
     | '/auth/reset/$token'
     | '/auth/verify/$token'
     | '/company/userManagement/user'
-    | '/auth/profile'
     | '/company/addressBook'
     | '/company/erm'
     | '/company/hrm'
@@ -329,10 +329,10 @@ export interface FileRouteTypes {
     | '/(public)/'
     | '/company/'
     | '/(public)/docs/$slug'
+    | '/auth/profile/$id'
     | '/auth/reset/$token'
     | '/auth/verify/$token'
     | '/company/userManagement/user'
-    | '/auth/profile/'
     | '/company/addressBook/'
     | '/company/erm/'
     | '/company/hrm/'
@@ -348,10 +348,10 @@ export interface RootRouteChildren {
   publicIndexRoute: typeof publicIndexRoute
   CompanyIndexRoute: typeof CompanyIndexRoute
   publicDocsSlugRoute: typeof publicDocsSlugRoute
+  AuthProfileIdRoute: typeof AuthProfileIdRoute
   AuthResetTokenRoute: typeof AuthResetTokenRoute
   AuthVerifyTokenRoute: typeof AuthVerifyTokenRoute
   CompanyUserManagementUserRoute: typeof CompanyUserManagementUserRoute
-  AuthProfileIndexRoute: typeof AuthProfileIndexRoute
   CompanyAddressBookIndexRoute: typeof CompanyAddressBookIndexRoute
   CompanyErmIndexRoute: typeof CompanyErmIndexRoute
   CompanyHrmIndexRoute: typeof CompanyHrmIndexRoute
@@ -366,10 +366,10 @@ const rootRouteChildren: RootRouteChildren = {
   publicIndexRoute: publicIndexRoute,
   CompanyIndexRoute: CompanyIndexRoute,
   publicDocsSlugRoute: publicDocsSlugRoute,
+  AuthProfileIdRoute: AuthProfileIdRoute,
   AuthResetTokenRoute: AuthResetTokenRoute,
   AuthVerifyTokenRoute: AuthVerifyTokenRoute,
   CompanyUserManagementUserRoute: CompanyUserManagementUserRoute,
-  AuthProfileIndexRoute: AuthProfileIndexRoute,
   CompanyAddressBookIndexRoute: CompanyAddressBookIndexRoute,
   CompanyErmIndexRoute: CompanyErmIndexRoute,
   CompanyHrmIndexRoute: CompanyHrmIndexRoute,
@@ -393,10 +393,10 @@ export const routeTree = rootRoute
         "/(public)/",
         "/company/",
         "/(public)/docs/$slug",
+        "/auth/profile/$id",
         "/auth/reset/$token",
         "/auth/verify/$token",
         "/company/userManagement/user",
-        "/auth/profile/",
         "/company/addressBook/",
         "/company/erm/",
         "/company/hrm/",
@@ -418,6 +418,9 @@ export const routeTree = rootRoute
     "/(public)/docs/$slug": {
       "filePath": "(public)/docs.$slug.tsx"
     },
+    "/auth/profile/$id": {
+      "filePath": "auth/profile.$id.tsx"
+    },
     "/auth/reset/$token": {
       "filePath": "auth/reset.$token.tsx"
     },
@@ -426,9 +429,6 @@ export const routeTree = rootRoute
     },
     "/company/userManagement/user": {
       "filePath": "company/userManagement/user.tsx"
-    },
-    "/auth/profile/": {
-      "filePath": "auth/profile/index.tsx"
     },
     "/company/addressBook/": {
       "filePath": "company/addressBook/index.tsx"

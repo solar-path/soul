@@ -62,3 +62,9 @@ export const updateProfileSchema = z.object({
 });
 
 export type UpdateProfile = z.infer<typeof updateProfileSchema>;
+
+export const getUserByIdSchema = z.object({
+  id: z.string().uuid("Invalid user ID format"),
+});
+
+export type GetUserById = z.infer<typeof getUserByIdSchema>;

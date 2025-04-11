@@ -4,13 +4,45 @@ import { Button, Spinner } from "flowbite-react";
 import { fillDrawer } from "@/ui/QDrawer/QDrawer.store";
 import { useUser } from "@/utils/client.store";
 import ProfileForm from "@/api/routes/auth/Profile.form";
+import { useQuery } from "@tanstack/react-query";
+import { trpc } from "@/utils/trpc";
 
-export const Route = createFileRoute("/auth/profile/")({
+export const Route = createFileRoute("/auth/profile/$id")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { data: user, isLoading } = useUser();
+  const { id } = Route.useParams();
+  const { data: currentUser, isLoading: isCurrentUserLoading } = useUser();
+
+  // Fetch user data by ID if it's not the current user
+  const { data: profileData, isLoading: isProfileLoading } = useQuery({
+    queryKey: ["user", id],
+    queryFn: async () => {
+      // If the ID matches the current user, use that data
+      if (currentUser && id === currentUser.id) {
+        return currentUser;
+      }
+
+      // Otherwise fetch the user by ID
+      const response = await trpc.auth.getUserById.$post({
+        json: { id },
+      });
+
+      const result = await response.json();
+      if (!result.success) {
+        throw new Error(result.message || "Failed to fetch user profile");
+      }
+
+      return result.data;
+    },
+    // Only run this query if we have the current user data to compare with
+    enabled: !isCurrentUserLoading,
+  });
+
+  const isLoading = isCurrentUserLoading || isProfileLoading;
+  const user = profileData;
+  const isOwnProfile = currentUser && id === currentUser.id;
 
   if (isLoading) {
     return (
@@ -28,7 +60,7 @@ function RouteComponent() {
       <div className="container mx-auto py-8 px-4">
         <h1 className="text-3xl font-bold mb-6">Profile</h1>
         <div className="text-center p-8 bg-gray-50 rounded-lg shadow">
-          <p className="text-lg">Please sign in to view your profile</p>
+          <p className="text-lg">User profile not found</p>
         </div>
       </div>
     );
@@ -49,7 +81,9 @@ function RouteComponent() {
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-6">Profile</h1>
+      <h1 className="text-3xl font-bold mb-6">
+        {isOwnProfile ? "My Profile" : `${user.fullname || "User"}'s Profile`}
+      </h1>
       <div className="w-full max-w-4xl mx-auto">
         {/* Header with Avatar and Name */}
         <div className="p-8 rounded-t-lg">
@@ -83,16 +117,18 @@ function RouteComponent() {
             <div>
               <div className="flex justify-between items-center mb-4 group">
                 <p className="text-lg font-semibold">PERSONAL INFORMATION</p>
-                <Button
-                  color="dark"
-                  size="sm"
-                  onClick={() =>
-                    fillDrawer(() => <ProfileForm />, "Edit Profile")
-                  }
-                  aria-label="Edit profile"
-                >
-                  <FaEdit className="w-5 h-5flex-shrink-0" />
-                </Button>
+                {isOwnProfile && (
+                  <Button
+                    color="dark"
+                    size="sm"
+                    onClick={() =>
+                      fillDrawer(() => <ProfileForm />, "Edit Profile")
+                    }
+                    aria-label="Edit profile"
+                  >
+                    <FaEdit className="w-5 h-5flex-shrink-0" />
+                  </Button>
+                )}
               </div>
 
               <div className="space-y-3">

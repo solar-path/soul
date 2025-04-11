@@ -17,6 +17,7 @@ import {
   signInSchema,
   signUpSchema,
   updateProfileSchema,
+  getUserByIdSchema,
 } from "./auth.zod.ts";
 import {
   sendPasswordResetEmail,
@@ -436,6 +437,35 @@ export const authRouter = new Hono<Context>()
       console.error("Error uploading avatar:", error);
       return c.json(
         createApiResponse(false, "Failed to upload avatar", null),
+        500
+      );
+    }
+  })
+  .post("/getUserById", zValidator("json", getUserByIdSchema), async (c) => {
+    try {
+      const { id } = c.req.valid("json");
+      
+      // Find user by ID
+      const user = await findUserBy("id", id);
+      
+      if (!user) {
+        return c.json(
+          createApiResponse(false, "User not found", null),
+          404
+        );
+      }
+      
+      // Remove sensitive information by destructuring and only keeping safe data
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, token, tokenExpire, ...safeUserData } = user;
+      
+      return c.json(
+        createApiResponse(true, "User found", safeUserData)
+      );
+    } catch (error) {
+      console.error("Error fetching user by ID:", error);
+      return c.json(
+        createApiResponse(false, "Failed to fetch user", null),
         500
       );
     }

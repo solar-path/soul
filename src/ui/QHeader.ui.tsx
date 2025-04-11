@@ -83,7 +83,7 @@ export default function QHeader() {
                 {currentUser?.email ?? "no email"}
               </span>
             </DropdownHeader>
-            <DropdownItem as={Link} href="/auth/profile">
+            <DropdownItem as={Link} href={`/auth/profile/${currentUser?.id}`}>
               User account
             </DropdownItem>
             <DropdownDivider />
