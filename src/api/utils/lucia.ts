@@ -15,6 +15,11 @@ export const lucia = new Lucia(adapter, {
       id: att.id,
       fullname: att.fullname,
       avatar: att.avatar,
+      gender: att.gender,
+      dob: att.dob,
+      contact: att.contact,
+      address: att.address,
+      isVerified: att.isVerified,
     };
   },
 });

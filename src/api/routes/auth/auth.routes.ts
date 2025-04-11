@@ -172,6 +172,14 @@ export const authRouter = new Hono<Context>()
         fullname: existingUser.fullname,
         avatar: existingUser.avatar,
         id: existingUser.id,
+        gender: existingUser.gender || null,
+        dob: existingUser.dob || null,
+        contact: existingUser.contact || null,
+        address: existingUser.address || null,
+        // Add the missing required properties
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        isVerified: Boolean(existingUser.isVerified),
       })
     );
   })
@@ -189,14 +197,23 @@ export const authRouter = new Hono<Context>()
   .get("/user", loggedIn, async (c) => {
     const user = c.get("user")!;
 
-    return c.json(
-      createApiResponse(true, "User fetched", {
-        email: user.email,
-        fullname: user.fullname,
-        avatar: user.avatar,
-        id: user.id,
-      })
-    );
+    // Create a user object with all available properties
+    const userData = {
+      email: user.email,
+      fullname: user.fullname,
+      avatar: user.avatar,
+      id: user.id,
+      gender: user.gender || null,
+      dob: user.dob || null,
+      contact: user.contact || null,
+      address: user.address || null,
+      isVerified: Boolean(user.isVerified),
+      // Use default values for potentially missing properties
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    return c.json(createApiResponse(true, "User fetched", userData));
   })
   .post("/activate", zValidator("json", activateSchema), async (c) => {
     const { token } = c.req.valid("json");

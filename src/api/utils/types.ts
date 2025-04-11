@@ -12,13 +12,13 @@ export type User = {
   id: string;
   fullname: string | null;
   avatar: string | null;
-  gender?: string | null;
-  dob?: string | null;
-  contact?: string | null;
-  address?: string | null;
-  createdAt?: string | null;
-  updatedAt?: string | null;
-  isVerified?: boolean;
+  gender: string | null;
+  dob: string | null;
+  contact: string | Record<string, string | number | boolean> | null;
+  address: string | Record<string, string | number | boolean> | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+  isVerified: boolean;
 };
 
 // Common timestamp fields for all database entities
