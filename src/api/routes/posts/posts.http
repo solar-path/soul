@@ -8,3 +8,25 @@ GET {{baseURL}}/posts/top
 
 ### Get post by ID
 GET {{baseURL}}/posts/97421623-5ddb-4c72-8acc-1f5ebc8187fd
+
+### Create a new post
+POST {{baseURL}}/posts
+Content-Type: application/json
+
+{
+  "title": "Sample Post Title",
+  "content": "This is the content of the sample post. It needs to be at least 10 characters long.",
+  "author": "97421623-5ddb-4c72-8acc-1f5ebc8187fd"
+}
+
+### Update a post
+PATCH {{baseURL}}/posts/97421623-5ddb-4c72-8acc-1f5ebc8187fd
+Content-Type: application/json
+
+{
+  "title": "Updated Post Title",
+  "content": "This is the updated content of the post. It also needs to be at least 10 characters long."
+}
+
+### Delete a post
+DELETE {{baseURL}}/posts/97421623-5ddb-4c72-8acc-1f5ebc8187fd
