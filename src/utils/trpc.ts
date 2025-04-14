@@ -36,6 +36,21 @@ export const trpc = hc<ApiRoutes>("/", {
     }),
 }).api;
 
+export const getCurrentUser = async () => {
+  try {
+    const response = await trpc.auth.user.$get();
+    if (!response.ok) return null;
+
+    const result = await response.json();
+    if (!result.success) return null;
+
+    return result.data;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return null;
+  }
+};
+
 /**
  * Create a client function for API endpoints
  * @param endpoint Function to call the API endpoint
@@ -154,8 +169,8 @@ export const clientUpdatePosition = (id: string) => {
       param: { id },
       json: data,
     });
-    
-    const result = await response.json() as ApiResponse<Position>;
+
+    const result = (await response.json()) as ApiResponse<Position>;
 
     if (!result.success) {
       throw new Error(result.message);
@@ -183,8 +198,8 @@ export const clientUpdateDepartment = (id: string) => {
       param: { id },
       json: data,
     });
-    
-    const result = await response.json() as ApiResponse<Department>;
+
+    const result = (await response.json()) as ApiResponse<Department>;
 
     if (!result.success) {
       throw new Error(result.message);

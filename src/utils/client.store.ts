@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { trpc } from "@/utils/trpc";
+import { getCurrentUser } from "@/utils/trpc";
 import { User } from "@/api/utils/types";
 
 /**
@@ -9,20 +9,7 @@ import { User } from "@/api/utils/types";
 export function useUser() {
   return useQuery({
     queryKey: ["currentUser"],
-    queryFn: async (): Promise<User | null> => {
-      try {
-        const response = await trpc.auth.user.$get();
-        if (!response.ok) return null;
-
-        const result = await response.json();
-        if (!result.success) return null;
-
-        return result.data;
-      } catch (error) {
-        console.error("Error fetching user:", error);
-        return null;
-      }
-    },
+    queryFn: getCurrentUser,
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: true,
   });
