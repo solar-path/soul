@@ -22,6 +22,7 @@
   - TanStack Query (https://tanstack.com/query)
   - React Hook Form (https://react-hook-form.com)
   - TanStack Router (https://tanstack.com/router) for client-side routing
+  - Hono RPC (https://hono.dev/docs/guides/rpc)
 - **Authentication**: Lucia (https://lucia-auth.com)
 - **Validation**: Zod (https://zod.dev)
 - **UI Components**: Flowbite-react (https://flowbite-react.com/)

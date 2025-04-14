@@ -1,0 +1,10 @@
+@baseURL=http://localhost:3000/api
+
+### Get all posts
+GET {{baseURL}}/posts
+
+### Get top 10 posts
+GET {{baseURL}}/posts/top
+
+### Get post by ID
+GET {{baseURL}}/posts/97421623-5ddb-4c72-8acc-1f5ebc8187fd

@@ -14,6 +14,7 @@ import { industryRoutes } from "./routes/business/industry/industry.routes";
 import { countryRoutes } from "./routes/business/country/country.routes";
 import { employeeRoutes } from "./routes/business/employee/employee.routes";
 import { positionRoutes } from "./routes/business/position/position.routes";
+import postsRoutes from "./routes/posts/posts.routes";
 
 const app = new Hono<Context>().use(logger());
 
@@ -51,7 +52,8 @@ const routes = app
   .route("/business/department", departmentRoutes)
   .route("/business/industry", industryRoutes)
   .route("/business/country", countryRoutes)
-  .route("/contact-us", contactUsRouter);
+  .route("/contact-us", contactUsRouter)
+  .route("/posts", postsRoutes);
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) {

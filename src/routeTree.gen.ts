@@ -22,6 +22,7 @@ import { Route as CompanyUserManagementUserImport } from './routes/company/userM
 import { Route as AuthVerifyTokenImport } from './routes/auth/verify.$token'
 import { Route as AuthResetTokenImport } from './routes/auth/reset.$token'
 import { Route as AuthProfileIdImport } from './routes/auth/profile.$id'
+import { Route as publicPostIdImport } from './routes/(public)/post.$id'
 import { Route as publicDocsSlugImport } from './routes/(public)/docs.$slug'
 import { Route as CompanyHrmPositionIndexImport } from './routes/company/hrm/position/index'
 import { Route as CompanyHrmEmployeeIndexImport } from './routes/company/hrm/employee/index'
@@ -95,6 +96,12 @@ const AuthProfileIdRoute = AuthProfileIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const publicPostIdRoute = publicPostIdImport.update({
+  id: '/(public)/post/$id',
+  path: '/post/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const publicDocsSlugRoute = publicDocsSlugImport.update({
   id: '/(public)/docs/$slug',
   path: '/docs/$slug',
@@ -149,6 +156,13 @@ declare module '@tanstack/react-router' {
       path: '/docs/$slug'
       fullPath: '/docs/$slug'
       preLoaderRoute: typeof publicDocsSlugImport
+      parentRoute: typeof rootRoute
+    }
+    '/(public)/post/$id': {
+      id: '/(public)/post/$id'
+      path: '/post/$id'
+      fullPath: '/post/$id'
+      preLoaderRoute: typeof publicPostIdImport
       parentRoute: typeof rootRoute
     }
     '/auth/profile/$id': {
@@ -238,6 +252,7 @@ export interface FileRoutesByFullPath {
   '/': typeof publicIndexRoute
   '/company': typeof CompanyIndexRoute
   '/docs/$slug': typeof publicDocsSlugRoute
+  '/post/$id': typeof publicPostIdRoute
   '/auth/profile/$id': typeof AuthProfileIdRoute
   '/auth/reset/$token': typeof AuthResetTokenRoute
   '/auth/verify/$token': typeof AuthVerifyTokenRoute
@@ -256,6 +271,7 @@ export interface FileRoutesByTo {
   '/': typeof publicIndexRoute
   '/company': typeof CompanyIndexRoute
   '/docs/$slug': typeof publicDocsSlugRoute
+  '/post/$id': typeof publicPostIdRoute
   '/auth/profile/$id': typeof AuthProfileIdRoute
   '/auth/reset/$token': typeof AuthResetTokenRoute
   '/auth/verify/$token': typeof AuthVerifyTokenRoute
@@ -275,6 +291,7 @@ export interface FileRoutesById {
   '/(public)/': typeof publicIndexRoute
   '/company/': typeof CompanyIndexRoute
   '/(public)/docs/$slug': typeof publicDocsSlugRoute
+  '/(public)/post/$id': typeof publicPostIdRoute
   '/auth/profile/$id': typeof AuthProfileIdRoute
   '/auth/reset/$token': typeof AuthResetTokenRoute
   '/auth/verify/$token': typeof AuthVerifyTokenRoute
@@ -295,6 +312,7 @@ export interface FileRouteTypes {
     | '/'
     | '/company'
     | '/docs/$slug'
+    | '/post/$id'
     | '/auth/profile/$id'
     | '/auth/reset/$token'
     | '/auth/verify/$token'
@@ -312,6 +330,7 @@ export interface FileRouteTypes {
     | '/'
     | '/company'
     | '/docs/$slug'
+    | '/post/$id'
     | '/auth/profile/$id'
     | '/auth/reset/$token'
     | '/auth/verify/$token'
@@ -329,6 +348,7 @@ export interface FileRouteTypes {
     | '/(public)/'
     | '/company/'
     | '/(public)/docs/$slug'
+    | '/(public)/post/$id'
     | '/auth/profile/$id'
     | '/auth/reset/$token'
     | '/auth/verify/$token'
@@ -348,6 +368,7 @@ export interface RootRouteChildren {
   publicIndexRoute: typeof publicIndexRoute
   CompanyIndexRoute: typeof CompanyIndexRoute
   publicDocsSlugRoute: typeof publicDocsSlugRoute
+  publicPostIdRoute: typeof publicPostIdRoute
   AuthProfileIdRoute: typeof AuthProfileIdRoute
   AuthResetTokenRoute: typeof AuthResetTokenRoute
   AuthVerifyTokenRoute: typeof AuthVerifyTokenRoute
@@ -366,6 +387,7 @@ const rootRouteChildren: RootRouteChildren = {
   publicIndexRoute: publicIndexRoute,
   CompanyIndexRoute: CompanyIndexRoute,
   publicDocsSlugRoute: publicDocsSlugRoute,
+  publicPostIdRoute: publicPostIdRoute,
   AuthProfileIdRoute: AuthProfileIdRoute,
   AuthResetTokenRoute: AuthResetTokenRoute,
   AuthVerifyTokenRoute: AuthVerifyTokenRoute,
@@ -393,6 +415,7 @@ export const routeTree = rootRoute
         "/(public)/",
         "/company/",
         "/(public)/docs/$slug",
+        "/(public)/post/$id",
         "/auth/profile/$id",
         "/auth/reset/$token",
         "/auth/verify/$token",
@@ -417,6 +440,9 @@ export const routeTree = rootRoute
     },
     "/(public)/docs/$slug": {
       "filePath": "(public)/docs.$slug.tsx"
+    },
+    "/(public)/post/$id": {
+      "filePath": "(public)/post.$id.tsx"
     },
     "/auth/profile/$id": {
       "filePath": "auth/profile.$id.tsx"
