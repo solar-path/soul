@@ -1,13 +1,15 @@
 /**
  * Database table drop utility
  *
- * This script drops all tables from the database.
- * USE WITH CAUTION: This will delete all data in the database.
+ * This script drops all tables from the database and cleans up avatar files.
+ * USE WITH CAUTION: This will delete all data in the database and avatar files.
  */
 
 // Direct SQLite access for dropping tables
 import { Database } from "bun:sqlite";
 import { z } from "zod";
+import fs from "node:fs";
+import path from "node:path";
 
 // Access the raw SQLite connection
 const EnvSchema = z.object({
@@ -17,11 +19,52 @@ const EnvSchema = z.object({
 const processEnv = EnvSchema.parse(process.env);
 const sqlite = new Database(processEnv.DATABASE_URL);
 
+// Avatar directory path
+const AVATARS_DIR = path.join(process.cwd(), "public", "uploads", "avatars");
+
 /**
- * Drops all tables from the database
+ * Deletes all files in the avatars directory
+ */
+async function deleteAvatarFiles() {
+  console.log("Starting avatar files cleanup...");
+
+  try {
+    // Check if directory exists
+    if (!fs.existsSync(AVATARS_DIR)) {
+      console.log("Avatars directory does not exist, creating it...");
+      fs.mkdirSync(AVATARS_DIR, { recursive: true });
+      return;
+    }
+
+    // Read all files in the directory
+    const files = fs.readdirSync(AVATARS_DIR);
+
+    // Delete each file
+    for (const file of files) {
+      // Skip .gitkeep or other special files you want to keep
+      if (file === ".gitkeep") continue;
+
+      const filePath = path.join(AVATARS_DIR, file);
+      // Check if it's a file (not a directory)
+      if (fs.statSync(filePath).isFile()) {
+        fs.unlinkSync(filePath);
+        console.log(`Deleted avatar file: ${file}`);
+      }
+    }
+
+    console.log("✅ All avatar files have been deleted successfully.");
+  } catch (error) {
+    console.error("Error deleting avatar files:", error);
+  }
+}
+
+/**
+ * Drops all tables from the database and cleans up avatar files
  */
 async function dropAllTables() {
-  console.log("⚠️ WARNING: This will delete all data in the database ⚠️");
+  console.log(
+    "⚠️ WARNING: This will delete all data in the database and avatar files ⚠️"
+  );
   console.log("Starting table drop process...");
 
   try {
@@ -58,6 +101,7 @@ async function dropAllTables() {
 
 // Execute the function if this script is run directly
 if (import.meta.main) {
+  await deleteAvatarFiles();
   await dropAllTables();
 }
 

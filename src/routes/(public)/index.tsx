@@ -3,6 +3,7 @@ import AIcon from "@/assets/icon.png";
 import { Button } from "flowbite-react";
 import { fillDrawer } from "@/ui/QDrawer/QDrawer.store";
 import SignUpForm from "@/api/routes/auth/SignUp.form";
+import { QPost } from "@/ui/QPost/QPost.ui";
 
 export const Route = createFileRoute("/(public)/")({
   component: Index,
@@ -10,7 +11,7 @@ export const Route = createFileRoute("/(public)/")({
 
 function Index() {
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
       <section className="bg-white dark:bg-gray-900">
         <div className="mx-auto grid max-w-screen-xl px-4 py-8 lg:grid-cols-12 lg:gap-8 lg:py-16 xl:gap-0">
           <div className="mr-auto place-self-center lg:col-span-7">
@@ -43,6 +44,7 @@ function Index() {
           </div>
         </div>
       </section>
+      <QPost />
     </div>
   );
 }
