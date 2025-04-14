@@ -13,38 +13,24 @@ import {
 import QInput from "@/ui/QInput/QInput.ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { trpc } from "@/utils/trpc";
-import { z } from "zod";
-import { createCompanySchema, updateCompanySchema } from "./company.zod";
+import {
+  clientCreateCompany,
+  clientGetCountries,
+  clientGetIndustries,
+  clientUpdateCompany,
+} from "@/utils/trpc";
+import {
+  createCompanySchema,
+  updateCompanySchema,
+  companyFormSchema,
+  CompanyFormValues,
+  transformFormToApiData,
+} from "./company.zod";
 
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
 import { closeDrawer } from "@/ui/QDrawer/QDrawer.store";
 
-// Define form schema based on Zod validation schemas
-const formSchema = z.object({
-  id: z.string().optional(),
-  title: z.string().min(1, "Company name is required"),
-  description: z.string().optional(),
-  bin: z.string().optional(),
-  logo: z.unknown().optional(),
-  // Fields for the QInput components
-  residence: z.string().optional(),
-  industry: z.string().optional(),
-  // IDs that will be mapped to countryID and industryID
-  residenceId: z.string().uuid({ message: "Please select a valid country" }),
-  industryId: z.string().uuid({ message: "Please select a valid industry" }),
-  // Contact fields
-  phone: z.string().optional(),
-  website: z.string().url().optional().or(z.string().length(0)),
-  // Address fields
-  addressLine: z.string().optional(),
-  city: z.string().optional(),
-  country: z.string().optional(),
-  postcode: z.string().optional(),
-  state: z.string().optional(),
-});
-
-type CompanyFormValues = z.infer<typeof formSchema>;
+// Using the form schema from company.zod.ts
 
 interface CompanyFormProps {
   currentCompany?: Record<string, unknown> | null;
@@ -61,35 +47,31 @@ export function CompanyForm({ currentCompany = null }: CompanyFormProps) {
   const { data: countries, isLoading: countriesLoading } = useQuery({
     queryKey: ["countries"],
     queryFn: async () => {
-      const response = await trpc.business.country.$get();
-      return response.json();
+      return (await clientGetCountries()).data;
     },
   });
 
   const { data: industries, isLoading: industriesLoading } = useQuery({
     queryKey: ["industries"],
     queryFn: async () => {
-      const response = await trpc.business.industry.$get();
-      return response.json();
+      return (await clientGetIndustries()).data;
     },
   });
 
   // Create mutation for adding a new company
   const createMutation = useMutation({
-    mutationFn: async (data: Record<string, unknown>) => {
-      // Using the correct endpoint based on the API routes
-      const response = await fetch("/api/business/company/newCompany", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(createCompanySchema.parse(data)),
-        credentials: "include",
-      });
-      return response.json();
+    mutationFn: async (data: CompanyFormValues) => {
+      // Transform form data to API format
+      const apiData = transformFormToApiData(data);
+
+      // Use the client function from trpc.ts
+      const response = await clientCreateCompany(
+        createCompanySchema.parse(apiData)
+      );
+      return response.data;
     },
     onSuccess: (data) => {
-      showFlashMessage("success", `${data.title} has been created`);
+      showFlashMessage("success", `${data?.title} has been created`);
       window.dispatchEvent(new CustomEvent("companyCreated", { detail: data }));
       closeDrawer();
     },
@@ -100,23 +82,18 @@ export function CompanyForm({ currentCompany = null }: CompanyFormProps) {
 
   // Update mutation for editing an existing company
   const updateMutation = useMutation({
-    mutationFn: async (data: Record<string, unknown>) => {
-      // Using the correct endpoint based on the API routes
-      const response = await fetch(
-        `/api/business/company/updateCompany/${data.id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updateCompanySchema.parse(data)),
-          credentials: "include",
-        }
+    mutationFn: async (data: CompanyFormValues) => {
+      // Transform form data to API format
+      const apiData = transformFormToApiData(data);
+
+      // Use the client function from trpc.ts
+      const response = await clientUpdateCompany(data.id as string)(
+        updateCompanySchema.parse(apiData)
       );
-      return response.json();
+      return response.data;
     },
     onSuccess: (data) => {
-      showFlashMessage("success", `${data.title} has been updated`);
+      showFlashMessage("success", `${data?.title} has been updated`);
       window.dispatchEvent(new CustomEvent("companyUpdated", { detail: data }));
       closeDrawer();
     },
@@ -145,10 +122,10 @@ export function CompanyForm({ currentCompany = null }: CompanyFormProps) {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
     watch,
+    formState: { errors },
   } = useForm<CompanyFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(companyFormSchema),
     defaultValues: {
       id: getCompanyValue<string>("id", ""),
       title: getCompanyValue<string>("title", ""),
@@ -178,41 +155,12 @@ export function CompanyForm({ currentCompany = null }: CompanyFormProps) {
   // Type-safe form submission handler
   const onSubmit: SubmitHandler<CompanyFormValues> = (data) => {
     try {
-      // Prepare the data for submission according to the API schemas
-      const apiData: Record<string, unknown> = {
-        title: data.title,
-        description: data.description || "",
-        bin: data.bin || "",
-        logo: data.logo || null,
-        // Map form fields to API schema fields
-        countryID: data.residenceId, // Map residenceId to countryID for API
-        industryID: data.industryId, // Map industryId to industryID for API
-        // Create address object according to the addressSchema
-        address: {
-          street: data.addressLine || "",
-          city: data.city || "",
-          state: data.state || "",
-          postalCode: data.postcode || "",
-          country: data.country || "",
-        },
-        // Create contact object according to the contactSchema
-        contact: {
-          phone: data.phone || "",
-          website: data.website || "",
-        },
-      };
-
-      // Add ID if updating an existing company
-      if (data.id) {
-        apiData.id = data.id;
-      }
-
       if (currentCompany) {
         // Update existing company
-        updateMutation.mutate(apiData);
+        updateMutation.mutate(data);
       } else {
         // Create new company
-        createMutation.mutate(apiData);
+        createMutation.mutate(data);
       }
     } catch (error) {
       showFlashMessage(
@@ -302,7 +250,7 @@ export function CompanyForm({ currentCompany = null }: CompanyFormProps) {
           id="residence"
           name="residence"
           value={watch("residence")}
-          items={countries?.data || []}
+          items={countries || []}
           searchField="title"
           displayAsHelper="code"
           error={errors.residenceId?.message}
@@ -320,7 +268,7 @@ export function CompanyForm({ currentCompany = null }: CompanyFormProps) {
           id="industry"
           name="industry"
           value={watch("industry")}
-          items={industries?.data || []}
+          items={industries || []}
           searchField="title"
           error={errors.industryId?.message}
           onChange={(e) => {

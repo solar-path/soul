@@ -11,13 +11,15 @@ import {
 import QInput from "@/ui/QInput/QInput.ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { z } from "zod";
+import type { Item } from "@/ui/QInput/QInput.ui";
 import {
-  createPositionSchema,
-  updatePositionSchema,
-  jobDescriptionSchema,
-  salarySchema,
-} from "./position.zod";
+  clientGetCompanies,
+  clientGetPositions,
+  clientCreatePosition,
+  clientUpdatePosition,
+} from "@/utils/trpc";
+import { z } from "zod";
+import { createPositionSchema, updatePositionSchema } from "./position.zod";
 
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
 import { closeDrawer } from "@/ui/QDrawer/QDrawer.store";
@@ -62,8 +64,7 @@ export function PositionForm({ currentPosition = null }: PositionFormProps) {
   const { data: companies } = useQuery({
     queryKey: ["companies"],
     queryFn: async () => {
-      const response = await fetch("/api/business/company");
-      return response.json();
+      return await clientGetCompanies();
     },
   });
 
@@ -71,8 +72,7 @@ export function PositionForm({ currentPosition = null }: PositionFormProps) {
   const { data: positions } = useQuery({
     queryKey: ["positions"],
     queryFn: async () => {
-      const response = await fetch("/api/business/position");
-      return response.json();
+      return await clientGetPositions();
     },
   });
 
@@ -154,47 +154,33 @@ export function PositionForm({ currentPosition = null }: PositionFormProps) {
   // Create mutation for adding a new position
   const createMutation = useMutation({
     mutationFn: async (data: PositionFormValues) => {
-      // Prepare job description and salary objects
-      const jobDescription = jobDescriptionSchema.parse({
-        responsibilities: data.responsibilities,
-        requirements: data.requirements,
-        qualifications: data.qualifications,
-        benefits: data.benefits,
-      });
-
-      const salary = salarySchema.parse({
-        min: data.salaryMin,
-        max: data.salaryMax,
-        currency: data.salaryCurrency,
-        period: data.salaryPeriod,
-      });
-
-      // Prepare submission data
-      const submissionData = {
+      // Prepare the data for submission according to the API schema
+      const apiData = {
         title: data.title,
-        companyID: data.companyID,
-        parentID: data.parentID,
         isVacant: data.isVacant,
-        jobDescription,
-        salary,
+        companyID: data.companyID,
+        parentID: data.parentID || null,
+        // Create job description object according to the jobDescriptionSchema
+        jobDescription: {
+          responsibilities: data.responsibilities,
+          requirements: data.requirements,
+          qualifications: data.qualifications,
+          benefits: data.benefits,
+        },
+        // Create salary object according to the salarySchema
+        salary: {
+          min: data.salaryMin,
+          max: data.salaryMax,
+          currency: data.salaryCurrency,
+          period: data.salaryPeriod,
+        },
       };
 
-      // Using the correct endpoint based on the API routes
-      const response = await fetch("/api/business/position", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(createPositionSchema.parse(submissionData)),
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create position");
-      }
-
-      return response.json();
+      // Use the client function from trpc.ts
+      const response = await clientCreatePosition(
+        createPositionSchema.parse(apiData)
+      );
+      return response.data;
     },
     onSuccess: () => {
       showFlashMessage("success", "Position created successfully");
@@ -207,50 +193,41 @@ export function PositionForm({ currentPosition = null }: PositionFormProps) {
     },
   });
 
-  // Update mutation for updating an existing position
+  // Update mutation for editing an existing position
   const updateMutation = useMutation({
     mutationFn: async (data: PositionFormValues) => {
-      // Prepare job description and salary objects
-      const jobDescription = jobDescriptionSchema.parse({
-        responsibilities: data.responsibilities,
-        requirements: data.requirements,
-        qualifications: data.qualifications,
-        benefits: data.benefits,
-      });
-
-      const salary = salarySchema.parse({
-        min: data.salaryMin,
-        max: data.salaryMax,
-        currency: data.salaryCurrency,
-        period: data.salaryPeriod,
-      });
-
-      // Prepare submission data
-      const submissionData = {
+      // Prepare the data for submission according to the API schema
+      const apiData: Record<string, unknown> = {
         title: data.title,
-        companyID: data.companyID,
-        parentID: data.parentID,
         isVacant: data.isVacant,
-        jobDescription,
-        salary,
+        companyID: data.companyID,
+        parentID: data.parentID || null,
+        // Create job description object according to the jobDescriptionSchema
+        jobDescription: {
+          responsibilities: data.responsibilities,
+          requirements: data.requirements,
+          qualifications: data.qualifications,
+          benefits: data.benefits,
+        },
+        // Create salary object according to the salarySchema
+        salary: {
+          min: data.salaryMin,
+          max: data.salaryMax,
+          currency: data.salaryCurrency,
+          period: data.salaryPeriod,
+        },
       };
 
-      // Using the correct endpoint based on the API routes
-      const response = await fetch(`/api/business/position/${data.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatePositionSchema.parse(submissionData)),
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update position");
+      // Add ID for updating
+      if (data.id) {
+        apiData.id = data.id;
       }
 
-      return response.json();
+      // Use the client function from trpc.ts
+      const response = await clientUpdatePosition(data.id as string)(
+        updatePositionSchema.parse(apiData)
+      );
+      return response.data;
     },
     onSuccess: () => {
       showFlashMessage("success", "Position updated successfully");
@@ -331,7 +308,7 @@ export function PositionForm({ currentPosition = null }: PositionFormProps) {
           id="company"
           name="company"
           value={watch("company")}
-          items={companies?.data || []}
+          items={(companies?.data || []) as unknown as Item[]}
           searchField="title"
           error={errors.companyID?.message}
           onChange={(e) => {
@@ -348,7 +325,7 @@ export function PositionForm({ currentPosition = null }: PositionFormProps) {
           id="parentPosition"
           name="parentPosition"
           value={watch("parentPosition")}
-          items={filteredPositions}
+          items={filteredPositions as unknown as Item[]}
           searchField="title"
           error={errors.parentID?.message}
           onChange={(e) => {

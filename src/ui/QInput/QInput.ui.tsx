@@ -13,7 +13,7 @@ import { HelperText, Label, TextInput } from "flowbite-react";
 /**
  * Item interface for autocomplete functionality
  */
-interface Item {
+export interface Item {
   id: string | number;
   [key: string]:
     | string

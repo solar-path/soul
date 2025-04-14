@@ -1,9 +1,15 @@
 import { useCallback } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Label, TextInput, Button, Spinner, HelperText } from "flowbite-react";
-import QInput from "@/ui/QInput/QInput.ui";
+import QInput, { type Item } from "@/ui/QInput/QInput.ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  clientGetCompanies,
+  clientGetDepartments,
+  clientCreateDepartment,
+  clientUpdateDepartment,
+} from "@/utils/trpc";
 import { z } from "zod";
 import {
   createDepartmentSchema,
@@ -39,8 +45,7 @@ export function DepartmentForm({
   const { data: companies } = useQuery({
     queryKey: ["companies"],
     queryFn: async () => {
-      const response = await fetch("/api/business/company");
-      return response.json();
+      return await clientGetCompanies();
     },
   });
 
@@ -48,8 +53,7 @@ export function DepartmentForm({
   const { data: departments } = useQuery({
     queryKey: ["departments"],
     queryFn: async () => {
-      const response = await fetch("/api/business/department");
-      return response.json();
+      return await clientGetDepartments();
     },
   });
 
@@ -75,27 +79,19 @@ export function DepartmentForm({
   // Create mutation for adding a new department
   const createMutation = useMutation({
     mutationFn: async (data: Record<string, unknown>) => {
-      // Using the correct endpoint based on the API routes
-      const response = await fetch("/api/business/department", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(createDepartmentSchema.parse(data)),
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create department");
-      }
-
-      return response.json();
+      // Use the client function from trpc.ts
+      const response = await clientCreateDepartment(
+        createDepartmentSchema.parse(data)
+      );
+      return response;
     },
     onSuccess: (data) => {
-      showFlashMessage("success", `${data.data.title} has been created`);
+      showFlashMessage(
+        "success",
+        `${data?.data?.title || "Department"} has been created`
+      );
       window.dispatchEvent(
-        new CustomEvent("departmentCreated", { detail: data.data })
+        new CustomEvent("departmentCreated", { detail: data?.data })
       );
       closeDrawer();
     },
@@ -107,27 +103,19 @@ export function DepartmentForm({
   // Update mutation for editing an existing department
   const updateMutation = useMutation({
     mutationFn: async (data: Record<string, unknown>) => {
-      // Using the correct endpoint based on the API routes
-      const response = await fetch(`/api/business/department/${data.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updateDepartmentSchema.parse(data)),
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update department");
-      }
-
-      return response.json();
+      // Use the client function from trpc.ts
+      const response = await clientUpdateDepartment(data.id as string)(
+        updateDepartmentSchema.parse(data)
+      );
+      return response;
     },
     onSuccess: (data) => {
-      showFlashMessage("success", `${data.data.title} has been updated`);
+      showFlashMessage(
+        "success",
+        `${data?.data?.title || "Department"} has been updated`
+      );
       window.dispatchEvent(
-        new CustomEvent("departmentUpdated", { detail: data.data })
+        new CustomEvent("departmentUpdated", { detail: data?.data })
       );
       closeDrawer();
     },
@@ -217,7 +205,7 @@ export function DepartmentForm({
           id="company"
           name="company"
           value={watch("company")}
-          items={companies?.data || []}
+          items={(companies?.data || []) as unknown as Item[]}
           searchField="title"
           error={errors.companyId?.message}
           onChange={(e) => {
@@ -234,7 +222,7 @@ export function DepartmentForm({
           id="parentDepartment"
           name="parentDepartment"
           value={watch("parentDepartment")}
-          items={filteredDepartments}
+          items={filteredDepartments as unknown as Item[]}
           searchField="title"
           error={errors.parentId?.message}
           onChange={(e) => {
