@@ -54,6 +54,10 @@ export default function SignInForm() {
         "success",
         `${result.data?.email} successfully signed in`
       );
+      
+      // Dispatch custom event to notify about authentication change
+      window.dispatchEvent(new CustomEvent('auth-state-changed'));
+      
       // Navigate to company page
       navigate({ to: "/company" });
       return null;

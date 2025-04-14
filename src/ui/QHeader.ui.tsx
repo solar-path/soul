@@ -43,6 +43,11 @@ export default function QHeader() {
       );
       // Update the query cache to remove the user
       queryClient.setQueryData(["currentUser"], null);
+
+      // Dispatch custom event to notify about sign-out
+      window.dispatchEvent(new CustomEvent("user-signed-out"));
+
+      // Navigate to home page
       navigate({ to: "/" });
     },
     onError: (error) => {

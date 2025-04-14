@@ -3,8 +3,9 @@ import { QSidebar } from "@/ui/QSidebar.ui";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { fillDrawer } from "@/ui/QDrawer/QDrawer.store";
 import SignInForm from "@/api/routes/auth/SignIn.form";
-import { useState, useEffect } from "react";
-import { getCurrentUser } from "@/utils/trpc";
+import { useEffect, useState } from "react";
+import { useUser } from "@/utils/client.store";
+import { useQueryClient } from "@tanstack/react-query";
 
 // No need for external query options, we define them inline
 
@@ -58,59 +59,69 @@ const moduleList: QSidebarProps = [
 function RouteComponent() {
   // Get authentication status from the loader data
   const loaderData = Route.useLoaderData() as CompanyLoaderData;
+  const queryClient = useQueryClient();
+  
+  // Use TanStack Query to fetch and manage user data
+  const { data: user, isLoading } = useUser();
+  
+  // Determine authentication status based on user data or loader data
+  const isAuthenticated = user != null || loaderData?.isAuthenticated || false;
 
-  // Simple state to track authentication and loading
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    loaderData?.isAuthenticated || false
-  );
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Check authentication on component mount
+  // Track if user just signed out to prevent drawer from opening
+  const [justSignedOut, setJustSignedOut] = useState(false);
+  
+  // Listen for authentication events
   useEffect(() => {
-    let isMounted = true;
-
-    // Function to check if user is authenticated
-    async function checkAuth() {
-      try {
-        // If already authenticated from loader data
-        if (isAuthenticated) {
-          if (isMounted) setIsLoading(false);
-          return;
-        }
-
-        // Otherwise try to fetch current user
-        const user = await getCurrentUser();
-
-        if (user && isMounted) {
-          setIsAuthenticated(true);
-        } else if (isMounted) {
-          // Show login drawer if not authenticated
-          fillDrawer(SignInForm, "Sign In");
-        }
-      } catch (error) {
-        console.error("Authentication error:", error);
-        // Show login drawer on error
-        if (isMounted) fillDrawer(SignInForm, "Sign In");
-      } finally {
-        if (isMounted) setIsLoading(false);
-      }
-    }
-
-    checkAuth();
-    return () => {
-      isMounted = false;
+    // Create a custom event listener for auth changes
+    const handleAuthChange = () => {
+      // Invalidate the user query to refresh data without page reload
+      queryClient.invalidateQueries({ queryKey: ["currentUser"] });
     };
-  }, [isAuthenticated]);
+    
+    // Create a custom event listener for sign out
+    const handleSignOut = () => {
+      // Set flag to prevent login drawer from opening immediately after sign-out
+      setJustSignedOut(true);
+      // Reset the flag after navigation (after 1 second)
+      setTimeout(() => setJustSignedOut(false), 1000);
+    };
+
+    // Add event listeners
+    window.addEventListener('auth-state-changed', handleAuthChange);
+    window.addEventListener('user-signed-out', handleSignOut);
+    
+    // Clean up
+    return () => {
+      window.removeEventListener('auth-state-changed', handleAuthChange);
+      window.removeEventListener('user-signed-out', handleSignOut);
+    };
+  }, [queryClient]);
+
+  // Show login drawer if not authenticated, not loading, and not just signed out
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated && !justSignedOut) {
+      fillDrawer(SignInForm, "Sign In");
+    }
+  }, [isAuthenticated, isLoading, justSignedOut]);
 
   // Show loading or authentication required message
-  if (isLoading || !isAuthenticated) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
-          <h2 className="text-xl font-semibold mb-4">
-            {isLoading ? "Loading..." : "Authentication Required"}
-          </h2>
-          {!isLoading && <p>Please sign in to access this area.</p>}
+          <h2 className="text-xl font-semibold mb-4">Loading...</h2>
+        </div>
+      </div>
+    );
+  }
+  
+  // Show authentication required message
+  if (!isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold mb-4">Authentication Required</h2>
+          <p>Please sign in to access this area.</p>
         </div>
       </div>
     );
