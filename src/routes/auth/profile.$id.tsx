@@ -4,7 +4,7 @@ import { Button, Spinner } from "flowbite-react";
 import { fillDrawer } from "@/ui/QDrawer/QDrawer.store";
 import { useUser } from "@/utils/client.store";
 import ProfileForm from "@/api/routes/auth/Profile.form";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { trpc } from "@/utils/trpc";
 
 export const Route = createFileRoute("/auth/profile/$id")({
@@ -14,6 +14,7 @@ export const Route = createFileRoute("/auth/profile/$id")({
 function RouteComponent() {
   const { id } = Route.useParams();
   const { data: currentUser, isLoading: isCurrentUserLoading } = useUser();
+  const queryClient = useQueryClient();
 
   // Fetch user data by ID if it's not the current user
   const { data: profileData, isLoading: isProfileLoading } = useQuery({
@@ -122,7 +123,18 @@ function RouteComponent() {
                     color="dark"
                     size="sm"
                     onClick={() =>
-                      fillDrawer(() => <ProfileForm />, "Edit Profile")
+                      fillDrawer(
+                        () => (
+                          <ProfileForm 
+                            onProfileUpdated={() => {
+                              // Invalidate both the user query and the currentUser query
+                              queryClient.invalidateQueries({ queryKey: ["user", id] });
+                              queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+                            }}
+                          />
+                        ), 
+                        "Edit Profile"
+                      )
                     }
                     aria-label="Edit profile"
                   >

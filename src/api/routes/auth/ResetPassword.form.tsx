@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Label, TextInput, Button, HelperText } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { resetPasswordSchema, type ResetPassword } from "./auth.zod";
-import { trpc } from "@/utils/trpc";
+import { clientResetPassword } from "@/utils/trpc";
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
 import { useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
@@ -62,14 +62,7 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     mutationFn: async (data: ResetPassword) => {
       // Add artificial delay to prevent double submissions even with fast network
       await new Promise((resolve) => setTimeout(resolve, 300));
-      const response = await trpc.auth["reset-password"].$post({
-        json: data,
-      });
-      const result = await response.json();
-      if (!result.success) {
-        throw new Error(result.message);
-      }
-      return result;
+      return clientResetPassword(data);
     },
     onSuccess: () => {
       // Clear form

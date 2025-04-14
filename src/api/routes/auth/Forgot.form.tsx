@@ -2,7 +2,7 @@ import { Label, Button, TextInput, HelperText } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { forgotSchema, type Forgot } from "@/api/routes/auth/auth.zod";
-import { trpc } from "@/utils/trpc";
+import { clientForgotPassword } from "@/utils/trpc";
 import { useMutation } from "@tanstack/react-query";
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
 import { closeDrawer } from "@/ui/QDrawer/QDrawer.store";
@@ -24,10 +24,7 @@ export default function ForgotPasswordForm() {
     mutationFn: async (data: Forgot) => {
       // Add artificial delay to prevent double submissions even with fast network
       await new Promise((resolve) => setTimeout(resolve, 300));
-      const response = await trpc.auth.forgot.$post({
-        json: data,
-      });
-      return response.json();
+      return clientForgotPassword(data);
     },
     onSuccess: (data) => {
       if (data.success) {

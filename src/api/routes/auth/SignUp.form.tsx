@@ -5,7 +5,7 @@ import { closeDrawer, fillDrawer } from "@/ui/QDrawer/QDrawer.store";
 import SignInForm from "./SignIn.form";
 import { SignUp, signUpSchema } from "./auth.zod";
 import { useMutation } from "@tanstack/react-query";
-import { trpc } from "@/utils/trpc";
+import { clientSignUp } from "@/utils/trpc";
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
 import { useState } from "react";
 
@@ -35,15 +35,7 @@ export default function SignUpForm() {
   const signUpMutation = useMutation({
     mutationFn: async (data: SignUp) => {
       // Add artificial delay to prevent double submissions even with fast network
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      const response = await trpc["auth"].signup.$post({
-        json: data,
-      });
-      const result = await response.json();
-      if (!result.success) {
-        throw new Error(result.message);
-      }
-      return result;
+      return clientSignUp(data);
     },
     onSuccess: (result) => {
       // Clear form and close drawer
@@ -146,12 +138,14 @@ export default function SignUpForm() {
         )}
       </div>
 
-      <Button 
-        type="submit" 
+      <Button
+        type="submit"
         color="dark"
         disabled={isSubmitting || signUpMutation.isPending}
       >
-        {isSubmitting || signUpMutation.isPending ? "Registering..." : "Register"}
+        {isSubmitting || signUpMutation.isPending
+          ? "Registering..."
+          : "Register"}
       </Button>
       <ul>
         <li>

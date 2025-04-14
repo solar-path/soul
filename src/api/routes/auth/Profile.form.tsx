@@ -14,7 +14,7 @@ import {
 import { closeDrawer } from "@/ui/QDrawer/QDrawer.store";
 import { useUser, useSetUser } from "@/utils/client.store";
 import { useMutation } from "@tanstack/react-query";
-import { trpc } from "@/utils/trpc";
+import { clientUpdateProfile } from "@/utils/trpc";
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
 
 // Define the form schema
@@ -38,7 +38,13 @@ type AccountFormValues = z.infer<typeof accountSchema>;
  * Profile form component for editing user profile
  * Uses React Hook Form for form management and validation
  */
-export default function ProfileForm() {
+interface ProfileFormProps {
+  onProfileUpdated?: () => void;
+}
+
+export default function ProfileForm({
+  onProfileUpdated,
+}: ProfileFormProps = {}) {
   const { data: currentUser, isLoading } = useUser();
   const { invalidateUser } = useSetUser();
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -166,20 +172,19 @@ export default function ProfileForm() {
         }),
       };
 
-      const response = await trpc.auth.updateProfile.$post({
-        json: payload,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update profile");
-      }
-
-      return response.json();
+      // Use the clientUpdateProfile function from trpc.ts
+      return clientUpdateProfile(payload);
     },
     onSuccess: (data) => {
       if (data.success) {
         showFlashMessage("success", "Profile updated successfully");
         invalidateUser(); // Refresh user data
+
+        // Call the onProfileUpdated callback if provided
+        if (onProfileUpdated) {
+          onProfileUpdated();
+        }
+
         closeDrawer();
       } else {
         showFlashMessage("fail", data.message || "Failed to update profile");
