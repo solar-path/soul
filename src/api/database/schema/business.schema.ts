@@ -76,6 +76,7 @@ export const orgchartTable = sqliteTable("business_orgchart", {
     .references(() => companyTable.id),
   departmentID: text("department_id").references(() => departmentTable.id),
   positionID: text("position_id").references(() => positionTable.id),
+  default: text("default").default("false"),
   employeeID: text("employee_id")
     .notNull()
     .references(() => userTable.id),

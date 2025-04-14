@@ -12,7 +12,7 @@ import { companyRoutes } from "./routes/business/company/company.routes";
 import { departmentRoutes } from "./routes/business/department/department.routes";
 import { industryRoutes } from "./routes/business/industry/industry.routes";
 import { countryRoutes } from "./routes/business/country/country.routes";
-import { employeeRoutes } from "./routes/business/employee/employee.routes";
+// import { employeeRoutes } from "./routes/business/employee/employee.routes";
 import { positionRoutes } from "./routes/business/position/position.routes";
 import postsRoutes from "./routes/posts/posts.routes";
 
@@ -47,7 +47,7 @@ const routes = app
   .basePath("/api")
   .route("/auth", authRouter)
   .route("/business/company", companyRoutes)
-  .route("/business/employee", employeeRoutes)
+  // .route("/business/employee", employeeRoutes)
   .route("/business/position", positionRoutes)
   .route("/business/department", departmentRoutes)
   .route("/business/industry", industryRoutes)

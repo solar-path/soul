@@ -1,0 +1,1 @@
+ALTER TABLE `business_orgchart` ADD `default` text DEFAULT 'false';

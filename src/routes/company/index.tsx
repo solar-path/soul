@@ -4,6 +4,13 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/company/")({
   component: RouteComponent,
+  // beforeLoad: async ({ context, search }) => {
+  //   const { currentUser } =
+  //     await context.queryClient.ensureQueryData(userQueryOptions());
+  //   if (!currentUser) {
+  //     throw new Error("Unauthorized");
+  //   }
+  // },
 });
 
 const moduleList: QSidebarProps = [

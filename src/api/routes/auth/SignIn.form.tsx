@@ -5,7 +5,7 @@ import { closeDrawer, fillDrawer } from "@/ui/QDrawer/QDrawer.store";
 import { SignIn, signInSchema } from "./auth.zod";
 import SignUpForm from "./SignUp.form";
 import ForgotPasswordForm from "./Forgot.form";
-import { trpc } from "@/utils/trpc";
+import { clientSignIn } from "@/utils/trpc";
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -40,14 +40,7 @@ export default function SignInForm() {
     mutationFn: async (data: SignIn) => {
       // Add artificial delay to prevent double submissions even with fast network
       await new Promise((resolve) => setTimeout(resolve, 300));
-      const response = await trpc["auth"].signin.$post({
-        json: data,
-      });
-      const result = await response.json();
-      if (!result.success) {
-        throw new Error(result.message);
-      }
-      return result;
+      return clientSignIn(data);
     },
     onSuccess: (result) => {
       // Clear form and close drawer

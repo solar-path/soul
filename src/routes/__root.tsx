@@ -1,17 +1,20 @@
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import QFooter from "@/ui/QFooter.ui";
 import QHeader from "@/ui/QHeader.ui";
 import QDrawer from "@/ui/QDrawer/QDrawer.ui";
 import QFlashMessage from "@/ui/QFlashMessage/QFlashMessage.ui";
-import { User } from "@/api/utils/types";
+// import { User } from "@/api/utils/types";
 import { useUser } from "@/utils/client.store";
 import { Spinner } from "flowbite-react";
 
+import { QueryClient } from "@tanstack/react-query";
+
 type RouterContext = {
-  currentUser: User | null;
+  // currentUser: User | null;
+  queryClient: QueryClient;
 };
-export const Route = createRootRoute<RouterContext>({
+export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootComponent,
 });
 
