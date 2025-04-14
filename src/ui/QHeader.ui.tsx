@@ -18,7 +18,7 @@ import { fillDrawer } from "./QDrawer/QDrawer.store";
 import SignUpForm from "@/api/routes/auth/SignUp.form";
 import SignInForm from "@/api/routes/auth/SignIn.form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { trpc } from "@/utils/trpc";
+import { clientSignOut } from "@/utils/trpc";
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
 import { useUser } from "@/utils/client.store";
 
@@ -28,14 +28,7 @@ export default function QHeader() {
   const navigate = useNavigate();
 
   const signOutMutation = useMutation({
-    mutationFn: async () => {
-      const response = await trpc["auth"].signout.$post();
-      const result = await response.json();
-      if (!result.success) {
-        throw new Error(result.message);
-      }
-      return result;
-    },
+    mutationFn: clientSignOut,
     onSuccess: () => {
       showFlashMessage(
         "success",

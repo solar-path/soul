@@ -208,3 +208,20 @@ export const clientUpdateDepartment = (id: string) => {
     return result;
   };
 };
+
+/**
+ * Client function for signing out a user
+ * @returns A promise that resolves to an ApiResponse with success status
+ */
+export const clientSignOut = async (): Promise<
+  ApiResponse<{ success: boolean }>
+> => {
+  const response = await trpc["auth"].signout.$post();
+  const result = await response.json();
+
+  if (!result.success) {
+    throw new Error(result.message);
+  }
+
+  return result;
+};
