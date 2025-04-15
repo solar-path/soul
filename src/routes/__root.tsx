@@ -4,17 +4,18 @@ import QFooter from "@/ui/QFooter.ui";
 import QHeader from "@/ui/QHeader.ui";
 import QDrawer from "@/ui/QDrawer/QDrawer.ui";
 import QFlashMessage from "@/ui/QFlashMessage/QFlashMessage.ui";
-// import { User } from "@/api/utils/types";
 import { useUser } from "@/utils/client.store";
 import { Spinner } from "flowbite-react";
-
+import { useEffect } from "react";
+import { fillDrawer } from "@/ui/QDrawer/QDrawer.store";
+import SignInForm from "@/api/routes/auth/SignIn.form";
 import { QueryClient } from "@tanstack/react-query";
 
 type RouterContext = {
-  // currentUser: User | null;
   queryClient: QueryClient;
 };
-export const Route = createRootRouteWithContext<RouterContext>()({
+
+export const Route = createRootRouteWithContext<RouterContext>()({  
   component: RootComponent,
 });
 
@@ -22,6 +23,19 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 function RootComponent() {
   // Use the TanStack Query hook to fetch the current user
   const { isLoading } = useUser();
+
+  // Handle auth parameters from URL query string
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const authRequired = url.searchParams.get('authRequired') === 'true';
+    const accessDenied = url.searchParams.get('accessDenied') === 'true';
+    
+    if (authRequired) {
+      fillDrawer(SignInForm, "Sign In");
+    } else if (accessDenied) {
+      fillDrawer(SignInForm, "Access Denied - Please Sign In");
+    }
+  }, []);
 
   return (
     <>
