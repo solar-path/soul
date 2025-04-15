@@ -60,16 +60,16 @@ function RouteComponent() {
   // Get authentication status from the loader data
   const loaderData = Route.useLoaderData() as CompanyLoaderData;
   const queryClient = useQueryClient();
-  
+
   // Use TanStack Query to fetch and manage user data
   const { data: user, isLoading } = useUser();
-  
+
   // Determine authentication status based on user data or loader data
   const isAuthenticated = user != null || loaderData?.isAuthenticated || false;
 
   // Track if user just signed out to prevent drawer from opening
   const [justSignedOut, setJustSignedOut] = useState(false);
-  
+
   // Listen for authentication events
   useEffect(() => {
     // Create a custom event listener for auth changes
@@ -77,7 +77,7 @@ function RouteComponent() {
       // Invalidate the user query to refresh data without page reload
       queryClient.invalidateQueries({ queryKey: ["currentUser"] });
     };
-    
+
     // Create a custom event listener for sign out
     const handleSignOut = () => {
       // Set flag to prevent login drawer from opening immediately after sign-out
@@ -87,13 +87,13 @@ function RouteComponent() {
     };
 
     // Add event listeners
-    window.addEventListener('auth-state-changed', handleAuthChange);
-    window.addEventListener('user-signed-out', handleSignOut);
-    
+    window.addEventListener("auth-state-changed", handleAuthChange);
+    window.addEventListener("user-signed-out", handleSignOut);
+
     // Clean up
     return () => {
-      window.removeEventListener('auth-state-changed', handleAuthChange);
-      window.removeEventListener('user-signed-out', handleSignOut);
+      window.removeEventListener("auth-state-changed", handleAuthChange);
+      window.removeEventListener("user-signed-out", handleSignOut);
     };
   }, [queryClient]);
 
@@ -114,13 +114,15 @@ function RouteComponent() {
       </div>
     );
   }
-  
+
   // Show authentication required message
   if (!isAuthenticated) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
-          <h2 className="text-xl font-semibold mb-4">Authentication Required</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            Authentication Required
+          </h2>
           <p>Please sign in to access this area.</p>
         </div>
       </div>
