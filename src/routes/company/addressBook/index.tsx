@@ -6,7 +6,7 @@ import { User } from "@/api/utils/types";
 // Define the type for the loader data
 interface AddressBookLoaderData {
   isAuthenticated: boolean;
-  user: User;
+  user: User | null;
 }
 
 export const Route = createFileRoute("/company/addressBook/")({

@@ -1,6 +1,6 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useUser } from "@/utils/client.store";
-import { fillDrawer } from "@/ui/QDrawer/QDrawer.store";
+import { fillDrawer, closeDrawer } from "@/ui/QDrawer/QDrawer.store";
 import SignInForm from "@/api/routes/auth/SignIn.form";
 import { Spinner } from "flowbite-react";
 
@@ -21,16 +21,40 @@ export function QAuthGuard({
 }: QAuthGuardProps) {
   const { data: user, isLoading } = useUser();
   const isAuthenticated = user != null;
+  const [drawerOpened, setDrawerOpened] = useState(false);
 
   // Show login drawer if not authenticated
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    if (!isLoading && !isAuthenticated && !drawerOpened) {
+      // Open the SignIn form drawer when user is not authenticated
       fillDrawer(SignInForm, "Sign In");
+      setDrawerOpened(true);
+    } else if (isAuthenticated && drawerOpened) {
+      // Close drawer if user becomes authenticated
+      closeDrawer();
+      setDrawerOpened(false);
     }
-  }, [isAuthenticated, isLoading]);
+  }, [isAuthenticated, isLoading, drawerOpened]);
+
+  // Listen for authentication events from SignIn form
+  useEffect(() => {
+    const handleAuthChange = () => {
+      // This will be triggered when the user successfully signs in
+      // The component will re-render with the updated authentication state
+      setDrawerOpened(false);
+    };
+
+    // Add event listener for auth state changes
+    window.addEventListener("auth-state-changed", handleAuthChange);
+
+    // Clean up
+    return () => {
+      window.removeEventListener("auth-state-changed", handleAuthChange);
+    };
+  }, []);
 
   // Check verification status if required
-  const hasRequiredVerification = !requireVerified || user?.isVerified === true;
+  const hasRequiredVerification = !requireVerified || (user?.isVerified === true);
 
   // Show loading state
   if (isLoading) {

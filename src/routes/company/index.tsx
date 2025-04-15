@@ -11,23 +11,16 @@ import { User } from "@/api/utils/types";
 // Define the type for the loader data
 interface CompanyLoaderData {
   isAuthenticated: boolean;
-  user: User;
+  user: User | null;
 }
 
 export const Route = createFileRoute("/company/")({
   component: RouteComponent,
-  // Use the auth guard for route protection
+  // Use the auth guard for route protection without redirecting
   beforeLoad: async ({ context }): Promise<CompanyLoaderData> => {
-    try {
-      // Use the authGuard utility to protect this route
-      const { isAuthenticated, user } = await authGuard(context.queryClient);
-      return { isAuthenticated, user };
-    } catch (error) {
-      // The authGuard will redirect if not authenticated
-      // This code will only run if there's a different error
-      console.error("Error in company route protection:", error);
-      throw error;
-    }
+    // Use the authGuard utility to check authentication status
+    const { isAuthenticated, user } = await authGuard(context.queryClient);
+    return { isAuthenticated, user };
   },
 });
 
