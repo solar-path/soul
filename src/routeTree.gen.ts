@@ -22,6 +22,7 @@ import { Route as CompanyUserManagementUserImport } from './routes/company/userM
 import { Route as AuthVerifyTokenImport } from './routes/auth/verify.$token'
 import { Route as AuthResetTokenImport } from './routes/auth/reset.$token'
 import { Route as AuthProfileIdImport } from './routes/auth/profile.$id'
+import { Route as AuthSignInFormImport } from './routes/auth/_SignIn.form'
 import { Route as publicPostIdImport } from './routes/(public)/post.$id'
 import { Route as publicDocsSlugImport } from './routes/(public)/docs.$slug'
 import { Route as CompanyHrmPositionIndexImport } from './routes/company/hrm/position/index'
@@ -96,6 +97,12 @@ const AuthProfileIdRoute = AuthProfileIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthSignInFormRoute = AuthSignInFormImport.update({
+  id: '/auth/_SignIn/form',
+  path: '/auth/form',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const publicPostIdRoute = publicPostIdImport.update({
   id: '/(public)/post/$id',
   path: '/post/$id',
@@ -163,6 +170,13 @@ declare module '@tanstack/react-router' {
       path: '/post/$id'
       fullPath: '/post/$id'
       preLoaderRoute: typeof publicPostIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/_SignIn/form': {
+      id: '/auth/_SignIn/form'
+      path: '/auth/form'
+      fullPath: '/auth/form'
+      preLoaderRoute: typeof AuthSignInFormImport
       parentRoute: typeof rootRoute
     }
     '/auth/profile/$id': {
@@ -253,6 +267,7 @@ export interface FileRoutesByFullPath {
   '/company': typeof CompanyIndexRoute
   '/docs/$slug': typeof publicDocsSlugRoute
   '/post/$id': typeof publicPostIdRoute
+  '/auth/form': typeof AuthSignInFormRoute
   '/auth/profile/$id': typeof AuthProfileIdRoute
   '/auth/reset/$token': typeof AuthResetTokenRoute
   '/auth/verify/$token': typeof AuthVerifyTokenRoute
@@ -272,6 +287,7 @@ export interface FileRoutesByTo {
   '/company': typeof CompanyIndexRoute
   '/docs/$slug': typeof publicDocsSlugRoute
   '/post/$id': typeof publicPostIdRoute
+  '/auth/form': typeof AuthSignInFormRoute
   '/auth/profile/$id': typeof AuthProfileIdRoute
   '/auth/reset/$token': typeof AuthResetTokenRoute
   '/auth/verify/$token': typeof AuthVerifyTokenRoute
@@ -292,6 +308,7 @@ export interface FileRoutesById {
   '/company/': typeof CompanyIndexRoute
   '/(public)/docs/$slug': typeof publicDocsSlugRoute
   '/(public)/post/$id': typeof publicPostIdRoute
+  '/auth/_SignIn/form': typeof AuthSignInFormRoute
   '/auth/profile/$id': typeof AuthProfileIdRoute
   '/auth/reset/$token': typeof AuthResetTokenRoute
   '/auth/verify/$token': typeof AuthVerifyTokenRoute
@@ -313,6 +330,7 @@ export interface FileRouteTypes {
     | '/company'
     | '/docs/$slug'
     | '/post/$id'
+    | '/auth/form'
     | '/auth/profile/$id'
     | '/auth/reset/$token'
     | '/auth/verify/$token'
@@ -331,6 +349,7 @@ export interface FileRouteTypes {
     | '/company'
     | '/docs/$slug'
     | '/post/$id'
+    | '/auth/form'
     | '/auth/profile/$id'
     | '/auth/reset/$token'
     | '/auth/verify/$token'
@@ -349,6 +368,7 @@ export interface FileRouteTypes {
     | '/company/'
     | '/(public)/docs/$slug'
     | '/(public)/post/$id'
+    | '/auth/_SignIn/form'
     | '/auth/profile/$id'
     | '/auth/reset/$token'
     | '/auth/verify/$token'
@@ -369,6 +389,7 @@ export interface RootRouteChildren {
   CompanyIndexRoute: typeof CompanyIndexRoute
   publicDocsSlugRoute: typeof publicDocsSlugRoute
   publicPostIdRoute: typeof publicPostIdRoute
+  AuthSignInFormRoute: typeof AuthSignInFormRoute
   AuthProfileIdRoute: typeof AuthProfileIdRoute
   AuthResetTokenRoute: typeof AuthResetTokenRoute
   AuthVerifyTokenRoute: typeof AuthVerifyTokenRoute
@@ -388,6 +409,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompanyIndexRoute: CompanyIndexRoute,
   publicDocsSlugRoute: publicDocsSlugRoute,
   publicPostIdRoute: publicPostIdRoute,
+  AuthSignInFormRoute: AuthSignInFormRoute,
   AuthProfileIdRoute: AuthProfileIdRoute,
   AuthResetTokenRoute: AuthResetTokenRoute,
   AuthVerifyTokenRoute: AuthVerifyTokenRoute,
@@ -416,6 +438,7 @@ export const routeTree = rootRoute
         "/company/",
         "/(public)/docs/$slug",
         "/(public)/post/$id",
+        "/auth/_SignIn/form",
         "/auth/profile/$id",
         "/auth/reset/$token",
         "/auth/verify/$token",
@@ -443,6 +466,9 @@ export const routeTree = rootRoute
     },
     "/(public)/post/$id": {
       "filePath": "(public)/post.$id.tsx"
+    },
+    "/auth/_SignIn/form": {
+      "filePath": "auth/_SignIn.form.tsx"
     },
     "/auth/profile/$id": {
       "filePath": "auth/profile.$id.tsx"

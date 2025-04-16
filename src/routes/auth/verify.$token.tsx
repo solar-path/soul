@@ -4,7 +4,7 @@ import { HiCheckCircle, HiExclamationCircle } from "react-icons/hi";
 import { trpc } from "@/utils/trpc";
 import { useQuery } from "@tanstack/react-query";
 import { fillDrawer } from "@/ui/QDrawer/QDrawer.store";
-import SignInForm from "@/api/routes/auth/SignIn.form";
+import SignInForm from "@/routes/auth/_SignIn.form";
 
 export const Route = createFileRoute("/auth/verify/$token")({
   component: VerifyAccount,

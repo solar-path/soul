@@ -8,14 +8,14 @@ import { useUser } from "@/utils/client.store";
 import { Spinner } from "flowbite-react";
 import { useEffect } from "react";
 import { fillDrawer } from "@/ui/QDrawer/QDrawer.store";
-import SignInForm from "@/api/routes/auth/SignIn.form";
+import SignInForm from "@/routes/auth/_SignIn.form";
 import { QueryClient } from "@tanstack/react-query";
 
 type RouterContext = {
   queryClient: QueryClient;
 };
 
-export const Route = createRootRouteWithContext<RouterContext>()({  
+export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootComponent,
 });
 
@@ -27,9 +27,9 @@ function RootComponent() {
   // Handle auth parameters from URL query string
   useEffect(() => {
     const url = new URL(window.location.href);
-    const authRequired = url.searchParams.get('authRequired') === 'true';
-    const accessDenied = url.searchParams.get('accessDenied') === 'true';
-    
+    const authRequired = url.searchParams.get("authRequired") === "true";
+    const accessDenied = url.searchParams.get("accessDenied") === "true";
+
     if (authRequired) {
       fillDrawer(SignInForm, "Sign In");
     } else if (accessDenied) {

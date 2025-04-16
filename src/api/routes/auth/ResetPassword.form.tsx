@@ -7,7 +7,7 @@ import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
 import { useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { fillDrawer } from "@/ui/QDrawer/QDrawer.store";
-import SignInForm from "./SignIn.form";
+import SignInForm from "@/routes/auth/_SignIn.form";
 import { useUser, useSetUser } from "@/utils/client.store";
 import { useNavigate } from "@tanstack/react-router";
 

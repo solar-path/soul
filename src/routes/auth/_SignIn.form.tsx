@@ -2,9 +2,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Label, TextInput, Button, HelperText } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { closeDrawer, fillDrawer } from "@/ui/QDrawer/QDrawer.store";
-import { SignIn, signInSchema } from "./auth.zod";
-import SignUpForm from "./SignUp.form";
-import ForgotPasswordForm from "./Forgot.form";
+import { SignIn, signInSchema } from "../../api/routes/auth/auth.zod";
+import SignUpForm from "../../api/routes/auth/SignUp.form";
+import ForgotPasswordForm from "../../api/routes/auth/Forgot.form";
 import { clientSignIn } from "@/utils/trpc";
 import { showFlashMessage } from "@/ui/QFlashMessage/QFlashMessage.store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -54,10 +54,10 @@ export default function SignInForm() {
         "success",
         `${result.data?.email} successfully signed in`
       );
-      
+
       // Dispatch custom event to notify about authentication change
-      window.dispatchEvent(new CustomEvent('auth-state-changed'));
-      
+      window.dispatchEvent(new CustomEvent("auth-state-changed"));
+
       // Navigate to company page
       navigate({ to: "/company" });
       return null;

@@ -2,7 +2,7 @@ import { Label, TextInput, Button, Checkbox, HelperText } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { closeDrawer, fillDrawer } from "@/ui/QDrawer/QDrawer.store";
-import SignInForm from "./SignIn.form";
+import SignInForm from "@/routes/auth/_SignIn.form";
 import { SignUp, signUpSchema } from "./auth.zod";
 import { useMutation } from "@tanstack/react-query";
 import { clientSignUp } from "@/utils/trpc";
